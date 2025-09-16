@@ -62,45 +62,88 @@ Describe what the rest of the document contains and how it is organized.
 This section should describe the general factors that affect the product and its requirements. This section does not state specific requirements. Instead, it provides a background for those requirements, which are defined in detail in Section 3, and makes them easier to understand.
 
 ### 2.1 Product Functions
-Summarize the major functions the product must perform or must let the user perform. Details will be provided in Section 3, so only a high level summary (such as a bullet list) is needed here. Organize the functions to make them understandable to any reader of the SRS. A picture of the major groups of related requirements and how they relate, such as a top level data flow diagram or object class diagram, is often effective.
+* Profile Management (customer/provider)
+* Listing & Search (browse, filter, sort)
+* Offer/Counter-Offer System (barter only)
+* Estimated Value Guidance (mock index or TCGplayer's offical API)
+* Watchlists & Notifications
+* Review & Reputation System
+* In-App Messaging
 
 ### 2.2 Product Constraints
-This subsection should provide a general description of any other items that will limit the developer’s options. These may include:  
-
-* Interfaces to users, other applications or hardware.  
-* Quality of service constraints.  
-* Standards compliance.  
-* Constraints around design or implementation.
+* Implemented as a web application (browser-based).
+* Backend hosted on a cloud service (e.g., Firebase, AWS, or UNCG server).
+* No real money transactions; all trades are barter-only.
+* Dependence on TCGplayer API for price guidance (subject to rate limits & ToS).
   
 ### 2.3 User Characteristics
-Identify the various user classes that you anticipate will use this product. User classes may be differentiated based on frequency of use, subset of product functions used, technical expertise, security or privilege levels, educational level, or experience. Describe the pertinent characteristics of each user class. Certain requirements may pertain only to certain user classes. Distinguish the most important user classes for this product from those who are less important to satisfy.
+  * Customer users
+* Role & purpose: Customers are collectors who primarily use the platform to browse, discover, and trade cards.
+* Functions used: Search listings, view card details, make and respond to trade offers, maintain watchlists, message providers, and leave reviews.
+* Frequency of use: May log in a few times per week depending on trade activity or new listings.
+* Technical expertise: Moderate; most will have general web browsing and account management skills.
+* Privileges: Limited to their own profiles, offers, and reviews. Cannot edit other users’ listings or reviews.
+
+  * Provider users
+* Role & purpose: Providers are users who actively list and manage cards for trade and interact with multiple customers.
+* Functions used: Create, update, and remove listings. Respond to trade offers and view customer statistics. Reply to reviews and manage their profile's reputation.
+* Frequency of use: Typically more frequent than customers. Daily or multiple times per week to manage inventory and respond to offers.
+* Technical expertise: Slightly higher than customers. May be familiar with inventory systems or online marketplace platforms.
+* Privileges: Can create and manage multiple listings.
+
 
 ### 2.4 Assumptions and Dependencies
-List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. These could include third-party or commercial components that you plan to use, issues around the development or operating environment, or constraints. The project could be affected if these assumptions are incorrect, are not shared, or change. Also identify any dependencies the project has on external factors, such as software components that you intend to reuse from another project, unless they are already documented elsewhere (for example, in the vision and scope document or the project plan).
+* Assume continuous internet access.
+* Dependence on TCGplayer API for optional live pricing.
+* Mock index ensures functionality even if live API is unavailable.
+* Users are responsible for physical shipping; Trade Table does not provide a check out or payment method. Users must decide via website DM how they want to exhange their products.
 
 ## 3. Requirements
 
 ### 3.1 Functional Requirements 
-This section specifies the software product's requirements. Specify all of the software requirements to a level of detail sufficient to enable designers to design a software system to satisfy those requirements, and to enable testers to test that the software system satisfies those requirements.
+* Customer Role
+FR1: The system shall allow customers to create and modify profiles (avatar, preferred sets, region).
+FR2: The system shall allow customers to browse/search listings by game, set, rarity, grade, condition, and estimated value.
+FR3: The system shall allow customers to create watchlists and saved searches with notifications.
+FR4: The system shall allow customers to write reviews of providers after trades.
 
-The specific requirements should:
-* Be uniquely identifiable.
-* State the subject of the requirement (e.g., system, software, etc.) and what shall be done.
-* Optionally state the conditions and constraints, if any.
-* Describe every input (stimulus) into the software system, every output (response) from the software system, and all functions performed by the software system in response to an input or in support of an output.
-* Be verifiable (e.g., the requirement realization can be proven to the customer's satisfaction)
-* Conform to agreed upon syntax, keywords, and terms.
+* Provider Role
+FR5: The system shall allow providers to create, modify, and remove profiles.
+FR6: The system shall allow providers to create listings with details (set, rarity, grade, photos, estimated value).
+FR7: The system shall allow providers to view customer statistics (trades, ratings, reviews).
+FR8: The system shall allow providers to reply to reviews.
+
+* Shared Functions
+FR9: The system shall support barter trades (cards for cards, bundles allowed).
+FR10: The system shall display estimated values using TCGplayer data (Market, Low, Mid, High) when available; otherwise falls back to mock values.
+FR11: The system shall allow users to create, send, and counter offers.
+FR12: The system shall allow both parties to accept an offer, creating a Trade record.
+FR13: The system shall provide a shipping panel (mark Shipped/Received, attach tracking numbers).
+FR14: The system shall allow users to complete trades and leave reviews.
+FR15: The system shall include in-app messaging.
+FR16: The system shall maintain a reputation system based on reviews.
+FR17: The system shall not include checkout, payment, or invoices (barter only).
+FR18: The system shall show the source (TCGplayer) and timestamp for live estimates.
+FR19: The system shall fall back to mock values if the TCGplayer API fails or rate limits.
+FR20: The system shall provide a toggle for pricing mode (live or mock).
+FR21: The system shall allow users to report a trade if the other party does not fulfill within a reasonable timeframe.
 
 #### 3.1.1 User interfaces
-Define the software components for which a user interface is needed. Describe the logical characteristics of each interface between the software product and the users. This may include sample screen images, any GUI standards or product family style guides that are to be followed, screen layout constraints, standard buttons and functions (e.g., help) that will appear on every screen, keyboard shortcuts, error message display standards, and so on. Details of the user interface design should be documented in a separate user interface specification.
-
-Could be further divided into Usability and Convenience requirements.
+* Homepage: Browse listings.
+* Profile Page: Edit details.
+* Listing Page: View/add/filter cards.
+* Offer Panel: Build/counter offers with value meter.
+* Trade Dashboard: Track status (Pending to Countered to Agreed to Completed).
+* Messaging: Inbox.
+* Review Section: Leave/view reviews.
 
 #### 3.1.2 Hardware interfaces
-Describe the logical and physical characteristics of each interface between the software product and the hardware components of the system. This may include the supported device types, the nature of the data and control interactions between the software and the hardware, and communication protocols to be used.
+* Runs on PCs, laptops, smartphones with internet.
 
 #### 3.1.3 Software interfaces
-Describe the connections between this product and other specific software components (name and version), including databases, operating systems, tools, libraries, and integrated commercial components. Identify the data items or messages coming into the system and going out and describe the purpose of each. Describe the services needed and the nature of communications. Refer to documents that describe detailed application programming interface protocols. Identify data that will be shared across software components. If the data sharing mechanism must be implemented in a specific way (for example, use of a global data area in a multitasking operating system), specify this as an implementation constraint.
+* TCGplayer API: Provides pricing (product and condition). Authenticate via keys for a temporary password (bearer token).
+* Backend Proxy: Secures API keys, caches results, and enforces rate limits.
+* Mock Index: Fallback pricing dataset (JSON/DB).
 
 ### 3.2 Non Functional Requirements 
 
