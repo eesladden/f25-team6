@@ -102,31 +102,31 @@ This section should describe the general factors that affect the product and its
 
 ### 3.1 Functional Requirements 
 * Customer Role
-FR1: The system shall allow customers to create and modify profiles (avatar, preferred sets, region).
-FR2: The system shall allow customers to browse/search listings by game, set, rarity, grade, condition, and estimated value.
-FR3: The system shall allow customers to create watchlists and saved searches with notifications.
-FR4: The system shall allow customers to write reviews of providers after trades.
+- FR1: The system shall allow customers to create and modify profiles (avatar, preferred sets, region).
+- FR2: The system shall allow customers to browse/search listings by game, set, rarity, grade, condition, and estimated value.
+- FR3: The system shall allow customers to create watchlists and saved searches with notifications.
+- FR4: The system shall allow customers to write reviews of providers after trades.
 
 * Provider Role
-FR5: The system shall allow providers to create, modify, and remove profiles.
-FR6: The system shall allow providers to create listings with details (set, rarity, grade, photos, estimated value).
-FR7: The system shall allow providers to view customer statistics (trades, ratings, reviews).
-FR8: The system shall allow providers to reply to reviews.
+- FR5: The system shall allow providers to create, modify, and remove profiles.
+- FR6: The system shall allow providers to create listings with details (set, rarity, grade, photos, estimated value).
+- FR7: The system shall allow providers to view customer statistics (trades, ratings, reviews).
+- FR8: The system shall allow providers to reply to reviews.
 
 * Shared Functions
-FR9: The system shall support barter trades (cards for cards, bundles allowed).
-FR10: The system shall display estimated values using TCGplayer data (Market, Low, Mid, High) when available; otherwise falls back to mock values.
-FR11: The system shall allow users to create, send, and counter offers.
-FR12: The system shall allow both parties to accept an offer, creating a Trade record.
-FR13: The system shall provide a shipping panel (mark Shipped/Received, attach tracking numbers).
-FR14: The system shall allow users to complete trades and leave reviews.
-FR15: The system shall include in-app messaging.
-FR16: The system shall maintain a reputation system based on reviews.
-FR17: The system shall not include checkout, payment, or invoices (barter only).
-FR18: The system shall show the source (TCGplayer) and timestamp for live estimates.
-FR19: The system shall fall back to mock values if the TCGplayer API fails or rate limits.
-FR20: The system shall provide a toggle for pricing mode (live or mock).
-FR21: The system shall allow users to report a trade if the other party does not fulfill within a reasonable timeframe.
+- FR9: The system shall support barter trades (cards for cards, bundles allowed).
+- FR10: The system shall display estimated values using TCGplayer data (Market, Low, Mid, High) when available; otherwise falls back to mock values.
+- FR11: The system shall allow users to create, send, and counter offers.
+- FR12: The system shall allow both parties to accept an offer, creating a Trade record.
+- FR13: The system shall provide a shipping panel (mark Shipped/Received, attach tracking numbers).
+- FR14: The system shall allow users to complete trades and leave reviews.
+- FR15: The system shall include in-app messaging.
+- FR16: The system shall maintain a reputation system based on reviews.
+- FR17: The system shall not include checkout, payment, or invoices (barter only).
+- FR18: The system shall show the source (TCGplayer) and timestamp for live estimates.
+- FR19: The system shall fall back to mock values if the TCGplayer API fails or rate limits.
+- FR20: The system shall provide a toggle for pricing mode (live or mock).
+- FR21: The system shall allow users to report a trade if the other party does not fulfill within a reasonable timeframe.
 
 #### 3.1.1 User interfaces
 * Homepage: Browse listings.
