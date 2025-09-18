@@ -1,10 +1,10 @@
 # Software Requirements Specification
-## For <project name>
+## For Tradetable
 
 Version 0.1  
-Prepared by <author>  
-<organization>  
-<date created> 
+Prepared by Emma Sladden and Taylor Edwards
+CSC 340 
+September 14, 2025  
 
 Table of Contents
 =================
@@ -37,29 +37,42 @@ Table of Contents
 ## Revision History
 | Name | Date    | Reason For Changes  | Version   |
 | ---- | ------- | ------------------- | --------- |
-|      |         |                     |           |
+| Emma |  9/15   |     Initial SRS     |    1.0    |
 |      |         |                     |           |
 |      |         |                     |           |
 
 ## 1. Introduction
 
 ### 1.1 Document Purpose
-Describe the purpose of the SRS and its intended audience.
+The purpose of this Software Requirements Document is to descirbe to customer-view and provider-view for the Tradetable application. The customer requirements describe what is needed on the customer's side. The provider requirements describe what is needed on the provider side.
 
 ### 1.2 Product Scope
-Identify the product whose software requirements are specified in this document, including the revision or release number. Explain what the product that is covered by this SRS will do, particularly if this SRS describes only part of the system or a single subsystem. 
-Provide a short description of the software being specified and its purpose, including relevant benefits, objectives, and goals. Relate the software to corporate goals or business strategies. If a separate vision and scope document is available, refer to it rather than duplicating its contents here.
+The purpose of Tradetable is to provide a tradeable marketplace for popular card-based games and entertainment to its customers and providers.
+The system used is a web-based application which allows widespread access and a simplifies functionality. The main objective is to create a space for people with common interests to gather and easily communicate trades.
 
-### 1.3 Definitions, Acronyms and Abbreviations                                                                                                                                                                          |
+### 1.3 Definitions, Acronyms and Abbreviations                               
+| Reference            | Definition                                                                                                                |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------|
+| Java                 | An object-oriented programming language, which will be used for the backend of the application.                           |
+| HTML                 | Stands for Hypertext Markup Language. This is the code used to give the web application structure.                        |
+| CSS                  | Stands for Cascading Style Sheets. This will be used to stylize and implement design into the application                 |
+| SpringBoot           | An open-source, Java-based framework. This will be used to create and run the application.                                |
+| Spring MVC           | MVC stands for Model-View-Controller. This will be used for the architectual design pattern of the application.           |
+| Spring Boot DevTools | Provide an enhanced development experience. This will be used to develop to system.                                       |
+| Spring Web           | Used to build web applications using Spring MVC. This will be used as a dependency.                                       |
+| API                  | Stands for Application Programming Interface. This will be used to interface the frontend and backend of the application. |
+| Javascript           | An object-oriented programming language used to create interactivity in web browsers. Will be used with HTML and CSS.     |
+| VS Code              | An integrated development environment (IDE) for Java. This is where the system will be created.                           |
+|                      |                                                                                                                           |
 
 ### 1.4 References
-List any other documents or Web addresses to which this SRS refers. These may include user interface style guides, contracts, standards, system requirements specifications, use case documents, or a vision and scope document. Provide enough information so that the reader could access a copy of each reference, including title, author, version number, date, and source or location.
+https://spring.io/guides
 
 ### 1.5 Document Overview
-Describe what the rest of the document contains and how it is organized.
+Section 1 is just a general overview of the system, its purpose, and what it is. Section 2 includes more about the specific application being created, including functions and constraints. Section 3 goes into more detail about the specific funtions of the system, broken down into customer fuctions and provider functions.
 
 ## 2. Product Overview
-This section should describe the general factors that affect the product and its requirements. This section does not state specific requirements. Instead, it provides a background for those requirements, which are defined in detail in Section 3, and makes them easier to understand.
+The Tradetable application is a web-based platform designed to allow the user to communicate and trade cards. Users can create customizable profiles and listings for cards for trade, then negotiate price and meeting place. They will also be able to view traders in there local area.
 
 ### 2.1 Product Functions
 * Profile Management (customer/provider)
@@ -148,22 +161,24 @@ This section should describe the general factors that affect the product and its
 ### 3.2 Non Functional Requirements 
 
 #### 3.2.1 Performance
-If there are performance requirements for the product under various circumstances, state them here and explain their rationale, to help the developers understand the intent and make suitable design choices. Specify the timing relationships for real time systems. Make such requirements as specific as possible. You may need to state performance requirements for individual functional requirements or features.
+- NFR0: This system shall should use a maxiumum of 300 MB of memory 
+- NFR1: A novice user of this system should take a maximum of 5 minutes to add and manage trading card listings 
+- NFR1: An experienced user of this system should take a maximum of 2 minute to add and manage trading card listings 
 
 #### 3.2.2 Security
-Specify any requirements regarding security or privacy issues surrounding use of the product or protection of the data used or created by the product. Define any user identity authentication requirements. Refer to any external policies or regulations containing security issues that affect the product. Define any security or privacy certifications that must be satisfied.
+- NFR2: This system shall only allow authorized user with a profile to access it
 
 #### 3.2.3 Reliability
-Specify the factors required to establish the required reliability of the software system at time of delivery.
+- NFR3: This system shall be tested throughly to ensure functionality before release
+- NFR4: If this system has an issue, it shall be handled in a timely manner
 
 #### 3.2.4 Availability
-Specify the factors required to guarantee a defined availability level for the entire system such as checkpoint, recovery, and restart.
+- NFR5: This system shall be avaliabe to users at all hours of the day, whenever they would like to access it
 
 #### 3.2.5 Compliance
-Specify the requirements derived from existing standards or regulations
 
 #### 3.2.6 Cost
-Specify monetary cost of the software product.
+- NFR6: This sytem shall not require any money to be made
 
 #### 3.2.7 Deadline
-Specify schedule for delivery of the software product.
+- NFR7: This system shall be completed by the due date in December 2025
