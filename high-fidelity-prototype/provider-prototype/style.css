@@ -1,0 +1,55 @@
+.btn-square {
+    width: 200px;
+    height: 280px;
+    padding: 0;
+    border-radius: 0;
+    font-size: medium;
+    color: black;
+    background-color: #f8f9fa;
+    border: 2px dashed #6c757d;
+    cursor: pointer;
+}
+.btn-square:hover {
+    background-color: #e2e6ea;
+    color: black;
+}
+.listing-container {
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    background-color: #f8f9fa;
+}
+.dollar-sign {
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 1.2em;
+    color: #000000;
+    align-content: baseline;
+}
+.manage-listings-container {
+    width: 80%;
+    margin-top: 10px !important;
+    margin-bottom: 30px !important;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+.card-image-sm {
+    width: 75%;
+    height: auto;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.rating {
+    margin-left: 20px;
+    align-items: center !important;
+}
+.reply-message {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    resize: vertical;
+}
+.review-container {
+    background-color: #f8f9fa;
+}
