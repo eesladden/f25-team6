@@ -12,34 +12,30 @@
   </style>
 </head>
 <body class="bg-light">
-  <!-- NAVBAR  -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom sticky-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="common/home.html">Trade Table</a>
+      <a class="navbar-brand fw-bold" href="home.html">Trade Table</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div id="nav" class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
+          <!-- Login / Signup (point to root login/signup) -->
+          <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
           <li class="nav-item"><a class="nav-link" href="signup.html">Sign Up</a></li>
+          <!-- Customer dropdown -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Customer</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="customer/trade-dashboard.html">Trade Dashboard</a></li>
-              <li><a class="dropdown-item" href="customer/messaging.html">Messaging</a></li>
-              <li><a class="dropdown-item" href="customer/profile.html">Profile</a></li>
-              <li><a class="dropdown-item" href="customer/watchlist.html">Watchlist</a></li>
+              <li><a class="dropdown-item" href="./customer-prototype/trade-dashboard.html">Trade Dashboard</a></li>
+              <li><a class="dropdown-item" href="./customer-prototype/messaging.html">Messaging</a></li>
+              <li><a class="dropdown-item" href="./customer-prototype/profile.html">Profile</a></li>
+              <li><a class="dropdown-item" href="./customer-prototype/watchlist.html">Watchlist</a></li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Provider</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="provider/dashboard.html">Provider Dashboard</a></li>
-              <li><a class="dropdown-item" href="provider/listings.html">Manage Listings</a></li>
-              <li><a class="dropdown-item" href="provider/reviews.html">Reviews</a></li>
-            </ul>
-          </li>
+          <!-- Provider quick link -->
+          <li class="nav-item"><a class="nav-link" href="./provider-prototype/provider-dashboard.html">Provider</a></li>
         </ul>
       </div>
     </div>
