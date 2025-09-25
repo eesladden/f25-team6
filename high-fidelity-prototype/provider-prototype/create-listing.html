@@ -42,7 +42,9 @@
             <div class="create-listing-form-container card shadow-sm p-4 signup-card mt-3 mt-md-0 listing-container">
                 <h2 class="h5 mb-3 text-center">Create a New Listing</h2>
 
-                <form class="create-listing-form row align-items-center justify-content-center" action="./provider-dashboard.html" method="POST">
+
+                <form class="create-listing-form row align-items-center justify-content-center" action="./provider-dashboard.html" method="GET" enctype="multipart/form-data">
+             
                     <div class="col-md-3">
                         <div class="card-image-container text-center">
                             <input accept="image/*,image/heif,image/heic" type="file" id="card-image" style="display: none;" name="card-image" required>
