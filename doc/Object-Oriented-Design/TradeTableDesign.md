@@ -25,7 +25,7 @@ Table of Contents
 |        |         |                     |           |
 
 ## 1. Product Overview
-
+TradeTable is a simple web app designed to connect people to like individuals who share an interest in playing cards, and allow them to trade card with one another. Providers add their collection and list their cards for sale or trade and customers buy those cards or trade them for cards in their collections.
 ## 2. Use Cases
 ### 2.1 Use Case Model
 ![Use Case Model](https://github.com/eesladden/f25-team6/blob/main/doc/Object-Oriented-Design/use-cases.png)
