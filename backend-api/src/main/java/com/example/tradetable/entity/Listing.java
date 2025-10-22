@@ -51,9 +51,6 @@ public class Listing {
     private String cityName;
 
     @NotBlank
-    private String geographicLocation; // could be coordinates or address
-
-    @NotBlank
     private String imageLink;
 
     @Column(updatable = false)
