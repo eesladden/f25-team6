@@ -45,14 +45,9 @@ public class Provider {
     @JsonIgnoreProperties("provider")
     private List<Listing> listings = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "provider_cards",
-        joinColumns = @JoinColumn(name = "provider_id"),
-        inverseJoinColumns = @JoinColumn(name = "card_id")
-    )
-    @JsonIgnoreProperties("owners")
-    private List<Card> collection = new ArrayList<>();
+    @OneToOne(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("provider")
+    private Collection collection;
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")

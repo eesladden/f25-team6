@@ -40,8 +40,8 @@ public class MessageController {
     
     @GetMapping("/provider/{providerId}/search")
     public ResponseEntity<java.util.List<Message>> getMessagesByProviderIdAndCommentContaining(
-            @PathVariable Long providerId, @RequestParam String substring) {
-        java.util.List<Message> messages = messageService.getMessagesByProviderIdAndCommentContaining(providerId, substring);
+            @PathVariable Long providerId, @RequestParam String text) {
+        java.util.List<Message> messages = messageService.getMessagesByProviderIdAndCommentContaining(providerId, text);
         return ResponseEntity.ok(messages);
     }
 }

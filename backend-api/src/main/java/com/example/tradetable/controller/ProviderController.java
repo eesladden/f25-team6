@@ -37,16 +37,4 @@ public class ProviderController {
         Provider provider = providerService.getProviderById(id);
         return ResponseEntity.ok(provider);
     }
-
-    @PostMapping("/{providerId}/cards/{cardId}")
-    public ResponseEntity<Void> addCardToCollection(@PathVariable Long providerId, @PathVariable Long cardId) {
-        providerService.addCardToCollection(providerId, cardId);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{providerId}/cards/{cardId}")
-    public ResponseEntity<Void> removeCardFromCollection(@PathVariable Long providerId, @PathVariable Long cardId) {
-        providerService.removeCardFromCollection(providerId, cardId);
-        return ResponseEntity.ok().build();
-    }
 }

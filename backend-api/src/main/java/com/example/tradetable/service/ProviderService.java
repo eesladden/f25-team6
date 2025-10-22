@@ -51,12 +51,4 @@ public class ProviderService {
     public List<Provider> searchProvidersByUsername(String username) {
         return providerRepository.findByUsernameContaining(username);
     }
-
-    public void addCardToCollection(Long providerId, Long cardId) {
-        providerRepository.addCardToCollection(providerId, cardId);
-    }
-
-    public void removeCardFromCollection(Long providerId, Long cardId) {
-        providerRepository.removeCardFromCollection(providerId, cardId);
-    }
 }

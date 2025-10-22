@@ -15,6 +15,4 @@ public interface ProviderRepository extends JpaRepository<Provider, Long> {
     Optional<Provider> findByEmail(String email);
     @Query("SELECT p FROM Provider p WHERE LOWER(p.username) LIKE LOWER(CONCAT('%', :username, '%'))")
     List<Provider> findByUsernameContaining(String username);
-    void addCardToCollection(Long providerId, Long cardId);
-    void removeCardFromCollection(Long providerId, Long cardId);
 }

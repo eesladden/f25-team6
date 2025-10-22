@@ -28,8 +28,8 @@ public class MessageService {
         return messageRepository.findByProviderId(providerId);
     }
     
-    public List<Message> getMessagesByProviderIdAndCommentContaining(Long providerId, String substring) {
-        return messageRepository.findByProviderIdAndCommentContaining(providerId, substring);
+    public List<Message> getMessagesByProviderIdAndCommentContaining(Long providerId, String text) {
+        return messageRepository.searchByProviderIdAndText(providerId, text);
     }
 
     public void deleteMessage(Long id) {
