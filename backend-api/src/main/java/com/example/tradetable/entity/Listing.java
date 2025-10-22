@@ -1,0 +1,74 @@
+package com.example.tradetable.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.NoArgsConstructor;
+import lombok.Data;
+
+@Entity
+@Data
+@NoArgsConstructor
+@Table(name = "listings")
+//Listing should pull information from Card and Provider entities as foreign key references.
+//Listing should include condition, grade, market price, high price, low price, a boolean for availability, a boolean for 'for sale' or 'for trade', trading for, city name, a geographic city location, an image link, and timestamps for creation and last update.
+//All prices should default input as 0 for trade and for trade should be default N/A for sale
+public class Listing {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "card_id", nullable = false)
+    @JsonIgnoreProperties("listings")
+    private Card card;
+
+    @ManyToOne
+    @JoinColumn(name = "provider_id", nullable = false)
+    @JsonIgnoreProperties("listings")
+    private Provider provider;
+
+    @NotBlank
+    private String condition;
+
+    @NotBlank
+    private String grade;
+
+    private Double marketPrice = 0.0;
+
+    private Double highPrice = 0.0;
+
+    private Double lowPrice = 0.0;
+    
+    //should be true when new listing is created
+    private Boolean isAvailable = true;
+
+    private Boolean isForSale; // true for sale, false for trade
+
+    private String tradingFor = "N/A";
+
+    @NotBlank
+    private String cityName;
+
+    @NotBlank
+    private String geographicLocation; // could be coordinates or address
+
+    @NotBlank
+    private String imageLink;
+
+    @Column(updatable = false)
+    private java.time.LocalDateTime createdAt;
+
+    private java.time.LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = java.time.LocalDateTime.now();
+        this.updatedAt = java.time.LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = java.time.LocalDateTime.now();
+    }
+}
