@@ -12,6 +12,5 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
     Collection findByProviderId(Long providerId);
     @Query("SELECT c FROM Collection c JOIN c.cards card WHERE c.provider.id = :providerId AND card.id = :cardId")
     Collection addByProviderIdAndCardId(Long providerId, Long cardId);
-    //not working. fix it by removing card from collection's card set and saving collection in service layer
     void removeCardFromCollection(Long providerId, Long cardId);
 }
