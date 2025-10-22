@@ -14,10 +14,6 @@ import java.util.ArrayList;
 @Data
 @NoArgsConstructor
 @Table(name = "providers")
-//Provider should have a name, unique username, unique email, unique phone number, password, and birthdate.
-//Provider should also contain foreign key references to Listing, Card, and Message entities.
-//A list of created listings, collected (collection) cards, and sent/received messages can be included as relationships.
-//A list of reviews received from Customers can also be included as a relationship.
 public class Provider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,11 +56,7 @@ public class Provider {
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")
-    private List<Message> sentMessages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("provider")
-    private List<Message> receivedMessages = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")

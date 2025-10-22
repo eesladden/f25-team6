@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Table(name = "messages")
-//Message should include an auto-generated id number, a foreign key reference to the Provider who received the message, a foreign key reference to the Customer who sent the message, the message content, and a timestamp for creation.
-//And the Provider could also be the sender and the Customer the receiver.
-//With sender and receiver role names for the linking to a list of sent and received messages.
+
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +20,10 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties("receivedMessages")
+    @JsonIgnoreProperties({"receivedMessages", "sentMessages"})
     private Provider provider;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties("sentMessages")
-    private Customer customer;
+    Boolean sentOrReceived; // true for sent by provider, false for received by provider
 
     @NotBlank
     private String content;

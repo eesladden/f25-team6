@@ -10,9 +10,6 @@ import lombok.Data;
 @Data
 @NoArgsConstructor
 @Table(name = "listings")
-//Listing should pull information from Card and Provider entities as foreign key references.
-//Listing should include condition, grade, market price, high price, low price, a boolean for availability, a boolean for 'for sale' or 'for trade', trading for, city name, a geographic city location, an image link, and timestamps for creation and last update.
-//All prices should default input as 0 for trade and for trade should be default N/A for sale
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

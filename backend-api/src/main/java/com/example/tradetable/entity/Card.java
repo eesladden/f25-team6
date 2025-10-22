@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(name = "cards")
-//Card should include an auto-generated id number, a name, deck, game, rarity.
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

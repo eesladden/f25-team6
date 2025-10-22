@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Table(name = "reviews")
-//Review should include an auto-generated id number, a foreign key reference to the Provider who received a review, a foreign key reference to the Customer who made the review, a rating (1-5) from the Customer, the review comment from the Customer, a timestamp for creation from Customer, a Provider response comment, and a timestamp for the response.
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +23,6 @@ public class Review {
     @JoinColumn(name = "provider_id", nullable = false)
     @JsonIgnoreProperties("receivedReviews")
     private Provider provider;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties("createdReviews")
-    private Customer customer;
 
     @NotNull
     @Min(1)
