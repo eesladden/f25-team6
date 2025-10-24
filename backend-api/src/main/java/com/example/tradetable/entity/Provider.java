@@ -1,3 +1,4 @@
+//Need to be able to map multiple providers to a single card and multiple cards to a single provider for the collection list
 package com.example.tradetable.entity;
 
 import jakarta.persistence.*;
@@ -41,13 +42,14 @@ public class Provider {
     @NotBlank
     private String birthdate;
 
+    //Collection needs to take the provider-card table and find all cards associated with the provider ID and make a list of them
+    @ManyToMany(mappedBy = "providers")
+    @JsonIgnoreProperties("providers")
+    private java.util.Set<Card> collection = new java.util.HashSet<>();
+
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")
     private List<Listing> listings = new ArrayList<>();
-
-    @OneToOne(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("provider")
-    private Collection collection;
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")

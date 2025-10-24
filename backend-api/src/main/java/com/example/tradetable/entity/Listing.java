@@ -3,8 +3,10 @@ package com.example.tradetable.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.NoArgsConstructor;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -48,21 +50,21 @@ public class Listing {
     private String cityName;
 
     @NotBlank
-    private String imageLink;
+    private String stateName;
 
     @Column(updatable = false)
-    private java.time.LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
-    private java.time.LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = java.time.LocalDateTime.now();
-        this.updatedAt = java.time.LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = java.time.LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }

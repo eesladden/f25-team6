@@ -13,31 +13,65 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;
-
+    /**
+     * Get all cards.
+     *
+     * @return list of all cards
+     */
+    @GetMapping
+    public ResponseEntity<java.util.List<Card>> getAllCards() {
+        java.util.List<Card> cards = cardService.getAllCards();
+        return ResponseEntity.ok(cards);
+    }
+    /**
+     * Create a new card.
+     * @param card the card to create
+     * @return the created card
+     */
     @PostMapping
     public ResponseEntity<Card> createCard(@Valid @RequestBody Card card) {
         Card createdCard = cardService.createCard(card);
         return ResponseEntity.ok(createdCard);
     }
-
+    /**
+     * Update an existing card.
+     * @param id   the ID of the card to update
+     * @param card the updated card data
+     * @return the updated card
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Card> updateCard(@PathVariable Long id, @Valid @RequestBody Card card) {
         Card updatedCard = cardService.updateCard(id, card);
         return ResponseEntity.ok(updatedCard);
     }
-
+    /**
+     * Get a card by ID.
+     * @param id the ID of the card
+     * @return the card with the specified ID
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable Long id) {
         Card card = cardService.getCardById(id);
         return ResponseEntity.ok(card);
     }
-
+    /**
+     * Delete a card by ID.
+     * @param id the ID of the card to delete
+     * @return response entity with no content
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
         cardService.deleteCard(id);
         return ResponseEntity.ok().build();
     }
-
+    /**
+     * Search cards by various criteria.
+     * @param name   the name of the card
+     * @param deck   the deck of the card
+     * @param game   the game of the card
+     * @param rarity the rarity of the card
+     * @return list of cards matching the search criteria
+     */
     @GetMapping("/search")
     public ResponseEntity<java.util.List<Card>> searchCards(@RequestParam(required = false) String name,
                                                           @RequestParam(required = false) String deck,
@@ -57,5 +91,23 @@ public class CardController {
             results.addAll(cardService.searchCardsByRarity(rarity));
         }
         return ResponseEntity.ok(results);
+    }
+    /**
+     * Add a card to a provider's collection.
+     * @param cardId the ID of the card
+     * @param providerId
+     */
+    @PostMapping("/{cardId}/providers/{providerId}")
+    public void addCardToProviderCollection(@PathVariable Long cardId, @PathVariable Long providerId) {
+        cardService.addCardToProviderCollection(cardId, providerId);
+    }
+    /**
+     * Remove a card from a provider's collection.
+     * @param cardId the ID of the card
+     * @param providerId the ID of the provider
+     */
+    @DeleteMapping("/{cardId}/providers/{providerId}")
+    public void removeCardFromProviderCollection(@PathVariable Long cardId, @PathVariable Long providerId) {
+        cardService.removeCardFromProviderCollection(cardId, providerId);
     }
 }

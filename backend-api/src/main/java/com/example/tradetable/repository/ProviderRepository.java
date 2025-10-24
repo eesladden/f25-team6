@@ -1,6 +1,7 @@
 package com.example.tradetable.repository;
 
 import com.example.tradetable.entity.Provider;
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
