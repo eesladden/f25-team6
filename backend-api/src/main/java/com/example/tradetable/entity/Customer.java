@@ -1,5 +1,8 @@
 package com.example.tradetable.entity;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -69,4 +72,8 @@ public class Customer {
     void onUpdate() {
         updatedAt = Instant.now();
     }
+    
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("customer")
+    final private List<Review> sentReviews = new ArrayList<>();
 }

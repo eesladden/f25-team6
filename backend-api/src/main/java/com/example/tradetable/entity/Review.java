@@ -24,6 +24,11 @@ public class Review {
     @JsonIgnoreProperties("receivedReviews")
     private Provider provider;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnoreProperties("sentReviews")
+    private Customer customer;
+
     @NotNull
     @Min(1)
     @Max(5)

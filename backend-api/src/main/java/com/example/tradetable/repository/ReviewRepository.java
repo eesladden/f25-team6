@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByProviderId(Long providerId);
+    List<Review> findByCustomerId(Long customerId);
     @Query("SELECT r FROM Review r WHERE r.provider.id = :providerId ORDER BY r.rating DESC")
     List<Review> findByProviderIdOrderByRatingDesc(Long providerId);
     @Query("SELECT r FROM Review r WHERE r.provider.id = :providerId ORDER BY r.rating ASC")

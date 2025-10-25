@@ -20,6 +20,12 @@ public class ReviewController {
         return ResponseEntity.ok(createdReview);
     }
 
+    @PutMapping("/{id}/response")
+    public ResponseEntity<Review> respondToReview(@PathVariable Long id, @RequestBody String response) {
+        Review updatedReview = reviewService.respondToReview(id, response);
+        return ResponseEntity.ok(updatedReview);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
         Review review = reviewService.getReviewById(id);
@@ -32,9 +38,9 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/provider/{providerId}")
-    public ResponseEntity<java.util.List<Review>> getReviewsByProviderId(@PathVariable Long providerId) {
-        java.util.List<Review> reviews = reviewService.getReviewsByProviderId(providerId);
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<java.util.List<Review>> getReviewsByCustomerId(@PathVariable Long customerId) {
+        java.util.List<Review> reviews = reviewService.getReviewsByCustomerId(customerId);
         return ResponseEntity.ok(reviews);
     }
 

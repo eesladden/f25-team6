@@ -19,6 +19,12 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    public Review respondToReview(Long id, String response) {
+        Review review = getReviewById(id);
+        review.setProviderResponse(response);
+        return reviewRepository.save(review);
+    }
+
     public Review getReviewById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found with id " + id));
@@ -26,6 +32,10 @@ public class ReviewService {
 
     public List<Review> getReviewsByProviderId(Long providerId) {
         return reviewRepository.findByProviderId(providerId);
+    }
+
+    public List<Review> getReviewsByCustomerId(Long customerId) {
+        return reviewRepository.findByCustomerId(customerId);
     }
 
     public List<Review> getReviewsByProviderIdAndCommentSubstring(Long providerId, String substring) {
