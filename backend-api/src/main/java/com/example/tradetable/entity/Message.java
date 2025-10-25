@@ -18,12 +18,17 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private boolean isFromProvider; // true if sent by provider, false if sent by customer
+
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties({"receivedMessages", "sentMessages"})
+    @JsonIgnoreProperties("receivedMessages")
     private Provider provider;
 
-    Boolean sentOrReceived; // true for sent by provider, false for received by provider
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnoreProperties("receivedMessages")
+    private Customer customer;
 
     @NotBlank
     private String content;

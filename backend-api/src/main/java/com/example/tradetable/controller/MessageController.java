@@ -15,15 +15,9 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<Message> createMessage(@Valid @RequestBody Message message) {
-        Message createdMessage = messageService.createMessage(message);
-        return ResponseEntity.ok(createdMessage);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Message> getMessageById(@PathVariable Long id) {
-        Message message = messageService.getMessageById(id);
-        return ResponseEntity.ok(message);
+    public ResponseEntity<Message> sendMessage(@Valid @RequestBody Message message) {
+        Message savedMessage = messageService.sendMessage(message);
+        return ResponseEntity.ok(savedMessage);
     }
 
     @DeleteMapping("/{id}")
@@ -35,6 +29,19 @@ public class MessageController {
     @GetMapping("/provider/{providerId}")
     public ResponseEntity<java.util.List<Message>> getMessagesByProviderId(@PathVariable Long providerId) {
         java.util.List<Message> messages = messageService.getMessagesByProviderId(providerId);
+        return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<java.util.List<Message>> getMessagesByCustomerId(@PathVariable Long customerId) {
+        java.util.List<Message> messages = messageService.getMessagesByCustomerId(customerId);
+        return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/conversation")
+    public ResponseEntity<java.util.List<Message>> getConversationBetweenProviderAndCustomer(
+            @RequestParam Long providerId, @RequestParam Long customerId) {
+        java.util.List<Message> messages = messageService.getConversationBetweenProviderAndCustomer(providerId, customerId);
         return ResponseEntity.ok(messages);
     }
 

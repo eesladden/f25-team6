@@ -53,11 +53,11 @@ public class Provider {
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")
-    private List<Message> messages = new ArrayList<>();
+    private List<Message> sentMessages = new ArrayList<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("provider")
-    private List<Review> receivedReviews = new ArrayList<>();
+    private List<Message> receivedMessages = new ArrayList<>();
 }
 
 
