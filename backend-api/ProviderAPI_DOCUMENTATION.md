@@ -125,7 +125,7 @@ Content-Type: application/json
     "isForSale": true,
     "tradingFor": "N/A",
     "cityName": "New York",
-    "stateName": "NY",
+    "stateName": "NY"
 }
 
 OR
@@ -146,7 +146,7 @@ OR
     "isForSale": false,
     "tradingFor": "Looking for Rare Cards",
     "cityName": "Los Angeles",
-    "stateName": "CA",
+    "stateName": "CA"
 }
 ```
 
@@ -238,4 +238,123 @@ GET /api/listings/low-price/desc
 ## Get All Listings From A Specific Provider
 ```http
 GET /api/listings/provider/1
+```
+
+## Review Endpoints
+
+## Create Review
+```http
+POST /api/reviews
+Content-Type: application/json
+
+{
+  "provider": { 
+    "id": 1
+  },
+  "customer": { 
+    "id": 1
+  },
+  "rating": 5,
+  "comment": "Very communicative!"
+}
+```
+
+## Respond To Review
+```http
+POST /api/messages/{id}/response
+Content-Type: application/json
+
+{
+  "provider": { 
+    "id": 1
+  },
+  "customer": { 
+    "id": 1
+  },
+  "rating": 5,
+  "comment": "Very communicative!",
+  "providerResponse": "Thank you!"
+}
+```
+
+## Get Review
+```http
+GET /api/reviews/{id}
+```
+
+## Delete Review
+```http
+DELETE /api/reviews/{id}
+```
+
+## Get Reviews By Customer
+```http
+GET /api/reviews/customer/{customerId}
+```
+
+## Get Reviews By Provider
+```http
+GET /api/reviews/provider/{providerId}
+```
+
+## Get Reviews From Highest Rating to Lowest Rating
+```http
+GET /api/reviews/provider/{providerId}/sort?order=asc
+```
+
+## Get Reviews From Lowest Rating to Highest Rating
+```http
+GET /api/reviews/provider/{providerId}/sort?order=desc
+```
+
+## Search Reviews by Substring
+```http
+GET /api/reviews/provider/{providerId}/search?substring=someText
+```
+
+## Message Endpoints
+
+## Send Message
+```http
+POST /api/messages
+Content-Type: application/json
+
+Customer message:
+{
+    "provider": { 
+        "id": 1 
+    },
+    "customer": { 
+        "id": 1 
+    },
+    "content": "Hello, I am interested in your listing.",
+    "fromProvider": false
+}
+
+Provider message:
+{
+    "provider": { 
+        "id": 1 
+    },
+    "customer": { 
+        "id": 1 
+    },
+    "content": "Great!",
+    "fromProvider": true
+}
+```
+
+## Get Provider Messages
+```http
+GET /api/messages/provider/{providerId}
+```
+
+## Get Customer Messages
+```http
+GET /api/messages/customer/{customerId}
+```
+
+## Delete Message
+```http
+DELETE /api/messages/{id}
 ```

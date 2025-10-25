@@ -44,20 +44,20 @@ public class Provider {
 
     //Collection needs to take the provider-card table and find all cards associated with the provider ID and make a list of them
     @ManyToMany(mappedBy = "providers")
-    @JsonIgnoreProperties("providers")
+    @JsonIgnoreProperties({"providers", "listings", "messages", "sentReviews", "receivedReviews"})
     private java.util.Set<Card> collection = new java.util.HashSet<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("provider")
+    @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
     private List<Listing> listings = new ArrayList<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("provider")
-    private List<Message> sentMessages = new ArrayList<>();
+    @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
+    private List<Review> receivedReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("provider")
-    private List<Message> receivedMessages = new ArrayList<>();
+    @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
+    private List<Message> messages = new ArrayList<>();
 }
 
 

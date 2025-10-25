@@ -19,9 +19,9 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public Review respondToReview(Long id, String response) {
+    public Review respondToReview(Long id, Review updatedReview) {
         Review review = getReviewById(id);
-        review.setProviderResponse(response);
+        review.setProviderResponse(updatedReview.getProviderResponse());
         return reviewRepository.save(review);
     }
 

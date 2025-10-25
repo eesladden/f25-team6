@@ -25,7 +25,7 @@ public class Card {
         joinColumns = @JoinColumn(name = "card_id"),
         inverseJoinColumns = @JoinColumn(name = "provider_id")
     )
-    @JsonIgnoreProperties("collection")
+    @JsonIgnoreProperties({"collection", "providers"})
     private List<Provider> providers = new ArrayList<>();
 
     @NotBlank

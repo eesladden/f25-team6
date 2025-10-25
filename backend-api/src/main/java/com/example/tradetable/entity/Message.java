@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Table(name = "messages")
-
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +21,12 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties("receivedMessages")
+    @JsonIgnoreProperties({"messages", "sentReviews", "receivedReviews", "listings", "collection"})
     private Provider provider;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties("receivedMessages")
+    @JsonIgnoreProperties({"messages", "sentReviews", "receivedReviews", "listings", "collection"})
     private Customer customer;
 
     @NotBlank

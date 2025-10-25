@@ -20,23 +20,15 @@ public class MessageService {
     }
 
     public List<Message> getMessagesByProviderId(Long providerId) {
-        return messageRepository.findByProviderId(providerId);
+        return messageRepository.findAll().stream()
+                .filter(m -> m.getProvider().getId().equals(providerId))
+                .toList();
     }
 
     public List<Message> getMessagesByCustomerId(Long customerId) {
-        return messageRepository.findByCustomerId(customerId);
-    }
-
-    public List<Message> getMessagesByProviderIdAndCommentContaining(Long providerId, String text) {
-        return messageRepository.searchByProviderIdAndText(providerId, text);
-    }
-
-    public List<Message> getMessagesByCustomerIdAndCommentContaining(Long customerId, String text) {
-        return messageRepository.searchByCustomerIdAndText(customerId, text);
-    }
-
-    public List<Message> getConversationBetweenProviderAndCustomer(Long providerId, Long customerId) {
-        return messageRepository.findConversationBetweenProviderAndCustomer(providerId, customerId);
+        return messageRepository.findAll().stream()
+                .filter(m -> m.getCustomer().getId().equals(customerId))
+                .toList();
     }
 
     public void deleteMessage(Long id) {

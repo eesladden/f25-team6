@@ -21,12 +21,12 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties("receivedReviews")
+    @JsonIgnoreProperties({"receivedReviews", "messages", "listings", "collection"})
     private Provider provider;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties("sentReviews")
+    @JsonIgnoreProperties({"sentReviews", "messages", "listings", "collection"})
     private Customer customer;
 
     @NotNull
@@ -47,5 +47,10 @@ public class Review {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.responseAt = LocalDateTime.now();
     }
 }

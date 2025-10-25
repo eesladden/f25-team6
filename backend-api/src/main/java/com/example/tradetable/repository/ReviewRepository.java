@@ -18,5 +18,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r WHERE r.provider.id = :providerId AND r.comment LIKE %:substring%")
     List<Review> findByProviderIdAndCommentContaining(Long providerId, String substring);
     void deleteByIdAndProviderId(Long id, Long providerId);
-
 }

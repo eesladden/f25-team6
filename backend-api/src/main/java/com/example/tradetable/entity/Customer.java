@@ -72,16 +72,12 @@ public class Customer {
     void onUpdate() {
         updatedAt = Instant.now();
     }
-    
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("customer")
+    @JsonIgnoreProperties({"customer", "sentReviews", "provider.receivedReviews", "provider.listings", "provider.messages", "provider.collection"})
     final private List<Review> sentReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("customer")
-    final private List<Message> sentMessages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("customer")
-    final private List<Message> receivedMessages = new ArrayList<>();
+    @JsonIgnoreProperties({"customer", "sentReviews", "receivedReviews", "listings", "messages", "collection"})
+    final private List<Message> messages = new ArrayList<>();
 }

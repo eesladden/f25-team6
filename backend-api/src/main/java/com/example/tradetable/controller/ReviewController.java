@@ -21,9 +21,9 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}/response")
-    public ResponseEntity<Review> respondToReview(@PathVariable Long id, @RequestBody String response) {
-        Review updatedReview = reviewService.respondToReview(id, response);
-        return ResponseEntity.ok(updatedReview);
+    public ResponseEntity<Review> respondToReview(@PathVariable Long id, @Valid @RequestBody Review updatedReview) {
+        Review respondedReview = reviewService.respondToReview(id, updatedReview);
+        return ResponseEntity.ok(respondedReview);
     }
 
     @GetMapping("/{id}")
@@ -55,7 +55,7 @@ public class ReviewController {
         }
         return ResponseEntity.ok(reviews);
     }
-
+    
     @GetMapping("/provider/{providerId}/search")
     public ResponseEntity<java.util.List<Review>> getReviewsByProviderIdAndCommentSubstring(
             @PathVariable Long providerId, @RequestParam String substring) {
