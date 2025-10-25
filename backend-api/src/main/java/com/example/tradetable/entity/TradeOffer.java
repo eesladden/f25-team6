@@ -1,6 +1,7 @@
 package com.example.tradetable.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.time.Instant;
@@ -16,7 +17,10 @@ public class TradeOffer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long listingId; // Listing entity, make relation later
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "listing_id", nullable = true)
+    @JsonIgnoreProperties({"customer", "sentReviews", "receivedReviews", "listings", "messages", "collection"})
+    private Listing listing;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id", nullable = false)

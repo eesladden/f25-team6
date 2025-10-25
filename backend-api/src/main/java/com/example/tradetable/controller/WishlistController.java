@@ -17,10 +17,10 @@ public class WishlistController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WishlistItem add(@PathVariable Long customerId, @Valid @RequestBody WishlistItem body) {
-        return service.add(customerId, body);
+    public WishlistItem add(@PathVariable Long customerId, @Valid @RequestBody WishlistItem item) {
+        return service.add(customerId, item);
     }
-
+    
     @GetMapping
     public List<WishlistItem> list(@PathVariable Long customerId) {
         return service.list(customerId);

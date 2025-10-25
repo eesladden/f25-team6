@@ -21,7 +21,11 @@ public class WishlistItem {
     private Customer customer;
 
     // Listing entity, convert this to @ManyToOne Listing
-    private Long listingId;     // optional link to Listing table
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "listing_id", nullable = true)
+    @JsonIgnoreProperties({"customer", "sentReviews", "receivedReviews", "listings", "messages", "collection"})
+    private Listing listing;
+
     private String cardName;    // fallback if no listing
     private String notes;
 

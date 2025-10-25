@@ -19,19 +19,12 @@ public class WishlistService {
     public WishlistService(WishlistItemRepository repo, CustomerRepository customerRepo) {
         this.repo = repo; this.customerRepo = customerRepo;
     }
-
-    public WishlistItem add(Long customerId, WishlistItem incoming) {
+    
+    public WishlistItem add(Long customerId, WishlistItem item) {
         Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-
-        incoming.setCustomer(customer);
-
-        if (incoming.getListingId() != null
-                && repo.existsByCustomer_IdAndListingId(customerId, incoming.getListingId())) {
-            throw new IllegalArgumentException("Listing already in wishlist");
-        }
-
-        return repo.save(incoming);
+                .orElseThrow(() -> new IllegalArgumentException("Invalid customer ID"));
+        item.setCustomer(customer);
+        return repo.save(item);
     }
 
     @Transactional(readOnly = true)
