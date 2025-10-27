@@ -28,7 +28,8 @@ public class TradeOffer {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
-    private Customer seller;
+    @JsonIgnoreProperties({"customer", "sentReviews", "receivedReviews", "listings", "messages", "collection"})
+    private Provider seller;
 
     private Integer offeredValueCents;
 

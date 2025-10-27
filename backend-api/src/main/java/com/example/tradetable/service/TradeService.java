@@ -1,11 +1,13 @@
 package com.example.tradetable.service;
 
 import com.example.tradetable.entity.Customer;
+import com.example.tradetable.entity.Provider;
 import com.example.tradetable.entity.TradeOffer;
 import com.example.tradetable.repository.CustomerRepository;
 import com.example.tradetable.repository.TradeOfferRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.tradetable.repository.ProviderRepository;
 
 import java.util.List;
 
@@ -15,9 +17,10 @@ public class TradeService {
 
     private final TradeOfferRepository repo;
     private final CustomerRepository customerRepo;
+    private final ProviderRepository providerRepo;
 
-    public TradeService(TradeOfferRepository repo, CustomerRepository customerRepo) {
-        this.repo = repo; this.customerRepo = customerRepo;
+    public TradeService(TradeOfferRepository repo, CustomerRepository customerRepo, ProviderRepository providerRepo) {
+        this.repo = repo; this.customerRepo = customerRepo; this.providerRepo = providerRepo;
     }
 
     public TradeOffer createOffer(TradeOffer incoming) {
@@ -28,7 +31,7 @@ public class TradeService {
 
         Customer buyer = customerRepo.findById(incoming.getBuyer().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Buyer not found"));
-        Customer seller = customerRepo.findById(incoming.getSeller().getId())
+        Provider seller = providerRepo.findById(incoming.getSeller().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Seller not found"));
 
         incoming.setBuyer(buyer);

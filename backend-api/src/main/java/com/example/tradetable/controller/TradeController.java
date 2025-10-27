@@ -12,7 +12,7 @@ public class TradeController {
 
     private final TradeService service;
     public TradeController(TradeService service) { this.service = service; }
-
+    
     // Create trade offer: send TradeOffer JSON with {listingId, buyer:{id}, seller:{id}, offeredValueCents}
     @PostMapping("/offers")
     public TradeOffer createOffer(@RequestBody TradeOffer body) {
