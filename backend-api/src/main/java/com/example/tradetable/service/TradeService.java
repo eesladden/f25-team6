@@ -4,11 +4,12 @@ import com.example.tradetable.entity.Customer;
 import com.example.tradetable.entity.Provider;
 import com.example.tradetable.entity.TradeOffer;
 import com.example.tradetable.repository.CustomerRepository;
+import com.example.tradetable.repository.ProviderRepository;
 import com.example.tradetable.repository.TradeOfferRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.tradetable.repository.ProviderRepository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -19,10 +20,15 @@ public class TradeService {
     private final CustomerRepository customerRepo;
     private final ProviderRepository providerRepo;
 
-    public TradeService(TradeOfferRepository repo, CustomerRepository customerRepo, ProviderRepository providerRepo) {
-        this.repo = repo; this.customerRepo = customerRepo; this.providerRepo = providerRepo;
+    public TradeService(TradeOfferRepository repo,
+                        CustomerRepository customerRepo,
+                        ProviderRepository providerRepo) {
+        this.repo = repo;
+        this.customerRepo = customerRepo;
+        this.providerRepo = providerRepo;
     }
 
+    // Accepts a TradeOffer JSON with nested { buyer: {id}, seller: {id} }
     public TradeOffer createOffer(TradeOffer incoming) {
         if (incoming.getBuyer() == null || incoming.getBuyer().getId() == null)
             throw new IllegalArgumentException("Buyer required");
@@ -36,7 +42,10 @@ public class TradeService {
 
         incoming.setBuyer(buyer);
         incoming.setSeller(seller);
+
         if (incoming.getStatus() == null) incoming.setStatus(TradeOffer.Status.PENDING);
+        if (incoming.getCreatedAt() == null) incoming.setCreatedAt(Instant.now());
+        incoming.setUpdatedAt(Instant.now());
 
         return repo.save(incoming);
     }
@@ -55,6 +64,7 @@ public class TradeService {
         TradeOffer t = repo.findById(offerId)
                 .orElseThrow(() -> new IllegalArgumentException("Offer not found"));
         t.setStatus(status);
-        return t;
+        t.setUpdatedAt(Instant.now());
+        return repo.save(t);
     }
 }

@@ -3,9 +3,7 @@ package com.example.tradetable.entity;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-
 import java.time.Instant;
-
 
 @Entity
 @Table(name = "trade_offers")
@@ -17,18 +15,22 @@ public class TradeOffer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // offer may or may not be tied to a specific listing
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "listing_id", nullable = true)
-    @JsonIgnoreProperties({"customer", "sentReviews", "receivedReviews", "listings", "messages", "collection"})
+    @JoinColumn(name = "listing_id")
+    @JsonIgnoreProperties({"provider","messages","collection","sentReviews","receivedReviews"})
     private Listing listing;
 
+    // Buyer is Customer
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id", nullable = false)
+    @JsonIgnoreProperties({"listings","messages","collection","sentReviews","receivedReviews","wishlists"})
     private Customer buyer;
 
+    // Seller is provider
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false)
-    @JsonIgnoreProperties({"customer", "sentReviews", "receivedReviews", "listings", "messages", "collection"})
+    @JoinColumn(name = "seller_id", nullable = false)   
+    @JsonIgnoreProperties({"listings","messages","collection","sentReviews","receivedReviews"})
     private Provider seller;
 
     private Integer offeredValueCents;
@@ -52,7 +54,6 @@ public class TradeOffer {
     }
 
     @PreUpdate
-    void onUpdate() {
-        updatedAt = Instant.now();
-    }
+    void onUpdate() { updatedAt = Instant.now(); }
 }
+

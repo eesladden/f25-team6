@@ -1,4 +1,4 @@
-# LocalHarvest Hub API Documentation
+# TradeTable API documentation
 
 ## Provider API Endpoints
 
@@ -358,3 +358,82 @@ GET /api/messages/customer/{customerId}
 ```http
 DELETE /api/messages/{id}
 ```
+
+## Customer API Endpoints
+
+## Create Customer
+POST /api/customers
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "username": "janedoe",
+  "email": "jane@example.com",
+  "phoneNumber": "555-111-2222",
+  "password": "securepassword",
+  "birthdate": "1998-05-12"
+}
+
+## Update Customer
+PUT /api/customers/{id}
+Content-Type: application/json
+
+{
+  "name": "Jane A. Doe",
+  "username": "janedoe",
+  "email": "jane.updated@example.com",
+  "phoneNumber": "555-333-4444",
+  "birthdate": "1998-05-12"
+}
+
+## Update Password
+PUT /api/customers/{id}/password?oldPassword={oldPassword}&newPassword={newPassword}
+
+## Get Customer
+GET /api/customers/{id}
+
+## Add to wishlist
+POST /api/wishlists
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "listingId": 42
+}
+## Remove from wishlist
+DELETE /api/wishlists
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "listingId": 42
+}
+
+## Get wishlist by customer
+GET /api/wishlists/customer/{customerId}
+
+## Create Trade Offer
+POST /api/trades/offers
+Content-Type: application/json
+
+{
+  "listingId": 42,          // optional
+  "buyerId": 1,             // Customer making the offer
+  "sellerId": 7,            // Provider who owns the listing
+  "offeredValueCents": 12500
+}
+
+## Get offers by buyer (customer) 
+GET /api/trades/offers/buyer/{buyerId}
+
+## Get offers for seller (provider) 
+GET /api/trades/offers/seller/{sellerId}
+
+## Accept offer (provider only action) 
+POST /api/trades/offers/{offerId}/accept
+
+## Decline OFfer (provider only action)
+POST /api/trades/offers/{offerId}/decline
+
+## Cancel Offer (buyer cancels their own pending offer)
+POST /api/trades/offers/{offerId}/cancel
