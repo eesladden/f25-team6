@@ -11,9 +11,21 @@ import java.util.List;
 public class TradeController {
 
     private final TradeService service;
-    public TradeController(TradeService service) { this.service = service; }
-    
-    // Create trade offer: send TradeOffer JSON with {listingId, buyer:{id}, seller:{id}, offeredValueCents}
+
+    public TradeController(TradeService service) {
+        this.service = service;
+    }
+
+    /**
+     * Create trade offer by IDs.
+     * Example JSON:
+     * {
+     *   "listingId": 42,
+     *   "buyerId": 7,
+     *   "sellerId": 3,
+     *   "offeredValueCents": 12500
+     * }
+     */
     @PostMapping("/offers")
     public TradeOffer createOffer(@RequestBody TradeOffer body) {
         return service.createOffer(body);
@@ -33,12 +45,17 @@ public class TradeController {
     public TradeOffer accept(@PathVariable Long offerId) {
         return service.setStatus(offerId, TradeOffer.Status.ACCEPTED);
     }
+
     @PostMapping("/offers/{offerId}/decline")
     public TradeOffer decline(@PathVariable Long offerId) {
         return service.setStatus(offerId, TradeOffer.Status.DECLINED);
     }
+
     @PostMapping("/offers/{offerId}/cancel")
     public TradeOffer cancel(@PathVariable Long offerId) {
         return service.setStatus(offerId, TradeOffer.Status.CANCELLED);
     }
+
+    // Local request model 
+    public record CreateOfferRequest(Long listingId, Long buyerId, Long sellerId, Integer offeredValueCents) {}
 }
