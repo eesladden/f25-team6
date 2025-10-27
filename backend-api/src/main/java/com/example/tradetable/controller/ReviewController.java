@@ -44,6 +44,12 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    @GetMapping("/provider/{providerId}")
+    public ResponseEntity<java.util.List<Review>> getReviewsByProviderId(@PathVariable Long providerId) {
+        java.util.List<Review> reviews = reviewService.getReviewsByProviderId(providerId);
+        return ResponseEntity.ok(reviews);
+    }
+
     @GetMapping("/provider/{providerId}/sort")
     public ResponseEntity<java.util.List<Review>> getReviewsByProviderIdSorted(
             @PathVariable Long providerId, @RequestParam String order) {
