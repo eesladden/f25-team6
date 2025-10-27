@@ -237,7 +237,7 @@ GET /api/listings/low-price/desc
 
 ## Get All Listings From A Specific Provider
 ```http
-GET /api/listings/provider/1
+GET /api/listings/provider/{providerId}
 ```
 
 ## Review Endpoints
@@ -261,7 +261,7 @@ Content-Type: application/json
 
 ## Respond To Review
 ```http
-POST /api/messages/{id}/response
+PUT /api/reviews/{id}/response
 Content-Type: application/json
 
 {
@@ -362,6 +362,7 @@ DELETE /api/messages/{id}
 ## Customer API Endpoints
 
 ## Create Customer
+```http
 POST /api/customers
 Content-Type: application/json
 
@@ -373,8 +374,10 @@ Content-Type: application/json
   "password": "securepassword",
   "birthdate": "1998-05-12"
 }
+```
 
 ## Update Customer
+```http
 PUT /api/customers/{id}
 Content-Type: application/json
 
@@ -385,22 +388,32 @@ Content-Type: application/json
   "phoneNumber": "555-333-4444",
   "birthdate": "1998-05-12"
 }
+```
 
 ## Update Password
+```http
 PUT /api/customers/{id}/password?oldPassword={oldPassword}&newPassword={newPassword}
+```
 
 ## Get Customer
+```http
 GET /api/customers/{id}
+```
 
 ## Add to wishlist
+```http
 POST /api/wishlists
 Content-Type: application/json
+
 
 {
   "customerId": 1,
   "listingId": 42
 }
+```
+
 ## Remove from wishlist
+```http
 DELETE /api/wishlists
 Content-Type: application/json
 
@@ -408,11 +421,15 @@ Content-Type: application/json
   "customerId": 1,
   "listingId": 42
 }
+```
 
 ## Get wishlist by customer
+```http
 GET /api/wishlists/customer/{customerId}
+```
 
 ## Create Trade Offer
+```http
 POST /api/trades/offers
 Content-Type: application/json
 
@@ -422,18 +439,29 @@ Content-Type: application/json
   "sellerId": 7,            // Provider who owns the listing
   "offeredValueCents": 12500
 }
+```
 
 ## Get offers by buyer (customer) 
+```http
 GET /api/trades/offers/buyer/{buyerId}
+```
 
 ## Get offers for seller (provider) 
+```http
 GET /api/trades/offers/seller/{sellerId}
+```
 
-## Accept offer (provider only action) 
+## Accept offer (provider only action)
+```http 
 POST /api/trades/offers/{offerId}/accept
+```
 
-## Decline OFfer (provider only action)
+## Decline Offer (provider only action)
+```http
 POST /api/trades/offers/{offerId}/decline
+```
 
 ## Cancel Offer (buyer cancels their own pending offer)
+```http
 POST /api/trades/offers/{offerId}/cancel
+```
