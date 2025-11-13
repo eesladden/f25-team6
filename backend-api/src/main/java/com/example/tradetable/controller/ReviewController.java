@@ -5,10 +5,13 @@ import com.example.tradetable.service.ReviewService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
 public class ReviewController {

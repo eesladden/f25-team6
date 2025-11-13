@@ -7,35 +7,75 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CardService {
     private final CardRepository cardRepository;
+
+    private static final String UPLOAD_DIR = "backend-api/src/main/resources/static/card-images/";
+
     /**
      * Create a new card.
      * @param card the card to create
+     * @param imageFile the image file for the card
      * @return the created card
      */
-    public Card createCard(Card card) {
-        return cardRepository.save(card);
+    public Card createCard(Card card, MultipartFile imageFile) {
+        Card newCard = cardRepository.save(card);
+        String originalFileName = imageFile.getOriginalFilename();
+
+        try {
+            if (originalFileName != null && originalFileName.contains(".")) {
+                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String fileName = String.valueOf(newCard.getId()) + fileExtension;
+                Path filePath = Paths.get(UPLOAD_DIR + fileName);
+
+                InputStream inputStream = imageFile.getInputStream();
+
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                newCard.setImagePath(fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cardRepository.save(newCard);
     }
     /**
      * Update an existing card.
-     * @param id   the ID of the card to update
-     * @param updatedCard the updated card data
+     * @param id the ID of the card to update
+     * @param card the updated card data
+     * @param imageFile the new image file
      * @return the updated card
      */
-    public Card updateCard(Long id, Card updatedCard) {
-        Card existingCard = getCardById(id);
-        existingCard.setName(updatedCard.getName());
-        existingCard.setDeck(updatedCard.getDeck());
-        existingCard.setGame(updatedCard.getGame());
-        existingCard.setRarity(updatedCard.getRarity());
-        // Update other fields as necessary
-        return cardRepository.save(existingCard);
+    public Card updateCard(Long id, Card card, MultipartFile imageFile) {
+        String originalFileName = imageFile.getOriginalFilename();
+        
+        try {
+            if (originalFileName != null && originalFileName.contains(".")) {
+                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String fileName = String.valueOf(id) + fileExtension;
+                Path filePath = Paths.get(UPLOAD_DIR + fileName);
+
+                InputStream inputStream = imageFile.getInputStream();
+
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                card.setImagePath(fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cardRepository.save(card);
     }
     /**
      * Get a card by ID.
@@ -52,6 +92,10 @@ public class CardService {
      */
     public List<Card> getAllCards() {
         return cardRepository.findAll();
+    }
+    //Get cards by provider
+    public List<Card> getCardsByProvider(Long providerId) {
+        return cardRepository.getCardsByProvider(providerId);
     }
     /**
      * Delete a card by ID.

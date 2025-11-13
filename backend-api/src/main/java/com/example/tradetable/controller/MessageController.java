@@ -7,10 +7,13 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
 public class MessageController {

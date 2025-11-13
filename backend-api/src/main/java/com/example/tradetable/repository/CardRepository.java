@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CardRepository extends JpaRepository<Card, Long> {
     @Query("SELECT c FROM Card c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Card> findByNameContaining(String name);
-    @Query("SELECT c FROM Card c WHERE LOWER(c.deck) LIKE LOWER(CONCAT('%', :deck, '%'))")
+    @Query("SELECT c FROM Card c WHERE LOWER(c.set) LIKE LOWER(CONCAT('%', :deck, '%'))")
     List<Card> findByDeckContaining(String deck);
     @Query("SELECT c FROM Card c WHERE LOWER(c.game) LIKE LOWER(CONCAT('%', :game, '%'))")
     List<Card> findByGameContaining(String game);
@@ -29,4 +29,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Transactional
     @Query(value = "DELETE FROM collections WHERE card_id = :cardId AND provider_id = :providerId", nativeQuery = true)
     void removeCardFromProviderCollection(@Param("cardId") Long cardId, @Param("providerId") Long providerId);
+    @Query("SELECT c FROM Card c JOIN c.providers p WHERE p.id = :providerId")
+    List<Card> getCardsByProvider(@Param("providerId") Long providerId);
 }

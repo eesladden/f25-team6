@@ -5,10 +5,14 @@ import com.example.tradetable.service.CardService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/cards")
 @RequiredArgsConstructor
 public class CardController {
@@ -29,8 +33,8 @@ public class CardController {
      * @return the created card
      */
     @PostMapping
-    public ResponseEntity<Card> createCard(@Valid @RequestBody Card card) {
-        Card createdCard = cardService.createCard(card);
+    public ResponseEntity<Card> createCard(@Valid @RequestBody Card card, @RequestParam(required = false) MultipartFile imageFile) {
+        Card createdCard = cardService.createCard(card, imageFile);
         return ResponseEntity.ok(createdCard);
     }
     /**
@@ -40,8 +44,8 @@ public class CardController {
      * @return the updated card
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Card> updateCard(@PathVariable Long id, @Valid @RequestBody Card card) {
-        Card updatedCard = cardService.updateCard(id, card);
+    public ResponseEntity<Card> updateCard(@PathVariable Long id, @Valid @RequestBody Card card, @RequestParam(required = false) MultipartFile imageFile) {
+        Card updatedCard = cardService.updateCard(id, card, imageFile);
         return ResponseEntity.ok(updatedCard);
     }
     /**

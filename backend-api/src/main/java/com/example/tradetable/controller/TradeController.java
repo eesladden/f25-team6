@@ -2,11 +2,14 @@ package com.example.tradetable.controller;
 
 import com.example.tradetable.entity.TradeOffer;
 import com.example.tradetable.service.TradeService;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/trades")
 public class TradeController {
 

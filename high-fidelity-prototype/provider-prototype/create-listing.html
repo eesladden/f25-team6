@@ -44,7 +44,7 @@
 
 
                 <form class="create-listing-form row align-items-center justify-content-center" action="./provider-dashboard.html" method="GET" enctype="multipart/form-data">
-             
+                    <input type="hidden" id="id" name="id" value="${animal.animalId?c}">
                     <div class="col-md-3">
                         <div class="card-image-container text-center">
                             <input accept="image/*,image/heif,image/heic" type="file" id="card-image" style="display: none;" name="card-image" required>

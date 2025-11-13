@@ -3,6 +3,8 @@ package com.example.tradetable.controller;
 import com.example.tradetable.entity.Customer;
 import com.example.tradetable.service.CustomerService;
 import jakarta.validation.Valid;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/customers")
 public class CustomerController {
 

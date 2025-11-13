@@ -7,20 +7,70 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ProviderService {
     private final ProviderRepository providerRepository;
+
+    private static final String UPLOAD_DIR = "backend-api/src/main/resources/static/profile-pictures/";
+    
     /**
      * Create a new provider.
      * @param provider the provider to create
+     * @param imageFile the profile image file
      * @return the created provider
      */
-    public Provider createProvider(Provider provider) {
-        return providerRepository.save(provider);
+    public Provider createProvider(Provider provider, MultipartFile imageFile) {
+        if (providerRepository.existsByUsername(provider.getUsername())) {
+            throw new IllegalStateException("Username already registered");
+        }
+        if (providerRepository.existsByEmail(provider.getEmail())) {
+            throw new IllegalStateException("Email already registered");
+        }
+        
+        Provider newProvider = providerRepository.save(provider);
+        String originalFileName = imageFile.getOriginalFilename();
+
+        try {
+            if (originalFileName != null && originalFileName.contains(".")) {
+                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String fileName = String.valueOf(newProvider.getId()) + fileExtension;
+                Path filePath = Paths.get(UPLOAD_DIR + fileName);
+
+                InputStream inputStream = imageFile.getInputStream();
+
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                newProvider.setProfileImagePath(fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return providerRepository.save(newProvider);
+    }
+    /**
+     * Authenticate a provider.
+     * @param username
+     * @param password
+     * @return
+     */
+    public Provider authenticate(String username, String password) {
+        Provider provider = providerRepository.findByUsername(username)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+
+        if (!provider.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+        return provider;
     }
     /**
      * Update an existing provider.
@@ -28,13 +78,25 @@ public class ProviderService {
      * @param updatedProvider the updated provider data
      * @return the updated provider
      */
-    public Provider updateProvider(Long id, Provider updatedProvider) {
-        Provider existingProvider = getProviderById(id);
-        existingProvider.setName(updatedProvider.getName());
-        existingProvider.setEmail(updatedProvider.getEmail());
-        existingProvider.setPhoneNumber(updatedProvider.getPhoneNumber());
-        existingProvider.setUsername(updatedProvider.getUsername());
-        return providerRepository.save(existingProvider);
+    public Provider updateProvider(Long id, Provider provider, MultipartFile imageFile) {
+        String originalFileName = imageFile.getOriginalFilename();
+        
+        try {
+            if (originalFileName != null && originalFileName.contains(".")) {
+                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String fileName = String.valueOf(id) + fileExtension;
+                Path filePath = Paths.get(UPLOAD_DIR + fileName);
+
+                InputStream inputStream = imageFile.getInputStream();
+
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                provider.setProfileImagePath(fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return providerRepository.save(provider);
     }
     /**
      * Update provider password.
@@ -43,10 +105,10 @@ public class ProviderService {
      * @param newPassword the new password
      * @return the updated provider
      */
-    public Provider updateProviderPassword(Long id, String oldPassword, String newPassword) {
+    public Provider updateProviderPassword(Long id, String currentPassword, String newPassword) {
         Provider existingProvider = getProviderById(id);
-        if (!existingProvider.getPassword().equals(oldPassword)) {
-            throw new IllegalArgumentException("Old password does not match");
+        if (!existingProvider.getPassword().equals(currentPassword)) {
+            throw new IllegalArgumentException("Current password does not match");
         }
         existingProvider.setPassword(newPassword);
         return providerRepository.save(existingProvider);
@@ -66,13 +128,5 @@ public class ProviderService {
     public Provider getProviderById(Long id) {
         return providerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Provider not found with id: " + id));
-    }
-    /**
-     * Search providers by username.
-     * @param username the username to search by
-     * @return list of matching providers
-     */
-    public List<Provider> searchProvidersByUsername(String username) {
-        return providerRepository.findByUsernameContaining(username);
     }
 }

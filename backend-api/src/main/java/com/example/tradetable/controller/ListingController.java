@@ -5,10 +5,13 @@ import com.example.tradetable.service.ListingService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/listings")
 @RequiredArgsConstructor
 public class ListingController {
@@ -20,8 +23,8 @@ public class ListingController {
      * @return the created listing
      */
     @PostMapping
-    public ResponseEntity<Listing> createListing(@Valid @RequestBody Listing listing) {
-        Listing createdListing = listingService.createListing(listing);
+    public ResponseEntity<Listing> createListing(@Valid @RequestBody Listing listing, @RequestParam Long providerId, @RequestParam Long cardId) {
+        Listing createdListing = listingService.createListing(listing, providerId, cardId);
         return ResponseEntity.ok(createdListing);
     }
     /**
@@ -46,46 +49,23 @@ public class ListingController {
         return ResponseEntity.ok(listing);
     }
     /**
-     * Search listings by city name, condition, or grade.
-     * @param cityName the city name to search by (optional)
-     * @param condition the condition to search by (optional)
-     * @param grade the grade to search by (optional)
-     * @return list of matching listings
-     */
-    @GetMapping("/search")
-    public ResponseEntity<java.util.List<Listing>> searchListings(@RequestParam(required = false) String cityName,
-                                                                 @RequestParam(required = false) String condition,
-                                                                 @RequestParam(required = false) String grade) {
-        java.util.List<Listing> results = new java.util.ArrayList<>();
-        if (cityName != null) {
-            results.addAll(listingService.searchListingsByCityName(cityName));
-        }
-        if (condition != null) {
-            results.addAll(listingService.searchListingsByCondition(condition));
-        }
-        if (grade != null) {
-            results.addAll(listingService.searchListingsByGrade(grade));
-        }
-        return ResponseEntity.ok(results);
-    }
-    /**
      * Get listings that are for sale.
      * @return list of listings for sale
      */
-    @GetMapping("/for-sale")
-    public ResponseEntity<java.util.List<Listing>> getForSaleListings() {
-        java.util.List<Listing> listings = listingService.getForSaleListings();
-        return ResponseEntity.ok(listings);
-    }
+    //@GetMapping("/for-sale")
+    //public ResponseEntity<java.util.List<Listing>> getForSaleListings() {
+    //    java.util.List<Listing> listings = listingService.getForSaleListings();
+    //    return ResponseEntity.ok(listings);
+    //}
     /**
      * Get listings that are for trade.
      * @return list of listings for trade
      */
-    @GetMapping("/for-trade")
-    public ResponseEntity<java.util.List<Listing>> getForTradeListings() {
-        java.util.List<Listing> listings = listingService.getForTradeListings();
-        return ResponseEntity.ok(listings);
-    }
+    //@GetMapping("/for-trade")
+    //public ResponseEntity<java.util.List<Listing>> getForTradeListings() {
+    //    java.util.List<Listing> listings = listingService.getForTradeListings();
+    //    return ResponseEntity.ok(listings);
+    //}
     /**
      * Get all listings ordered by various criteria.
      * @return list of listings
@@ -163,9 +143,9 @@ public class ListingController {
      * @param providerId the ID of the provider
      * @return list of listings by the provider
      */
-    @GetMapping("/provider/{providerId}")
-    public ResponseEntity<java.util.List<Listing>> getListingsByProviderId(@PathVariable Long providerId) {
-        java.util.List<Listing> listings = listingService.getListingsByProviderId(providerId);
-        return ResponseEntity.ok(listings);
-    }
+    //@GetMapping("/provider/{providerId}")
+    //public ResponseEntity<java.util.List<Listing>> getListingsByProviderId(@PathVariable Long providerId) {
+    //    java.util.List<Listing> listings = listingService.getListingsByProviderId(providerId);
+    //    return ResponseEntity.ok(listings);
+    //}
 }

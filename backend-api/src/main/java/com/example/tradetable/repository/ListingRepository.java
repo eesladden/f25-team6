@@ -8,16 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ListingRepository extends JpaRepository<Listing, Long> {
-    @Query("SELECT l FROM Listing l WHERE LOWER(l.cityName) LIKE LOWER(CONCAT('%', :cityName, '%'))")
-    java.util.List<Listing> findByCityNameContaining(String cityName);
     @Query("SELECT l FROM Listing l WHERE LOWER(l.condition) LIKE LOWER(CONCAT('%', :condition, '%'))")
     java.util.List<Listing> findByConditionContaining(String condition);
     @Query("SELECT l FROM Listing l WHERE LOWER(l.grade) LIKE LOWER(CONCAT('%', :grade, '%'))")
     java.util.List<Listing> findByGradeContaining(String grade);
-    @Query("SELECT l FROM Listing l WHERE l.isForSale = true")
-    java.util.List<Listing> findForSaleListings();
-    @Query("SELECT l FROM Listing l WHERE l.isForSale = false")
-    java.util.List<Listing> findForTradeListings();
     @Query("SELECT l FROM Listing l ORDER BY COALESCE(l.updatedAt, l.createdAt) DESC")
     java.util.List<Listing> findAllOrderByMostRecent();
     @Query("SELECT l FROM Listing l WHERE l.isAvailable = true")
