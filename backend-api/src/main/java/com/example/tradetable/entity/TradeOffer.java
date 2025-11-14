@@ -29,10 +29,11 @@ public class TradeOffer {
 
     // Seller is provider
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false)   
+    @JoinColumn(name = "seller_id", nullable = false)
     @JsonIgnoreProperties({"listings","messages","collection","sentReviews","receivedReviews"})
     private Provider seller;
 
+    // Amount of the offer in cents
     private Integer offeredValueCents;
 
     @Enumerated(EnumType.STRING)
@@ -55,5 +56,17 @@ public class TradeOffer {
 
     @PreUpdate
     void onUpdate() { updatedAt = Instant.now(); }
-}
 
+    // ---- Alias methods to match existing callers expecting "AmountCents" ----
+    public void setAmountCents(Integer amountCents) {
+        // basic validation
+        if (amountCents != null && amountCents < 0) {
+            throw new IllegalArgumentException("amountCents cannot be negative");
+        }
+        this.offeredValueCents = amountCents;
+    }
+
+    public Integer getAmountCents() {
+        return this.offeredValueCents;
+    }
+}
