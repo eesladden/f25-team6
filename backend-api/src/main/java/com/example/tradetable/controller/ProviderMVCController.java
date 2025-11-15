@@ -115,37 +115,120 @@ public class ProviderMVCController {
         return "provider-signup";
     }
 
-    //CARD STARTS HERE
+    //CARD STARTS HERE (need to add /providers prefix to routes)
 
     //Get all cards
     @GetMapping("/cards")
-    public String getAllCards(Model model) {
+    public String getAllCards(Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         model.addAttribute("cards", cardService.getAllCards());
+        return "card-list";
+    }
+    //Search cards by name
+    @GetMapping("/cards/search")
+    public String searchCardsByName(@RequestParam String name, Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("cards", cardService.searchCardsByName(name));
+        return "card-list";
+    }
+    //Filter cards by game, set, or rarity
+    @GetMapping("/cards/filter")
+    public String filterCards(@RequestParam(required = false) String game,
+                              @RequestParam(required = false) String set,
+                              @RequestParam(required = false) String rarity,
+                              Model model, HttpSession session) {
+        java.util.List<Card> cards;
+        if (game != null) {
+            cards = cardService.filterCardsByGame(game);
+        } else if (set != null) {
+            cards = cardService.filterCardsBySet(set);
+        } else if (rarity != null) {
+            cards = cardService.filterCardsByRarity(rarity);
+        } else {
+            cards = cardService.getAllCards();
+        }
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("cards", cards);
         return "card-list";
     }
     //Get all cards for a specific provider
     @GetMapping("/cards/collection")
     public String getCardsByProvider(HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         model.addAttribute("cards", cardService.getCardsByProvider(providerId));
+        return "card-collection";
+    }
+    //Search cards by name for a specific provider
+    @GetMapping("/cards/collection/search")
+    public String searchCardsByNameForProvider(@RequestParam String name, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        java.util.List<Card> allCards = cardService.getCardsByProvider(providerId);
+        java.util.List<Card> filteredCards = new java.util.ArrayList<>();
+        for (Card card : allCards) {
+            if (card.getName().toLowerCase().contains(name.toLowerCase())) {
+                filteredCards.add(card);
+            }
+        }
+        model.addAttribute("cards", filteredCards);
+        return "card-collection";
+    }
+    //Filter cards by game, set, or rarity for a specific provider
+    @GetMapping("/cards/collection/filter")
+    public String filterCardsForProvider(@RequestParam(required = false) String game,
+                                         @RequestParam(required = false) String set,
+                                         @RequestParam(required = false) String rarity,
+                                         HttpSession session,
+                                         Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        java.util.List<Card> allCards = cardService.getCardsByProvider(providerId);
+        java.util.List<Card> filteredCards = new java.util.ArrayList<>();
+        for (Card card : allCards) {
+            if ((game != null && card.getGame().equalsIgnoreCase(game)) ||
+                (set != null && card.getSet().equalsIgnoreCase(set)) ||
+                (rarity != null && card.getRarity().equalsIgnoreCase(rarity))) {
+                filteredCards.add(card);
+            }
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("cards", filteredCards);
         return "card-collection";
     }
     //Get a card by ID
     @GetMapping("/cards/view/{cardId}")
-    public String getCardById(@PathVariable Long cardId, Model model) {
+    public String getCardById(@PathVariable Long cardId, HttpSession session, Model model) {
         model.addAttribute("card", cardService.getCardById(cardId));
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "card-details";
     }
     //View form to edit an existing card
     @GetMapping("/cards/{cardId}/edit")
-    public String editCardForm(@PathVariable Long cardId, Model model) {
+    public String editCardForm(@PathVariable Long cardId, HttpSession session, Model model) {
         model.addAttribute("card", cardService.getCardById(cardId));
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "card-edit";
     }
     //View form to create a new card
     @GetMapping("/cards/new")
-    public String newCardForm(Model model) {
+    public String newCardForm(HttpSession session, Model model) {
         model.addAttribute("card", new Card());
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "card-new";
     }
     //Create a new card
@@ -185,10 +268,22 @@ public class ProviderMVCController {
     //LISTING STARTS HERE
 
     // Create a new listing
-    @PostMapping("/listings/create")
-    public String createListing(Listing listing, HttpSession session, @RequestParam Long cardId) {
+    @PostMapping("/listings/create/card/{cardId}")
+    public String createListing(@PathVariable Long cardId, Listing listing, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
-        listingService.createListing(listing, providerId, cardId);
+        Listing newListing = new Listing();
+        newListing.setProvider(providerService.getProviderById(providerId));
+        newListing.setCard(cardService.getCardById(cardId));
+        newListing.setGrade(listing.getGrade());
+        newListing.setCondition(listing.getCondition());
+        newListing.setForSaleOrTrade(listing.getForSaleOrTrade());
+        newListing.setMarketPrice(listing.getMarketPrice());
+        newListing.setLowPrice(listing.getLowPrice());
+        newListing.setHighPrice(listing.getHighPrice());
+        newListing.setIsAvailable(listing.getIsAvailable());
+        newListing.setTradingFor(listing.getTradingFor());  
+        newListing.setLocation(listing.getLocation());
+        listingService.createListing(newListing);
         return "redirect:/listings/my-listings";
     }
     // Update an existing listing
@@ -208,6 +303,8 @@ public class ProviderMVCController {
     public String viewMyListings(HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         model.addAttribute("listings", listingService.getListingsByProvider(providerId));
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "my-listings";
     }
     //View available listings
@@ -218,24 +315,32 @@ public class ProviderMVCController {
     }
     //View listing details
     @GetMapping("/listings/{id}")
-    public String viewListingDetails(@PathVariable Long id, Model model) {
+    public String viewListingDetails(@PathVariable Long id, HttpSession session, Model model) {
         Listing listing = listingService.getListingById(id);
         model.addAttribute("listing", listing);
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "listing-details";
     }
     //View update listing form
     @GetMapping("/listings/{id}/edit")
-    public String showEditListingForm(@PathVariable Long id, Model model) {
+    public String showEditListingForm(@PathVariable Long id, HttpSession session,Model model) {
         Listing listing = listingService.getListingById(id);
         model.addAttribute("listing", listing);
+        Long providerId = (Long) session.getAttribute("providerId");
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "edit-listing";
     }
     //View create listing form
-    @GetMapping("/listings/new")
-    public String showCreateListingForm(Model model, HttpSession session) {
+    @GetMapping("/listings/new/card/{cardId}")
+    public String showCreateListingForm(@PathVariable Long cardId, Model model, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
-        model.addAttribute("cards", cardService.getCardsByProvider(providerId));
+        model.addAttribute("card", cardService.getCardById(cardId));
         model.addAttribute("listing", new Listing());
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
         return "create-listing";
     }
 }

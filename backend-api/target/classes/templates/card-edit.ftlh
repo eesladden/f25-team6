@@ -11,9 +11,9 @@
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/home">TradeTable</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Logout</button>
+            <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+                <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
                 <!--should be the profile picture of the provider in session-->
@@ -25,11 +25,12 @@
     <!---Edit Card Form-->
     <div class="container mt-4">
         <h2>Edit Card</h2>
-        <form action="/cards/${card.cardId?c}/update" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="cardId" value="${card.cardId?c}">
+        <form action="/cards/${card.id?c}/update" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" value="${card.id?c}">
+            <input type="hidden" id="imagePath" name="imagePath" value="${(card.imagePath)}" readonly />
             <div class="mb-3">
-                <label for="imageFile" class="form-label">Upload New Image</label>
-                <input type="file" class="form-control" id="imageFile" name="imageFile" value="/profile-pictures/${(card.imagePath)!''}" accept="image/*">
+                <label for="imageFile" class="form-label">Card Image</label>
+                <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>

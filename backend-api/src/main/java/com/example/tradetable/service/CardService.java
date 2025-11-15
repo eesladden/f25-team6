@@ -113,29 +113,14 @@ public class CardService {
     public List<Card> searchCardsByName(String name) {
         return cardRepository.findByNameContaining(name);
     }
-    /**
-     * Search cards by deck.
-     * @param deck the deck to search for
-     * @return list of cards matching the deck
-     */
-    public List<Card> searchCardsByDeck(String deck) {
-        return cardRepository.findByDeckContaining(deck);
+    public List<Card> filterCardsByGame(String game) {
+        return cardRepository.findByGame(game);
     }
-    /**
-     * Search cards by game.
-     * @param game the game to search for
-     * @return list of cards matching the game
-     */
-    public List<Card> searchCardsByGame(String game) {
-        return cardRepository.findByGameContaining(game);
+    public List<Card> filterCardsBySet(String set) {
+        return cardRepository.findBySet(set);
     }
-    /**
-     * Search cards by rarity.
-     * @param rarity the rarity to search for
-     * @return list of cards matching the rarity
-     */
-    public List<Card> searchCardsByRarity(String rarity) {
-        return cardRepository.findByRarityContaining(rarity);
+    public List<Card> filterCardsByRarity(String rarity) {
+        return cardRepository.findByRarity(rarity);
     }
     /**
      * Add a card to a provider's collection.
@@ -152,5 +137,26 @@ public class CardService {
      */
     public void removeCardFromProviderCollection(Long cardId, Long providerId) {
         cardRepository.removeCardFromProviderCollection(cardId, providerId);
+    }
+    /**
+     * Get all unique games.
+     * @return list of unique games
+     */
+    public List<String> findAllUniqueGames() {
+        return cardRepository.findAllUniqueGames();
+    }
+    /**
+     * Get all unique sets.
+     * @return list of unique sets
+     */
+    public List<String> findAllUniqueSets() {
+        return cardRepository.findAllUniqueSets();
+    }
+    /**
+     * Get all unique rarities.
+     * @return list of unique rarities
+     */
+    public List<String> findAllUniqueRarities() {
+        return cardRepository.findAllUniqueRarities();
     }
 }

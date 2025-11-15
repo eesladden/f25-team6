@@ -11,9 +11,9 @@
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/home">TradeTable</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Logout</button>
+            <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+                <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
                 <!--should be the profile picture of the provider in session-->
@@ -45,9 +45,10 @@
             </div>
             <input type="hidden" name="birthdate" value="${provider.birthdate}">
             <input type="hidden" name="password" value="${provider.password}">
+            <input type="hidden" id="imagePath" name="imagePath" value="${(provider.profileImagePath)!'default-profile.png'}" readonly />
             <div class="mb-3">
                 <label for="imageFile" class="form-label">Profile Image</label>
-                <input type="file" class="form-control" id="imageFile" name="imageFile" value="${provider.profileImagePath!'image-not-found.png'}" accept="image/*">
+                <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
             </div>
             </div class="mb-3">
                 <label for="bio" class="form-label">Bio</label>

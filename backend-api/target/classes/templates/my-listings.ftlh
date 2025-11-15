@@ -11,9 +11,9 @@
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/home">TradeTable</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Logout</button>
+            <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+                <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
                 <!--should be the profile picture of the provider in session-->
@@ -38,7 +38,9 @@
                             <img src="/card-images/${(listing.card.imagePath)!'default-listing.png'}" class="card-img-top" alt="${listing.card.name}">
                             <div class="card-body">
                                 <h5 class="card-title">${listing.card.name}</h5>
-                                <p class="card-text">${listing.description}</p>
+                                <p class="card-text">Grade: ${listing.grade! 'N/A'}</p>
+                                <p class="card-text">Condition: ${listing.condition! 'N/A'}</p>
+                                <p class="card-text">${listing.forSaleOrTrade}</p>
                             </div>
                             <div class="card-footer">
                                 <a href="/listings/${listing.id}/edit" class="btn btn-primary">Edit Listing</a>

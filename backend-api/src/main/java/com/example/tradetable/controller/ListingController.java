@@ -23,8 +23,8 @@ public class ListingController {
      * @return the created listing
      */
     @PostMapping
-    public ResponseEntity<Listing> createListing(@Valid @RequestBody Listing listing, @RequestParam Long providerId, @RequestParam Long cardId) {
-        Listing createdListing = listingService.createListing(listing, providerId, cardId);
+    public ResponseEntity<Listing> createListing(@Valid @RequestBody Listing listing) {
+        Listing createdListing = listingService.createListing(listing);
         return ResponseEntity.ok(createdListing);
     }
     /**

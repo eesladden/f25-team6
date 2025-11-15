@@ -11,9 +11,9 @@
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/home">TradeTable</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Logout</button>
+            <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+                <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
                 <!--should be the profile picture of the provider in session-->
@@ -44,7 +44,7 @@
                 <form id="addToCollectionForm" action="/cards/${card.id}/addToProvider" method="post" class="d-inline">
                     <button type="submit" class="btn btn-success">Add to My Collection</button>
                 </form>
-                <a href="/listings/create" class="btn btn-secondary">Create Listing</a>
+                <a href="/listings/new/card/${card.id}" class="btn btn-secondary">Create Listing</a>
             </div>
         </div>
     </div>

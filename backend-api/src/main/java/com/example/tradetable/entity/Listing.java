@@ -18,12 +18,12 @@ public class Listing {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id", nullable = true)
     @JsonIgnoreProperties({"listings", "providers"})
     private Card card;
 
     @ManyToOne
-    @JoinColumn(name = "provider_id", nullable = false)
+    @JoinColumn(name = "provider_id", nullable = true)
     @JsonIgnoreProperties({"listings", "collection", "cards"})
     private Provider provider;
 

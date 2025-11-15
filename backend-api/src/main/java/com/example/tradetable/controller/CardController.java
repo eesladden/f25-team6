@@ -69,37 +69,43 @@ public class CardController {
         return ResponseEntity.ok().build();
     }
     /**
-     * Search cards by various criteria.
-     * @param name   the name of the card
-     * @param deck   the deck of the card
-     * @param game   the game of the card
-     * @param rarity the rarity of the card
-     * @return list of cards matching the search criteria
+     * Search cards by name.
+     * @param name the name to search for
+     * @return list of cards matching the name
      */
     @GetMapping("/search")
-    public ResponseEntity<java.util.List<Card>> searchCards(@RequestParam(required = false) String name,
-                                                          @RequestParam(required = false) String deck,
-                                                          @RequestParam(required = false) String game,
-                                                          @RequestParam(required = false) String rarity) {
-        java.util.List<Card> results = new java.util.ArrayList<>();
-        if (name != null) {
-            results.addAll(cardService.searchCardsByName(name));
-        }
-        if (deck != null) {
-            results.addAll(cardService.searchCardsByDeck(deck));
-        }
+    public ResponseEntity<java.util.List<Card>> searchCardsByName(@RequestParam String name) {
+        java.util.List<Card> cards = cardService.searchCardsByName(name);
+        return ResponseEntity.ok(cards);
+    }
+    /**
+     * Filter cards by game, set, or rarity.
+     * @param game the game to filter by
+     * @param set the set to filter by
+     * @param rarity the rarity to filter by
+     * @return list of filtered cards
+     */
+    @GetMapping("/filter")
+    public ResponseEntity<java.util.List<Card>> filterCards(
+            @RequestParam(required = false) String game,
+            @RequestParam(required = false) String set,
+            @RequestParam(required = false) String rarity) {
+        java.util.List<Card> cards;
         if (game != null) {
-            results.addAll(cardService.searchCardsByGame(game));
+            cards = cardService.filterCardsByGame(game);
+        } else if (set != null) {
+            cards = cardService.filterCardsBySet(set);
+        } else if (rarity != null) {
+            cards = cardService.filterCardsByRarity(rarity);
+        } else {
+            cards = cardService.getAllCards();
         }
-        if (rarity != null) {
-            results.addAll(cardService.searchCardsByRarity(rarity));
-        }
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(cards);
     }
     /**
      * Add a card to a provider's collection.
      * @param cardId the ID of the card
-     * @param providerId
+     * @param providerId the ID of the provider
      */
     @PostMapping("/{cardId}/providers/{providerId}")
     public void addCardToProviderCollection(@PathVariable Long cardId, @PathVariable Long providerId) {
@@ -113,5 +119,32 @@ public class CardController {
     @DeleteMapping("/{cardId}/providers/{providerId}")
     public void removeCardFromProviderCollection(@PathVariable Long cardId, @PathVariable Long providerId) {
         cardService.removeCardFromProviderCollection(cardId, providerId);
+    }
+    /**
+     * Get all unique games.
+     * @return list of unique games
+     */
+    @GetMapping("/unique/games")
+    public ResponseEntity<java.util.List<String>> findAllUniqueGames() {
+        java.util.List<String> games = cardService.findAllUniqueGames();
+        return ResponseEntity.ok(games);
+    }
+    /**
+     * Get all unique sets.
+     * @return list of unique sets
+     */
+    @GetMapping("/unique/sets")
+    public ResponseEntity<java.util.List<String>> findAllUniqueSets() {
+        java.util.List<String> sets = cardService.findAllUniqueSets();
+        return ResponseEntity.ok(sets);
+    }
+    /**
+     * Get all unique rarities.
+     * @return list of unique rarities
+     */
+    @GetMapping("/unique/rarities")
+    public ResponseEntity<java.util.List<String>> findAllUniqueRarities() {
+        java.util.List<String> rarities = cardService.findAllUniqueRarities();
+        return ResponseEntity.ok(rarities);
     }
 }

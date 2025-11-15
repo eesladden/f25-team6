@@ -13,19 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ListingService {
     private final ListingRepository listingRepository;
-    private final ProviderService providerService;
-    private final CardService cardService;
 
     /**
      * Create a new listing.
      * @param listing the listing to create
      * @return the created listing
      */
-    public Listing createListing(Listing listing, Long providerId, Long cardId) {
-        Listing newListing = new Listing();
-        newListing.setProvider(providerService.getProviderById(providerId));
-        newListing.setCard(cardService.getCardById(cardId));
-        return listingRepository.save(newListing);
+    public Listing createListing(Listing listing) {
+        return listingRepository.save(listing);
     }
     /**
      * Update an existing listing.

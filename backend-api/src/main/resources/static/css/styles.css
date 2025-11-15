@@ -1,78 +1,20 @@
-/* General typography & spacing */
-body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background-color: #f8f9fa;
-  color: #212529;
+/* Fix card-collection so that the buttons and filters are aligned properly in a row with a bit of spacing */
+.filterFormCollection {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 900px;
+    margin-left: -97px;
 }
-
-/* Navbar */
-.navbar-brand {
-  font-weight: 700;
-  letter-spacing: -0.5px;
+/* Fix logout button style in navbar to be right next to the profile picture in the left side of the navbar */
+.logoutForm {
+    left: 1290px;
+    position: absolute;
 }
-
-.nav-link {
-  font-size: 0.95rem;
+.clearFiltersCollection {
+    margin-left: -45px;
 }
-
-.nav-link.active {
-  font-weight: 600;
-}
-
-/* Cards */
-.card {
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.1s ease-in-out, box-shadow 0.1s;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-.card-title {
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
-/* Buttons */
-.btn {
-  font-size: 0.9rem;
-}
-
-.btn-primary {
-  background-color: #0d6efd;
-  border: none;
-}
-
-.btn-outline-secondary:hover {
-  background-color: #e9ecef;
-}
-
-/* Listings value box */
-.value-box {
-  padding: 0.25rem 0;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid #dee2e6;
-}
-
-/* Footer */
-footer {
-  font-size: 0.85rem;
-}
-
-/* Utility tweaks */
-.tiny {
-  font-size: 0.75rem;
-}
-
-.small {
-  font-size: 0.875rem !important;
-}
-
-/* Image shrinking */
-.card-img-top {
-  max-height: 200px;   
-  object-fit: contain; 
+.viewAllCardsButton {
+    margin-left: -40px;
+    margin-right: -40px;
 }
