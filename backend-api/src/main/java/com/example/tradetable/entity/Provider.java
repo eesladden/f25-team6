@@ -3,6 +3,7 @@ package com.example.tradetable.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.NoArgsConstructor;
@@ -47,11 +48,14 @@ public class Provider {
     private String bio;
 
     private String yearCreated;
-
+    
+    @Min(0)
     private Integer listingsListed = 0;
 
+    @Min(0)
     private Integer tradesCompleted = 0;
 
+    @Min(0)
     private Integer collectionSize = 0;
 
     @PrePersist

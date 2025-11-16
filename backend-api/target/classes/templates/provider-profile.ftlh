@@ -32,7 +32,7 @@
                     <p class="lead">${(provider.bio)!"No bio available."}</p>
                     <a href="/providers/dashboard" class="btn btn-primary mb-2">View Dashboard</a>
                     <a href="/providers/profile/change-password" class="btn btn-secondary mb-2">Change Password</a>
-                    <a href="/providers/profile/edit" class="btn btn-outline-secondary mb-2">Edit Profile</a>
+                    <a href="/providers/profile/edit" class="btn btn-outline-secondary mb-2 flex-fill">Edit Profile</a>
                     <!--Rating Stars (static for now)-->
                     <div class="mb-3">
                         <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>

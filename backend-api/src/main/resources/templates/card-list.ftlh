@@ -5,7 +5,7 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>TradeTable - Card List</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
     <!---NAVBAR Start-->
@@ -22,43 +22,117 @@
         </div>
     </nav>
     <!---NAVBAR End-->
-    <!---Card Collection-->
+    <!--Breadcrumbs Start-->
+    <nav aria-label="breadcrumb" class="mt-4 ms-5">
+        <ol class="breadcrumb ms-3">
+            <li class="breadcrumb-item"><a href="/providers/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/cards/collection">My Collection</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Card List</li>
+        </ol>
+    </nav>
+    <!--Breadcrumbs End-->
+    <!---Card List-->
     <div class="container mt-4">
         <h1 class="mb-4">Card List</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            <!--Search and Sort-->
-            <input type="text" id="searchName" class="form-control mb-3" placeholder="Search by name">
-            <div class="mb-3">
-                <select id="filterGame" class="form-select">
-                    <option value="">All Games</option>
-                </select>
-                <select id="filterSet" class="form-select mt-2">
-                    <option value="">All Sets</option>
-                </select>
-                <select id="filterRarity" class="form-select mt-2">
-                    <option value="">All Rarities</option>
-                </select>
+            <!--Search Bar-->
+            <div class="row mb-4 mt-3 w-100">
+                <form id="searchForm" action="/cards/search" method="get" class="col">
+                    <input type="text" name="name" id="searchBar" class="form-control" placeholder="Search cards by name">
+                </form>
             </div>
-             <!---Card List-->
-            <#list cards as card>
+            <!--Filter Form-->
+            <div class="row mb-4 w-100">
                 <div class="col">
-                    <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
-                        <div class="card h-100">
-                            <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
-                            <div class="card-body">
-                                <h5 class="card-title">${card.name}</h5>
+                    <form id="filterForm" action="/cards/filter" method="get" class="filterForm row g-2">
+                        <div class="col">
+                            <a href="/cards/new" class="createCardButtonList btn btn-success w-100">Create New Card</a>
+                        </div>
+                        <div class="col mt-2">
+                            <select id="sortGame" name="game" class="form-select">
+                                <option value="" selected>Sort by Game</option>
+                                <#assign cardGames = []>
+                                <#list cards as card>
+                                    <#assign cardGames = cardGames + [card.game]>
+                                </#list>
+                                <#assign seenElements = []>
+                                <#list cardGames as game>
+                                    <#if !(seenElements?seq_contains(game))>
+                                        <#assign seenElements = seenElements + [game]>
+                                    </#if>
+                                </#list>
+                                <#list seenElements as uniqueGame>
+                                    <option value="${uniqueGame}">${uniqueGame}</option>
+                                </#list>
+                            </select>
+                        </div>
+                        <div class="col mt-2">
+                            <select id="sortSet" name="set" class="form-select">
+                                <option value="" selected>Sort by Set</option>
+                                <#assign cardSets = []>
+                                <#list cards as card>
+                                    <#assign cardSets = cardSets + [card.set]>
+                                </#list>
+                                <#assign seenElements = []>
+                                <#list cardSets as set>
+                                    <#if !(seenElements?seq_contains(set))>
+                                        <#assign seenElements = seenElements + [set]>
+                                    </#if>
+                                </#list>
+                                <#list seenElements as uniqueSet>
+                                    <option value="${uniqueSet}">${uniqueSet}</option>
+                                </#list>
+                            </select>
+                        </div>
+                        <div class="col mt-2">
+                            <select id="sortRarity" name="rarity" class="form-select">
+                                <option value="" selected>Sort by Rarity</option>
+                                <#assign cardRarities = []>
+                                <#list cards as card>
+                                    <#assign cardRarities = cardRarities + [card.rarity]>
+                                </#list>
+                                <#assign seenElements = []>
+                                <#list cardRarities as rarity>
+                                    <#if !(seenElements?seq_contains(rarity))>
+                                        <#assign seenElements = seenElements + [rarity]>
+                                    </#if>
+                                </#list>
+                                <#list seenElements as uniqueRarity>
+                                    <option value="${uniqueRarity}">${uniqueRarity}</option>
+                                </#list>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="applyFilters btn btn-info flex-fill w-100" style="width: 100%;">Apply Filters</button>
+                        </div>
+                        <div class="col">
+                            <a href="/cards" class="clearFilters btn btn-secondary flex-fill w-100" style="width: 100%;">Clear Filters</a>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+            <!---Card List-->
+            <#list cards as card>
+            <div class="col mt-2">
+                <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
+                    <div class="card h-100">
+                        <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${card.name}</h5>
                             <p class="card-text">Game: ${card.game}</p>
                             <p class="card-text">Set: ${card.set}</p>
                             <p class="card-text">Rarity: ${card.rarity}</p>
                         </div>
-                        <div class="card-footer text-end">
-                            <a href="/cards/${card.id}/edit" class="btn btn-primary">Edit Card</a>
+                        <!--buttons need to be shorter, they are too tall-->
+                        <div class="card-footer text-center d-flex gap-2">
+                            <a href="/cards/${card.id}/edit" class="btn btn-primary flex-fill" style="margin-left: -8px;">Edit Card</a>
                             <form id="addToCollectionForm" action="/cards/${card.id}/addToProvider" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-success">Add to My Collection</button>
+                                <button type="submit" class="btn btn-success flex-fill w-100">Add to My Collection</button>
                             </form>
                         </div>
                     </div>
-                </div>
+                </a>
+            </div>
             </#list>
         </div>
     </div>
