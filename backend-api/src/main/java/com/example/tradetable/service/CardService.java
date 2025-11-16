@@ -21,7 +21,7 @@ import java.util.List;
 public class CardService {
     private final CardRepository cardRepository;
 
-    private static final String UPLOAD_DIR = "backend-api/src/main/resources/static/card-images/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/card-images/";
 
     /**
      * Create a new card.
@@ -30,6 +30,9 @@ public class CardService {
      * @return the created card
      */
     public Card createCard(Card card, MultipartFile imageFile) {
+        if(card == null) {
+            throw new IllegalArgumentException("Card cannot be null");
+        }
         Card newCard = cardRepository.save(card);
         String originalFileName = imageFile.getOriginalFilename();
 
@@ -58,6 +61,9 @@ public class CardService {
      * @return the updated card
      */
     public Card updateCard(Long id, Card card, MultipartFile imageFile) {
+        if(card == null) {
+            throw new EntityNotFoundException("Card not found with id " + id);
+        }
         String originalFileName = imageFile.getOriginalFilename();
         
         try {
@@ -83,6 +89,9 @@ public class CardService {
      * @return the card with the specified ID
      */
     public Card getCardById(Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Card ID cannot be null");
+        }
         return cardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found with id " + id));
     }
@@ -103,6 +112,9 @@ public class CardService {
      */
     public void deleteCard(Long id) {
         Card existingCard = getCardById(id);
+        if(existingCard == null) {
+            throw new EntityNotFoundException("Card not found with id " + id);
+        }
         cardRepository.delete(existingCard);
     }
     /**

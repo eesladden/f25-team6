@@ -1,9 +1,0 @@
-/* Fix logout button style in navbar to be right next to the profile picture in the left side of the navbar */
-.logoutForm {
-    left: 1290px;
-    position: absolute;
-}
-.logoutFormNS {
-    left: 1305px !important;
-    position: absolute;
-}

@@ -8,26 +8,36 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-    <!---NAVBAR Start-->
+    <!-- NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <a class="listingNav nav-link align-items-start" style="margin-left: -1200px;" href="/listings">Listings</a>
             <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
                 <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
-                <!--should be the profile picture of the provider in session-->
                 <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile" width="30" height="30" class="d-inline-block align-top">
             </a>
         </div>
     </nav>
-    <!---NAVBAR End-->
+    <!-- NAVBAR End -->
+    <!-- Breadcrumbs Start -->
+    <nav aria-label="breadcrumb" class="mt-4 ms-5">
+        <ol class="breadcrumb ms-3">
+            <li class="breadcrumb-item"><a href="/providers/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/listings">Listings</a></li>
+            <li class="breadcrumb-item"><a href="/listings/my-listings">My Listings</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Listing Details</li>
+        </ol>
+    </nav>
+    <!-- Breadcrumbs End -->
     <#if listing.forSaleOrTrade == "For Sale">
     <!--For Sale Listing Details-->
-    <div class="container py-4">
+    <div class="containerTrade py-4 border rounded mx-auto mt-5 w-100 d-flex" style="max-width: 900px;">
         <!-- Image -->
         <div class="col-md-5">
-            <img src="/card-images/${listing.card.imagePath!'image-not-found.png'}" class="card-img-top" alt="${listing.card.name}">
+            <img src="/card-images/${listing.card.imagePath!'image-not-found.png'}" class="card-img-top" style="width: 90%;" alt="${listing.card.name}">
         </div>
 
         <!-- Details -->
@@ -71,9 +81,10 @@
     </div>
     <#else>
     <!--For Trade Listing Details-->
+    <div class="containerTrade py-4 border rounded mx-auto mt-5 w-100 d-flex" style="max-width: 900px;">
         <!-- Image -->
         <div class="col-md-5">
-            <img src="/card-images/${listing.card.imagePath!'image-not-found.png'}" class="card-img-top" alt="${listing.card.name}">
+            <img src="/card-images/${listing.card.imagePath!'image-not-found.png'}" class="card-img-top" style="width: 90%;" alt="${listing.card.name}">
         </div>
     <!-- Details -->
         <div class="col-md-7">

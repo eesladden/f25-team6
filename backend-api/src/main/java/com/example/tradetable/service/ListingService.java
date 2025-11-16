@@ -20,6 +20,9 @@ public class ListingService {
      * @return the created listing
      */
     public Listing createListing(Listing listing) {
+        if(listing == null) {
+            throw new IllegalArgumentException("Listing cannot be null");
+        }
         return listingRepository.save(listing);
     }
     /**
@@ -29,6 +32,9 @@ public class ListingService {
      * @return the updated listing
      */
     public Listing updateListing(Long id, Listing listing) {
+        if(listing == null) {
+            throw new IllegalArgumentException("Listing cannot be null");
+        }
         return listingRepository.save(listing);
     }
     /**
@@ -37,6 +43,9 @@ public class ListingService {
      * @return the listing
      */
     public Listing getListingById(Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Listing ID cannot be null");
+        }
         return listingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Listing not found with id " + id));
     }
@@ -109,6 +118,9 @@ public class ListingService {
      * @param id the ID of the listing to delete
      */
     public void deleteListing(Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Listing ID cannot be null");
+        }
         listingRepository.deleteById(id);
     }
     /**
@@ -119,5 +131,103 @@ public class ListingService {
         Listing listing = getListingById(id);
         listing.setIsAvailable(false);
         listingRepository.save(listing);
+    }
+    /**
+     * Get listings by condition (exact match).
+     * @param condition the condition of the listing
+     * @return list of listings matching the condition criteria
+     */
+    public java.util.List<Listing> getListingsByCondition(String condition) {
+        return listingRepository.findByCondition(condition);
+    }
+    /**
+     * Get listings by grade (exact match).
+     * @param grade the grade of the listing
+     * @return list of listings matching the grade criteria
+     */
+    public java.util.List<Listing> getListingsByGrade(String grade) {
+        return listingRepository.findByGrade(grade);
+    }
+    /**
+     * Get listings by tradingFor (partial match).
+     * @param tradingFor what the listing is trading for
+     * @return list of listings matching the tradingFor criteria
+     */
+    public java.util.List<Listing> getListingsByTradingForContaining(String tradingFor) {
+        return listingRepository.findByTradingForContaining(tradingFor);
+    }
+    /**
+     * Search available listings by card name (partial match).
+     * @param cardName the name of the card
+     * @return list of available listings matching the card name
+     */
+    public java.util.List<Listing> searchAvailableListingsByCardName(String cardName) {
+        return listingRepository.searchAvailableListingsByCardName(cardName);
+    }
+    /**
+     * Get all available listings ordered by most recent.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByMostRecent() {
+        return listingRepository.findAllAvailableListingsOrderByMostRecent();
+    }
+    /**
+     * Get all available listings ordered by market price ascending.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByMarketPriceAsc() {
+        return listingRepository.findAllAvailableListingsOrderByMarketPriceAsc();
+    }
+    /**
+     * Get all available listings ordered by market price descending.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByMarketPriceDesc() {
+        return listingRepository.findAllAvailableListingsOrderByMarketPriceDesc();
+    }
+    /**
+     * Get all available listings ordered by high price ascending.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByHighPriceAsc() {
+        return listingRepository.findAllAvailableListingsOrderByHighPriceAsc();
+    }
+    /**
+     * Get all available listings ordered by high price descending.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByHighPriceDesc() {
+        return listingRepository.findAllAvailableListingsOrderByHighPriceDesc();
+    }
+    /**
+     * Get all available listings ordered by low price ascending.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByLowPriceAsc() {
+        return listingRepository.findAllAvailableListingsOrderByLowPriceAsc();
+    }
+    /**
+     * Get all available listings ordered by low price descending.
+     * @return list of available listings
+     */    
+    public java.util.List<Listing> getAllAvailableListingsOrderByLowPriceDesc() {
+        return listingRepository.findAllAvailableListingsOrderByLowPriceDesc();
+    }
+    /**
+     * Get all available listings by provider username.
+     * @param username the username of the provider
+     * @return list of available listings for the provider
+     */    
+    public java.util.List<Listing> getAllAvailableListingsByProviderUsername(String username) {
+        return listingRepository.findAllAvailableListingsByProviderUsername(username);
+    }
+    /**
+     * Search listings by card name and provider ID.
+     * @param cardName the name of the card
+     * @param providerId the ID of the provider
+     * @return list of listings matching the criteria
+     */
+    public java.util.List<Listing> searchListingsByCardNameAndProvider(String cardName, Long providerId) {
+        return listingRepository.searchListingsByCardNameAndProvider(cardName, providerId);
     }
 }

@@ -242,19 +242,18 @@ public class ProviderMVCController {
         if (providerId == null) {
             return "redirect:/providers/login";
         }
-        java.util.List<Card> cards;
-        if (game != null) {
-            cards = cardService.filterCardsByGame(game);
-        } else if (set != null) {
-            cards = cardService.filterCardsBySet(set);
-        } else if (rarity != null) {
-            cards = cardService.filterCardsByRarity(rarity);
-        } else {
-            cards = cardService.getAllCards();
+        java.util.List<Card> allCards = cardService.getAllCards();
+        java.util.List<Card> filteredCards = new java.util.ArrayList<>();
+        for (Card card : allCards) {
+            if ((game != null && card.getGame().equalsIgnoreCase(game)) ||
+                (set != null && card.getSet().equalsIgnoreCase(set)) ||
+                (rarity != null && card.getRarity().equalsIgnoreCase(rarity))) {
+                filteredCards.add(card);
+            }
         }
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        model.addAttribute("cards", cards);
+        model.addAttribute("cards", filteredCards);
         return "card-list";
     }
     /**
@@ -493,8 +492,10 @@ public class ProviderMVCController {
     @PostMapping("/listings/{id}/delete")
     public String deleteListing(@PathVariable Long id, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
+        if(listingService.getListingById(id).getIsAvailable()) {
+            providerService.decrementListingsListed(providerId);
+        }
         listingService.deleteListing(id);
-        providerService.decrementListingsListed(providerId);
         return "redirect:/listings/my-listings";
     }
     @PostMapping("/listings/{id}/trade")
@@ -523,6 +524,59 @@ public class ProviderMVCController {
         return "my-listings";
     }
     /**
+     * Search provider's listings by card name
+     * @param name the name to search for
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for searched listings
+     */
+    @GetMapping("/listings/my-listings/search")
+    public String searchMyListingsByCardName(@RequestParam String name, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", listingService.searchListingsByCardNameAndProvider(name, providerId));
+        return "my-listings";
+    }
+    /**
+     * Filter provider's listings by condition or grade
+     * @param condition the condition to filter by
+     * @param grade the grade to filter by
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for filtered listings
+     */
+    @GetMapping("/listings/my-listings/filter")
+    public String filterMyListings(@RequestParam(required = false) String condition,
+                                   @RequestParam(required = false) String grade,
+                                   @RequestParam(required = false) String game, @RequestParam(required = false) String set,
+                                   @RequestParam(required = false) String rarity,
+                                   HttpSession session,
+                                   Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        java.util.List<Listing> allProviderListings = listingService.getListingsByProvider(providerId);
+        java.util.List<Listing> filteredProviderListings = new java.util.ArrayList<>();
+        for (Listing listing : allProviderListings) {
+            if ((condition != null && condition.equalsIgnoreCase(listing.getCondition())) ||
+                (grade != null && grade.equalsIgnoreCase(listing.getGrade())) ||
+                (game != null && listing.getCard().getGame().equalsIgnoreCase(game)) ||
+                (set != null && listing.getCard().getSet().equalsIgnoreCase(set)) ||
+                (rarity != null && listing.getCard().getRarity().equalsIgnoreCase(rarity))) {
+                filteredProviderListings.add(listing);
+            }
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", filteredProviderListings);
+        return "my-listings";
+    }
+    /**
      * View available listings
      * @param model the model
      * @return the view for available listings
@@ -536,6 +590,131 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("listings", listingService.getAllAvailableListings());
+        return "listings";
+    }
+    /**
+     * Search available listings by card name
+     * @param name the name to search for
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for searched listings
+     */
+    @GetMapping("/listings/search")
+    public String searchAvailableListingsByCardName(@RequestParam String name, Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", listingService.searchAvailableListingsByCardName(name));;
+        return "listings";
+    }
+    /**
+     * Filter available listings by condition or grade
+     * @param condition the condition to filter by
+     * @param grade the grade to filter by
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for filtered listings
+     */
+    @GetMapping("/listings/filter")
+    public String filterAvailableListings(@RequestParam(required = false) String condition,
+                                          @RequestParam(required = false) String grade,
+                                          Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        java.util.List<Listing> allAvailableListings = listingService.getAllAvailableListings();
+        java.util.List<Listing> filteredAvailableListings = new java.util.ArrayList<>();
+        for (Listing listing : allAvailableListings) {
+            if ((condition != null && condition.equalsIgnoreCase(listing.getCondition())) ||
+                (grade != null && grade.equalsIgnoreCase(listing.getGrade())) || listing.getIsAvailable()) {
+                filteredAvailableListings.add(listing);
+            }
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", filteredAvailableListings);
+        return "listings";
+    }
+    /**
+     * Sort available listings by market price, high price, or low price
+     * @param sortBy the attribute to sort by
+     * @param order the order of sorting (asc or desc)
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for sorted listings
+     */
+    @GetMapping("/listings/sort")
+    public String sortAvailableListings(@RequestParam String sortBy,
+                                        @RequestParam String order,
+                                        Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        java.util.List<Listing> listings;
+        if (sortBy.equals("marketPrice")) {
+            if (order.equals("asc")) {
+                listings = listingService.getAllAvailableListingsOrderByMarketPriceAsc();
+            } else {
+                listings = listingService.getAllAvailableListingsOrderByMarketPriceDesc();
+            }
+        } else if (sortBy.equals("highPrice")) {
+            if (order.equals("asc")) {
+                listings = listingService.getAllAvailableListingsOrderByHighPriceAsc();
+            } else {
+                listings = listingService.getAllAvailableListingsOrderByHighPriceDesc();
+            }
+        } else if (sortBy.equals("lowPrice")) {
+            if (order.equals("asc")) {
+                listings = listingService.getAllAvailableListingsOrderByLowPriceAsc();
+            } else {
+                listings = listingService.getAllAvailableListingsOrderByLowPriceDesc();
+            }
+        } else {
+            listings = listingService.getAllAvailableListings();
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", listings);
+        return "listings";
+    }
+    /**
+     * Get available listings by most recent
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for recent listings
+     */
+    @GetMapping("/listings/recent")
+    public String getRecentAvailableListings(Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", listingService.getAllAvailableListingsOrderByMostRecent());
+        return "listings";
+    }
+    /**
+     * Get available listings by provider username
+     * @param username the provider's username
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for the provider's listings
+     */
+    @GetMapping("/listings/provider/{username}")
+    public String getAvailableListingsByProviderUsername(@PathVariable String username, Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", listingService.getAllAvailableListingsByProviderUsername(username));
         return "listings";
     }
     /**

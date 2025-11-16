@@ -21,7 +21,7 @@ import java.util.List;
 public class ProviderService {
     private final ProviderRepository providerRepository;
 
-    private static final String UPLOAD_DIR = "backend-api/src/main/resources/static/profile-pictures/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/profile-pictures/";
     
     /**
      * Create a new provider.
@@ -79,6 +79,9 @@ public class ProviderService {
      * @return the updated provider
      */
     public Provider updateProvider(Long id, Provider provider, MultipartFile imageFile) {
+        if(provider == null) {
+            throw new IllegalArgumentException("Provider ID cannot be null");
+        }
         String originalFileName = imageFile.getOriginalFilename();
         
         try {
@@ -171,6 +174,9 @@ public class ProviderService {
      * @return the provider
      */
     public Provider getProviderById(Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Provider ID cannot be null");
+        }
         return providerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Provider not found with id: " + id));
     }

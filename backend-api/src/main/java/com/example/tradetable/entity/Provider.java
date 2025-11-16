@@ -47,6 +47,7 @@ public class Provider {
 
     private String bio;
 
+    @Column(updatable = false)
     private String yearCreated;
     
     @Min(0)

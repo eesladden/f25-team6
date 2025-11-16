@@ -19,7 +19,6 @@
         <div class="card p-4" style="width: 400px;">
             <h2 class="mb-4 text-center">Provider Log In</h2>
             <form action="/providers/login" method="post" class="needs-validation" novalidate>
-            <!--Needs to have a message appear beneath when field is empty, when username doesn't exist, or when password is incorrect-->
             <div class="mb-3">
               <label for="username" class="form-label">Username</label>
               <input type="text" id="username" name="username" class="form-control" required>

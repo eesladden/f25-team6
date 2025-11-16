@@ -12,11 +12,11 @@
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <a class="listingNav nav-link align-items-start" style="margin-left: -1200px;" href="/listings">Listings</a>
             <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
                 <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
-                <!--should be the profile picture of the provider in session-->
                 <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile" width="30" height="30" class="d-inline-block align-top">
             </a>
         </div>

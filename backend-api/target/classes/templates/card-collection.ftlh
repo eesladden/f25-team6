@@ -5,13 +5,14 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>TradeTable - Card Collection</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
+            <a class="listingNav nav-link align-items-start" style="margin-left: -1200px;" href="/listings">Listings</a>
             <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
                 <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
@@ -33,9 +34,15 @@
     <div class="container mt-4">
         <h1 class="mb-3">My Collection</h1>
         <!--Search Bar-->
-        <form id="searchForm" action="/cards/collection/search" method="get" class="searchForm">
-            <input type="text" name="name" id="searchBar" class="form-control" placeholder="Search cards by name">
-        </form>
+        <div class="col d-flex w-100 gap-2">
+            <div class="col mt-2">
+                <form id="searchForm" action="/cards/collection/search" method="get" class="searchForm" style="width: 924px;">
+                    <input type="text" name="name" id="searchBar" class="form-control" placeholder="Search cards by name">
+                </form>
+            </div>
+            <a href="#" onclick="document.getElementById('searchForm').submit();" class="btn btn-primary mt-2 w-100" style="width: 100px;">Search</a>
+            <a href="/cards/collection" class="btn btn-dark mt-2 w-100">Clear Search</a>
+        </div>
         <!--Filter Form and Buttons-->
         <div class="row row-cols-1 row-cols-md-3 g-4 mt-2" style="width: 101%">
             <form id="filterForm" action="/cards/collection/filter" method="get" class="filterFormCollection row g-2 w-100" style="margin-left: 6px;">
@@ -115,9 +122,10 @@
                                 <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
                                 <div class="card-body">
                                     <h5 class="card-title">${card.name}</h5>
-                                <p class="card-text">Game: ${card.game}</p>
-                                <p class="card-text">Set: ${card.set}</p>
-                                <p class="card-text">Rarity: ${card.rarity}</p>
+                                    <p class="card-text">Game: ${card.game}</p>
+                                    <p class="card-text">Set: ${card.set}</p>
+                                    <p class="card-text">Rarity: ${card.rarity}</p>
+                                </div>
                             </div>
                             <div class="card-footer flex-fill d-flex gap-2">
                                 <a href="/cards/${card.id}/edit" class="btn btn-primary flex-fill" style="margin-left: -8px;">Edit Card</a>
@@ -125,7 +133,7 @@
                                     <button type="submit" class="btn btn-danger flex-fill">Remove from Collection</button>
                                 </form>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </#list>
             </div>

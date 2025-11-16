@@ -19,16 +19,6 @@ public class TradeController {
         this.service = service;
     }
 
-    /**
-     * Create trade offer by IDs.
-     * Example JSON:
-     * {
-     *   "listingId": 42,
-     *   "buyerId": 7,
-     *   "sellerId": 3,
-     *   "offeredValueCents": 12500
-     * }
-     */
     @PostMapping("/offers")
     public TradeOffer createOffer(@RequestBody TradeOffer body) {
         return service.createOffer(body);
