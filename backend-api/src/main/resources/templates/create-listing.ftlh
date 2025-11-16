@@ -22,8 +22,17 @@
         </div>
     </nav>
     <!---NAVBAR End-->
+    <!--Breadcrumb Start-->
+    <nav aria-label="breadcrumb" class="mt-4 ms-5">
+        <ol class="breadcrumb ms-3">
+            <li class="breadcrumb-item"><a href="/providers/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/cards">Cards</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create Listing</li>
+        </ol>
+    </nav>
+    <!--Breadcrumb End-->
     <!--Create Listing Form-->
-    <div class="container d-flex justify-content-center align-items-start align-items-md-center">
+    <div class="container d-flex justify-content-center align-items-start align-items-md-center mt-4 mb-5">
         <div class="create-listing-form-container card shadow-sm p-4 signup-card mt-3 mt-md-0 listing-container">
             <h2 class="h5 mb-3 text-center">Create Listing</h2>
             <form class="create-listing-form row align-items-center justify-content-center" action="/listings/create/card/${card.id}" method="post" enctype="multipart/form-data">
@@ -46,6 +55,13 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <div class="card-sale-or-trade-container col mt-2">
+                            <label for="forSaleOrTrade">For Sale or For Trade?</label>
+                            <select id="forSaleOrTrade" name="forSaleOrTrade" required>
+                                <option value="For Sale">For Sale</option>
+                                <option value="For Trade">For Trade</option>
+                            </select>
+                        </div>
                         <div class="card-market-price-container col">
                             <label for="card-market-price">Market Price:</label>
                             <div class="d-flex">
@@ -62,13 +78,6 @@
                         <input type="hidden" id="isAvailable" name="isAvailable" value="true">
                     </div>
                     <div class="row mb-3">
-                        <div class="card-sale-or-trade-container mt-3 text-center">
-                            <label for="forSaleOrTrade">For Sale or For Trade?</label>
-                            <select id="forSaleOrTrade" name="forSaleOrTrade" required>
-                                <option value="For Sale">For Sale</option>
-                                <option value="For Trade">For Trade</option>
-                            </select>
-                        </div>
                         <div class="card-trading-for-container col">
                             <label for="trading-for">Trading For:</label>
                             <input type="text" id="trading-for" name="tradingFor" value="N/A" placeholder="Trading For" class="form-control">
