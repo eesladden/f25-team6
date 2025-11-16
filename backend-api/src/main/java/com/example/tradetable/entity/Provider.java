@@ -46,6 +46,19 @@ public class Provider {
 
     private String bio;
 
+    private String yearCreated;
+
+    private Integer listingsListed = 0;
+
+    private Integer tradesCompleted = 0;
+
+    private Integer collectionSize = 0;
+
+    @PrePersist
+    protected void onCreate() {
+        this.yearCreated = String.valueOf(java.time.Year.now().getValue());
+    }
+
     @ManyToMany(mappedBy = "providers")
     @JsonIgnoreProperties({"providers", "listings", "messages", "sentReviews", "receivedReviews"})
     private java.util.Set<Card> collection = new java.util.HashSet<>();

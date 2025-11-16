@@ -111,4 +111,13 @@ public class ListingService {
     public void deleteListing(Long id) {
         listingRepository.deleteById(id);
     }
+    /**
+     * Mark a listing as unavailable.
+     * @param id the ID of the listing to mark as unavailable
+     */
+    public void markListingAsUnavailable(Long id) {
+        Listing listing = getListingById(id);
+        listing.setIsAvailable(false);
+        listingRepository.save(listing);
+    }
 }

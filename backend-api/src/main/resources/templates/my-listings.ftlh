@@ -30,7 +30,7 @@
                 <input type="text" id="searchBar" class="form-control" placeholder="Search listings by card name">
             </div>
             <#if listings?size == 0>
-                <p>You have no listings. <a href="/listings/new">Create a listing</a> to get started!</p>
+                <p>You have no listings. <a href="/cards">Find a card you want to list</a> to get started!</p>
             <#else>
                 <#list listings as listing>
                     <div class="col-md-4 mb-4">

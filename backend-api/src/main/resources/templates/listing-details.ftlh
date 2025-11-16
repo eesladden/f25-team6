@@ -44,10 +44,17 @@
             </div>
             <div class="text-secondary tiny">Created: ${listing.createdAt?string("yyyy-MM-dd HH:mm")} • Updated: ${listing.updatedAt?string("yyyy-MM-dd HH:mm")}</div>
         </div>
-
+        <#if availability>
         <div class="d-flex gap-2 mb-3">
-            <a href="#" class="btn btn-primary">Make Offer</a>
+            <form action="/listings/${listing.id}/trade" method="post">
+                <button type="submit" class="btn btn-primary">Make Offer</button>
+            </form>
         </div>
+        <#else>
+        <div class="d-flex gap-2 mb-3">
+            <button type="button" class="btn btn-secondary" disabled>Closed</button>
+        </div>
+        </#if>
 
         <hr>
         <h2 class="h6">Details</h2>
@@ -79,9 +86,17 @@
             </div>
         </div>
 
+        <#if availability>
         <div class="d-flex gap-2 mb-3">
-            <a href="#" class="btn btn-primary">Propose Trade</a>
+            <form action="/listings/${listing.id}/trade" method="post">
+                <button type="submit" class="btn btn-primary">Propose Trade</button>
+            </form>
         </div>
+        <#else>
+        <div class="d-flex gap-2 mb-3">
+            <button type="button" class="btn btn-secondary" disabled>Closed</button>
+        </div>
+        </#if>
 
         <hr>
         <h2 class="h6">Details</h2>

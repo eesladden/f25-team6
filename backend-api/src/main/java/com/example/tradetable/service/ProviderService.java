@@ -99,6 +99,51 @@ public class ProviderService {
         return providerRepository.save(provider);
     }
     /**
+     * Increment the listings listed count for a provider.
+     * @param providerId the ID of the provider
+     */
+    public void incrementListingsListed(Long providerId) {
+        Provider provider = getProviderById(providerId);
+        provider.setListingsListed(provider.getListingsListed() + 1);
+        providerRepository.save(provider);
+    }
+    /**
+     * Increment the collection size for a provider.
+     * @param providerId the ID of the provider
+     */
+    public void incrementCollectionSize(Long providerId) {
+        Provider provider = getProviderById(providerId);
+        provider.setCollectionSize(provider.getCollectionSize() + 1);
+        providerRepository.save(provider);
+    }
+    /**
+     * Increment the trades completed count for a provider.
+     * @param providerId the ID of the provider
+     */
+    public void incrementTradesCompleted(Long providerId) {
+        Provider provider = getProviderById(providerId);
+        provider.setTradesCompleted(provider.getTradesCompleted() + 1);
+        providerRepository.save(provider);
+    }
+    /**
+     * Decrement the collection size for a provider.
+     * @param providerId the ID of the provider
+     */
+    public void decrementCollectionSize(Long providerId) {
+        Provider provider = getProviderById(providerId);
+        provider.setCollectionSize(provider.getCollectionSize() - 1);
+        providerRepository.save(provider);
+    }
+    /**
+     * Decrement the listings listed count for a provider.
+     * @param providerId the ID of the provider
+     */
+    public void decrementListingsListed(Long providerId) {
+        Provider provider = getProviderById(providerId);
+        provider.setListingsListed(provider.getListingsListed() - 1);
+        providerRepository.save(provider);
+    }
+    /**
      * Update provider password.
      * @param id the ID of the provider to update
      * @param oldPassword the old password

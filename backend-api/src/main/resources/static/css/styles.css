@@ -11,6 +11,10 @@
     left: 1290px;
     position: absolute;
 }
+.logoutFormNS {
+    left: 1305px !important;
+    position: absolute;
+}
 .clearFiltersCollection {
     margin-left: -45px;
 }

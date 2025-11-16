@@ -38,8 +38,8 @@ public class Listing {
     private Double highPrice = 0.0;
 
     private Double lowPrice = 0.0;
-    
-    //should be true when new listing is created
+
+    // Indicates if the listing is still available for trade/sale
     private Boolean isAvailable = true;
 
     private String forSaleOrTrade = "For Sale";

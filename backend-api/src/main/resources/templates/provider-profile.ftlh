@@ -5,14 +5,14 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>TradeTable - Provider Profile</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutFormNS d-inline">
                 <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
@@ -22,15 +22,28 @@
         </div>
     </nav>
     <!---NAVBAR End-->
-    <!---Profile Content Start-->
-    <div class="container mt-4">
-        <div class="text-center">
-            <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile Picture" class="rounded-circle" width="150" height="150">
-            <h2 class="mt-3">${provider.username}</h2>
-            <p class="lead">${(provider.bio)!"No bio available."}</p>
-            <a href="/providers/dashboard" class="btn btn-primary">View Dashboard</a>
-            <a href="/providers/profile/change-password" class="btn btn-secondary">Change Password</a>
-            <a href="/providers/profile/edit" class="btn btn-outline-secondary">Edit Profile</a>
+    <!---Profile Content-->
+    <div class="container mt-4" style="margin-top: 20px;">
+        <div class="row justify-content-center align-items-center" style="min-height: 500px;">
+            <div class="col-md-4">
+                <div class="text-center border p-4 rounded" style="background-color: #f8f9fa;">
+                    <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile Picture" class="rounded-circle" width="150" height="150">
+                    <h2 class="mt-3">${provider.username}</h2>
+                    <p class="lead">${(provider.bio)!"No bio available."}</p>
+                    <a href="/providers/dashboard" class="btn btn-primary mb-2">View Dashboard</a>
+                    <a href="/providers/profile/change-password" class="btn btn-secondary mb-2">Change Password</a>
+                    <a href="/providers/profile/edit" class="btn btn-outline-secondary mb-2">Edit Profile</a>
+                    <!--Rating Stars (static for now)-->
+                    <div class="mb-3">
+                        <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
+                        <span class="ms-2">4.0 out of 5</span>
+                    </div>
+                    <p class="text-muted mt-3">Member since: ${provider.yearCreated}</p>
+                    <p class="text-muted"># of Cards Listed: ${provider.listingsListed}</p>
+                    <p class="text-muted"># of Trades Completed: ${provider.tradesCompleted}</p>
+                    <p class="text-muted"># of Cards Collected: ${provider.collectionSize}</p>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

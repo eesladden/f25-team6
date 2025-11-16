@@ -5,14 +5,14 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>TradeTable - Change Password</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutFormNS d-inline">
                 <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
@@ -23,8 +23,9 @@
     </nav>
     <!---NAVBAR End-->
     <!---Change Password Form-->
-    <div class="container mt-4">
-        <h2>Change Password</h2>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="border p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center">Change Password</h2>
         <form action="/providers/profile/change-password" method="post">
             <div class="mb-3">
                 <label for="currentPassword" class="form-label">Current Password</label>
@@ -34,8 +35,12 @@
                 <label for="newPassword" class="form-label">New Password</label>
                 <input type="password" class="form-control" id="newPassword" name="newPassword" required>
             </div>
-            <button type="submit" class="btn btn-primary">Update Password</button>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary" style="flex: 1.3;">Update Password</button>
+                <a class="btn btn-secondary flex-fill" href="/providers/profile" style="flex: 0.4;">Cancel</a>
+            </div>
         </form>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="/js-provider/logout.js"></script>
