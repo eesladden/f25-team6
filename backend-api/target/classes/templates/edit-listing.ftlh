@@ -58,10 +58,17 @@
                     <div class="row mb-3">
                         <div class="card-sale-or-trade-container col mt-2">
                             <label for="forSaleOrTrade">For Sale or For Trade?</label>
+                            <#if listing.forSaleOrTrade == "For Sale">
                             <select id="forSaleOrTrade" name="forSaleOrTrade" required>
                                 <option value="For Sale">For Sale</option>
                                 <option value="For Trade">For Trade</option>
                             </select>
+                            <#else>
+                            <select id="forSaleOrTrade" name="forSaleOrTrade" required> 
+                                <option value="For Trade">For Trade</option>
+                                <option value="For Sale">For Sale</option>
+                            </select>
+                            </#if>
                         </div>
                         <div class="card-market-price-container col">
                             <label for="card-market-price">Market Price:</label>

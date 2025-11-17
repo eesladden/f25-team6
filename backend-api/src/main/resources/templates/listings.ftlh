@@ -151,52 +151,58 @@
                     </form> 
                 </div>
             </div>
-            <form id="sortForm" action="/listings/sort" method="get" class="sortForm row g-2">
-                <div class="col-md-2 ms-2">
-                    <select id="sortBy" name="sortBy" class="form-select">
-                        <option value="" selected>Sort By</option>
-                        <option value="marketPrice">Market Price</option>
-                        <option value="listingPrice">High Price</option>
-                        <option value="createdAt">Low Price</option>
-                    </select>   
+            <div class="row mb-2 mt-2">
+                <div class="col g-2 ms-2">
+                    <form id="sortForm" action="/listings/sort" method="get" class="sortForm row g-2">
+                        <div class="col">
+                            <select id="sortBy" name="sortBy" class="form-select w-100">
+                                <option value="" selected>Sort By</option>
+                                <option value="marketPrice">Market Price</option>
+                                <option value="listingPrice">High Price</option>
+                                <option value="createdAt">Low Price</option>
+                            </select>   
+                        </div>
+                        <div class="col">
+                            <select id="order" name="order" class="form-select w-100">
+                                <option value="" selected>Order</option>
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="applySort btn btn-info w-100">Apply Sort</button>
+                        </div>
+                        <div class="col">
+                            <a href="/listings" class="clearSort btn btn-secondary w-100">Clear Sort</a>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-2">
-                    <select id="order" name="order" class="form-select">
-                        <option value="" selected>Order</option>
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
-                    </select>
+                <div class="col g-2 me-2">
+                    <form id="locationForm" action="/listings/location" method="get" class="locationForm row g-2">
+                        <div class="col">
+                            <select id="sortLocation" name="location" class="form-select w-100">
+                                <option value="" selected>Sort by Location</option>
+                                <#assign listingLocations = []>
+                                <#list listings as listing>
+                                    <#assign listingLocations = listingLocations + [listing.location]>
+                                </#list>
+                                <#assign seenElements = []>
+                                <#list listingLocations as location>
+                                    <#if !(seenElements?seq_contains(location))>
+                                        <#assign seenElements = seenElements + [location]>
+                                    </#if>
+                                </#list>
+                                <#list seenElements as uniqueLocation>
+                                    <option value="${uniqueLocation}">${uniqueLocation}</option>
+                                </#list>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-info w-100">Apply Location</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="applySort btn btn-info flex-fill w-100" style="width: 100%;">Apply Sort</button>
-                </div>
-                <div class="col-md-2">
-                    <a href="/listings" class="clearSort btn btn-secondary flex-fill w-100" style="width: 100%;">Clear Sort</a>
-                </div>
-                <form id="locationForm" action="/listings/location" method="get" class="locationForm gap-2">
-                    <div class="col">
-                        <select id="sortLocation" name="location" class="form-select">
-                            <option value="" selected>Sort by Location</option>
-                            <#assign listingLocations = []>
-                            <#list listings as listing>
-                                <#assign listingLocations = listingLocations + [listing.location]>
-                            </#list>
-                            <#assign seenElements = []>
-                            <#list listingLocations as location>
-                                <#if !(seenElements?seq_contains(location))>
-                                    <#assign seenElements = seenElements + [location]>
-                                </#if>
-                            </#list>
-                            <#list seenElements as uniqueLocation>
-                                <option value="${uniqueLocation}">${uniqueLocation}</option>
-                            </#list>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-info" style="width: 88%;">Apply Location</button>
-                    </div>
-                </form>
-            </form>
+            </div>
         </div>
         <!---Card List-->
         <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-2">

@@ -73,7 +73,7 @@
 
             <div class="col-md-6">
               <label for="birthdate" class="form-label">Birth Date</label>
-              <input type="date" id="birthdate" name="birthdate" class="form-control" max="2007-11-13" required>
+              <input type="date" id="birthdate" name="birthdate" class="form-control" max="2007-11-20" required>
               <#if signupError?? && signupError>
                 <div class="invalid-feedback d-block">Valid birth date required.</div>
               </#if>

@@ -36,11 +36,17 @@ public class Listing {
     @NotBlank
     private String marketPrice = "0.0";
 
+    private Double mpValue;
+
     @NotBlank
     private String highPrice = "0.0";
+
+    private Double hpValue;
     
     @NotBlank
     private String lowPrice = "0.0";
+
+    private Double lpValue;
 
     // Indicates if the listing is still available for trade/sale
     private Boolean isAvailable = true;
@@ -63,10 +69,16 @@ public class Listing {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.mpValue = Double.parseDouble(this.marketPrice);
+        this.hpValue = Double.parseDouble(this.highPrice);
+        this.lpValue = Double.parseDouble(this.lowPrice);
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+        this.mpValue = Double.parseDouble(this.marketPrice);
+        this.hpValue = Double.parseDouble(this.highPrice);
+        this.lpValue = Double.parseDouble(this.lowPrice);
     }
 }

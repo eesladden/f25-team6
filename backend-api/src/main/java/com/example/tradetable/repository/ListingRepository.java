@@ -42,17 +42,17 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     java.util.List<Listing> searchAvailableListingsByCardName(String cardName);
     @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY COALESCE(l.updatedAt, l.createdAt) DESC")
     java.util.List<Listing> findAllAvailableListingsOrderByMostRecent();
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.marketPrice ASC")
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.mpValue ASC")
     java.util.List<Listing> findAllAvailableListingsOrderByMarketPriceAsc();
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.marketPrice DESC")
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.mpValue DESC")
     java.util.List<Listing> findAllAvailableListingsOrderByMarketPriceDesc();
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.highPrice ASC")
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.hpValue ASC")
     java.util.List<Listing> findAllAvailableListingsOrderByHighPriceAsc();
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.highPrice DESC")
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.hpValue DESC")
     java.util.List<Listing> findAllAvailableListingsOrderByHighPriceDesc();
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.lowPrice ASC")
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.lpValue ASC")
     java.util.List<Listing> findAllAvailableListingsOrderByLowPriceAsc();
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.lowPrice DESC")
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true ORDER BY l.lpValue DESC")
     java.util.List<Listing> findAllAvailableListingsOrderByLowPriceDesc();
     @Query("SELECT l FROM Listing l WHERE l.isAvailable = true AND l.provider.username = :username")
     java.util.List<Listing> findAllAvailableListingsByProviderUsername(String username);
