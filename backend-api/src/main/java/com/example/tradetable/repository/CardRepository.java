@@ -15,12 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CardRepository extends JpaRepository<Card, Long> {
     @Query("SELECT c FROM Card c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Card> findByNameContaining(String name);
-    @Query("SELECT c FROM Card c WHERE LOWER(c.deck) LIKE LOWER(CONCAT('%', :deck, '%'))")
-    List<Card> findByDeckContaining(String deck);
-    @Query("SELECT c FROM Card c WHERE LOWER(c.game) LIKE LOWER(CONCAT('%', :game, '%'))")
-    List<Card> findByGameContaining(String game);
-    @Query("SELECT c FROM Card c WHERE LOWER(c.rarity) LIKE LOWER(CONCAT('%', :rarity, '%'))")
-    List<Card> findByRarityContaining(String rarity);
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO collections (card_id, provider_id) VALUES (:cardId, :providerId)", nativeQuery = true)
@@ -29,4 +23,15 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Transactional
     @Query(value = "DELETE FROM collections WHERE card_id = :cardId AND provider_id = :providerId", nativeQuery = true)
     void removeCardFromProviderCollection(@Param("cardId") Long cardId, @Param("providerId") Long providerId);
+    @Query("SELECT c FROM Card c JOIN c.providers p WHERE p.id = :providerId")
+    List<Card> getCardsByProvider(@Param("providerId") Long providerId);
+    List<Card> findByGame(String game);
+    List<Card> findBySet(String set);
+    List<Card> findByRarity(String rarity);
+    @Query("SELECT DISTINCT c.game FROM Card c")
+    List<String> findAllUniqueGames();
+    @Query("SELECT DISTINCT c.set FROM Card c")
+    List<String> findAllUniqueSets();
+    @Query("SELECT DISTINCT c.rarity FROM Card c")
+    List<String> findAllUniqueRarities();
 }

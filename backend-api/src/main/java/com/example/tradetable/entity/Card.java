@@ -1,5 +1,3 @@
-//Need to be able to map multiple providers to a single card and multiple cards to a single provider for the collection list
-//Many-to-Many relationship between Card and Provider entities not working properly
 package com.example.tradetable.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,11 +26,13 @@ public class Card {
     @JsonIgnoreProperties({"collection", "providers"})
     private List<Provider> providers = new ArrayList<>();
 
+    private String imagePath;
+
     @NotBlank
     private String name;
 
     @NotBlank
-    private String deck;
+    private String set;
 
     @NotBlank
     private String game;

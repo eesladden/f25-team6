@@ -3,12 +3,15 @@ package com.example.tradetable.controller;
 import com.example.tradetable.entity.WishlistItem;
 import com.example.tradetable.service.WishlistService;
 import jakarta.validation.Valid;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@ConditionalOnExpression("${my.controller.enabled:false}")
 @RequestMapping("/api/customers/{customerId}/wishlist")
 public class WishlistController {
 

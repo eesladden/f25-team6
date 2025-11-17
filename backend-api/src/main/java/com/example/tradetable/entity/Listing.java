@@ -18,13 +18,13 @@ public class Listing {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id", nullable = true)
     @JsonIgnoreProperties({"listings", "providers"})
     private Card card;
 
     @ManyToOne
-    @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties({"listings", "messages", "collection", "sentReviews", "receivedReviews"})
+    @JoinColumn(name = "provider_id", nullable = true)
+    @JsonIgnoreProperties({"listings", "collection", "cards"})
     private Provider provider;
 
     @NotBlank
@@ -33,24 +33,32 @@ public class Listing {
     @NotBlank
     private String grade;
 
-    private Double marketPrice = 0.0;
+    @NotBlank
+    private String marketPrice = "0.0";
 
-    private Double highPrice = 0.0;
+    private Double mpValue;
 
-    private Double lowPrice = 0.0;
+    @NotBlank
+    private String highPrice = "0.0";
+
+    private Double hpValue;
     
-    //should be true when new listing is created
+    @NotBlank
+    private String lowPrice = "0.0";
+
+    private Double lpValue;
+
+    // Indicates if the listing is still available for trade/sale
     private Boolean isAvailable = true;
 
-    private Boolean isForSale; // true for sale, false for trade
+    @NotBlank
+    private String forSaleOrTrade = "For Sale";
 
+    @NotBlank
     private String tradingFor = "N/A";
 
     @NotBlank
-    private String cityName;
-
-    @NotBlank
-    private String stateName;
+    private String location;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -61,10 +69,16 @@ public class Listing {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.mpValue = Double.parseDouble(this.marketPrice);
+        this.hpValue = Double.parseDouble(this.highPrice);
+        this.lpValue = Double.parseDouble(this.lowPrice);
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+        this.mpValue = Double.parseDouble(this.marketPrice);
+        this.hpValue = Double.parseDouble(this.highPrice);
+        this.lpValue = Double.parseDouble(this.lowPrice);
     }
 }

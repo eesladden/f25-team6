@@ -3,6 +3,7 @@ package com.example.tradetable.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,27 @@ public class Provider {
     @NotBlank
     private String birthdate;
 
-    //Collection needs to take the provider-card table and find all cards associated with the provider ID and make a list of them
+    private String profileImagePath;
+
+    private String bio;
+
+    @Column(updatable = false)
+    private String yearCreated;
+    
+    @Min(0)
+    private Integer listingsListed = 0;
+
+    @Min(0)
+    private Integer tradesCompleted = 0;
+
+    @Min(0)
+    private Integer collectionSize = 0;
+
+    @PrePersist
+    protected void onCreate() {
+        this.yearCreated = String.valueOf(java.time.Year.now().getValue());
+    }
+
     @ManyToMany(mappedBy = "providers")
     @JsonIgnoreProperties({"providers", "listings", "messages", "sentReviews", "receivedReviews"})
     private java.util.Set<Card> collection = new java.util.HashSet<>();
@@ -50,14 +71,6 @@ public class Provider {
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
     private List<Listing> listings = new ArrayList<>();
-
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
-    private List<Review> receivedReviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
-    private List<Message> messages = new ArrayList<>();
 }
 
 
