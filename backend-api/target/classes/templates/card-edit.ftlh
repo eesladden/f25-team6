@@ -26,7 +26,7 @@
     <div class="container mt-4 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="w-50 border p-4 rounded">
             <h2>Edit Card</h2>
-            <form action="/cards/${card.id?c}/update" method="post" enctype="multipart/form-data">
+            <form action="/cards/${card.id?c}/update" method="post" enctype="multipart/form-data" novalidate>
                 <input type="hidden" id="id" name="id" value="${card.id?c}">
                 <input type="hidden" id="imagePath" name="imagePath" value="${(card.imagePath)}" readonly />
                 <div class="mb-3">
@@ -35,19 +35,31 @@
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="${card.name}" required>
+                    <input type="text" class="form-control" id="name" name="name" value="${card.name}" placeholder="${card.name!'Charizard'}" required>
+                    <#if editError??>
+                        <div class="text-danger mt-2">Card name cannot be empty.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="game" class="form-label">Game</label>
-                    <input type="text" class="form-control" id="game" name="game" value="${card.game}" required>
+                    <input type="text" class="form-control" id="game" name="game" value="${card.game}" placeholder="${card.game!'Pokémon'}" required>
+                    <#if editError??>
+                        <div class="text-danger mt-2">Card game cannot be empty.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="set" class="form-label">Set</label>
-                    <input type="text" class="form-control" id="set" name="set" value="${card.set}" required>
+                    <input type="text" class="form-control" id="set" name="set" value="${card.set}" placeholder="${card.set!'Scarlett & Violet'}" required>
+                    <#if editError??>
+                        <div class="text-danger mt-2">Card set cannot be empty.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="rarity" class="form-label">Rarity</label>
-                    <input type="text" class="form-control" id="rarity" name="rarity" value="${card.rarity}" required>
+                    <input type="text" class="form-control" id="rarity" name="rarity" value="${card.rarity}" placeholder="${card.rarity!'Ultra Rare'}" required>
+                    <#if editError??>
+                        <div class="text-danger mt-2">Card rarity cannot be empty.</div>
+                    </#if>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Card</button>
             </form>

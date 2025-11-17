@@ -126,12 +126,12 @@
                                     <p class="card-text">Set: ${card.set}</p>
                                     <p class="card-text">Rarity: ${card.rarity}</p>
                                 </div>
-                            </div>
-                            <div class="card-footer flex-fill d-flex gap-2">
-                                <a href="/cards/${card.id}/edit" class="btn btn-primary flex-fill" style="margin-left: -8px;">Edit Card</a>
-                                <form id="removeCardForm" action="/cards/${card.id}/removeFromProvider" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-danger flex-fill">Remove from Collection</button>
-                                </form>
+                                <div class="card-footer text-center d-flex gap-2">
+                                    <a href="/cards/${card.id}/edit" class="btn btn-primary flex-fill" style="margin-left: -8px;">Edit Card</a>
+                                    <form id="removeCardForm" action="/cards/${card.id}/removeFromProvider" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger flex-fill">Remove from Collection</button>
+                                    </form>
+                                </div>
                             </div>
                         </a>
                     </div>

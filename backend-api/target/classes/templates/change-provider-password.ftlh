@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
             <a class="listingNav nav-link align-items-start" style="margin-left: -1200px;" href="/listings">Listings</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
+            <form id="logoutForm" action="/providers/logout" method="post" class="logoutFormNS d-inline">
                 <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
@@ -34,10 +34,13 @@
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="border p-4" style="max-width: 500px; width: 100%;">
         <h2 class="text-center">Change Password</h2>
-        <form action="/providers/profile/change-password" method="post">
+        <form action="/providers/profile/change-password" method="post" novalidate>
             <div class="mb-3">
                 <label for="currentPassword" class="form-label">Current Password</label>
                 <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                <#if changePasswordError?? && changePasswordError>
+                    <div class="text-danger mt-2">Current password is incorrect.</div>
+                </#if>
             </div>
             <div class="mb-3">
                 <label for="newPassword" class="form-label">New Password</label>

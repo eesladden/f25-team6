@@ -33,9 +33,9 @@
     <!--Breadcrumbs End-->
     <!---Create New Card Form-->
     <div class="container mt-4 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="w-50 border p-4 rounded">
+        <div class="w-50 border p-4 rounded mb-5">
             <h2>Create New Card</h2>
-            <form action="/cards" method="post" enctype="multipart/form-data">
+            <form action="/cards" method="post" enctype="multipart/form-data" novalidate>
                 <div class="mb-3">
                     <label for="imageFile" class="form-label">Upload Image</label>
                 <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" required>

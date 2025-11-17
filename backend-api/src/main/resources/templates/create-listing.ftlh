@@ -27,7 +27,7 @@
         <ol class="breadcrumb ms-3">
             <li class="breadcrumb-item"><a href="/providers/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/cards">Cards</a></li>
-            <li class="breadcrumb-item"><a href="/cards/${card.id}">Card Details</a></li>
+            <li class="breadcrumb-item"><a href="/cards/view/${card.id}">Card Details</a></li>
             <li class="breadcrumb-item active" aria-current="page">Create Listing</li>
         </ol>
     </nav>
@@ -36,7 +36,7 @@
     <div class="container d-flex justify-content-center align-items-start align-items-md-center mt-4 mb-5">
         <div class="create-listing-form-container card shadow-sm p-4 signup-card mt-3 mt-md-0 listing-container">
             <h2 class="h5 mb-3 text-center">Create Listing</h2>
-            <form class="create-listing-form row align-items-center justify-content-center" action="/listings/create/card/${card.id}" method="post" enctype="multipart/form-data">
+            <form class="create-listing-form row align-items-center justify-content-center" action="/listings/create/card/${card.id}" method="post" enctype="multipart/form-data" novalidate>
                 <div class="col-md-3 text-center mb-3">
                     <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" alt="${card.name}" class="img-fluid mb-2">
                     <h5 class="card-title">${card.name}</h5>
@@ -48,14 +48,14 @@
                     <div class="row mb-3">
                         <div class="card-condition-container col">
                             <label for="condition">Card Condition:</label>
-                            <input type="text" id="condition" name="condition" placeholder="Condition"class="form-control" required>
+                            <input type="text" id="condition" name="condition" placeholder="Fair" class="form-control" required>
                             <#if creationError?? && creationError>
                                 <div class="text-danger mt-1">Card condition is required.</div>
                             </#if>
                         </div>
                         <div class="card-grade-container col">
                             <label for="card-grade">Card Grade:</label>
-                            <input type="text" id="card-grade" name="grade" placeholder="Grade" class="form-control">
+                            <input type="text" id="card-grade" name="grade" placeholder="Gem Mint" class="form-control">
                             <#if creationError?? && creationError>
                                 <div class="text-danger mt-1">Card grade is required.</div>
                             </#if>
@@ -72,7 +72,7 @@
                         <div class="card-market-price-container col">
                             <label for="card-market-price">Market Price:</label>
                             <div class="d-flex">
-                                <label class="dollar-sign">$</label><input type="number" id="card-market-price" name="marketPrice" value="0.00" placeholder="0.00" min="0" step="0.01" class="form-control" required>
+                                <label class="dollar-sign">$</label><input type="number" id="card-market-price" name="marketPrice" value="0.00" placeholder="2.00" min="0" step="0.01" class="form-control" required>
                             </div>
                             <#if creationError?? && creationError>
                                 <div class="text-danger mt-1">Market price is required. Enter 0 if trading.</div>
@@ -80,23 +80,25 @@
                         </div>
                         <div class="card-price-high-low-inputs-container col-md-6">
                             <label for="card-price-high">Price Range:</label>
-                            <div class="d-flex">
-                                <label class="dollar-sign">$</label><input type="number" id="card-price-low" name="lowPrice" value="0.00" placeholder="Low" min="0" step="0.01" class="form-control me-2" required>
-                                <#if creationError?? && creationError>
-                                    <div class="text-danger mt-1">Low price is required. Enter 0 if trading.</div>
-                                </#if>
-                                <label class="dollar-sign">$</label><input type="number" id="card-price-high" name="highPrice" value="0.00" placeholder="High" min="0" step="0.01" class="form-control" required>
-                                <#if creationError?? && creationError>
-                                    <div class="text-danger mt-1">High price is required. Enter 0 if trading.</div>
-                                </#if>
+                            <div class="flex-fill d-flex gap-2">
+                                <div class="col align-items-center d-flex gap-2">
+                                    <label class="dollar-sign">$</label><input type="number" id="card-price-low" name="lowPrice" value="0.00" placeholder="1.00" min="0" step="0.01" class="form-control" required>
+                                </div>
+                                <label class="to-label align-self-center">–</label>
+                                <div class="col align-items-center d-flex gap-2">
+                                    <label class="dollar-sign">$</label><input type="number" id="card-price-high" name="highPrice" value="0.00" placeholder="3.00" min="0" step="0.01" class="form-control" required>
+                                </div>
                             </div>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">Price range is required. Enter 0 – 0 if trading.</div>
+                            </#if>
                         </div>
                         <input type="hidden" id="isAvailable" name="isAvailable" value="true">
                     </div>
                     <div class="row mb-3">
                         <div class="card-trading-for-container col">
                             <label for="trading-for">Trading For:</label>
-                            <input type="text" id="trading-for" name="tradingFor" value="N/A" placeholder="Trading For" class="form-control">
+                            <input type="text" id="trading-for" name="tradingFor" value="N/A" placeholder="Squirtle" class="form-control">
                             <#if creationError?? && creationError>
                                 <div class="text-danger mt-1">Trading for is required. Enter N/A if for sale.</div>
                             </#if>
@@ -105,7 +107,7 @@
                     <div class="row mb-3">
                         <div class="card-location-container col">
                             <label for="location">Location (City, State):</label>
-                            <input type="text" id="location" name="location" placeholder="City, State" class="form-control" required>
+                            <input type="text" id="location" name="location" placeholder="Los Angeles, CA" class="form-control" required>
                             <#if creationError?? && creationError>
                                 <div class="text-danger mt-1">Location is required.</div>
                             </#if>

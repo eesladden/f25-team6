@@ -52,7 +52,6 @@
             <div class="d-flex justify-content-between small">
             <span>Low / High</span><strong>$${listing.lowPrice} / $${listing.highPrice}</strong>
             </div>
-            <div class="text-secondary tiny">Created: ${listing.createdAt?string("yyyy-MM-dd HH:mm")} • Updated: ${listing.updatedAt?string("yyyy-MM-dd HH:mm")}</div>
         </div>
         <#if availability>
         <div class="d-flex gap-2 mb-3">
@@ -69,10 +68,10 @@
         <hr>
         <h2 class="h6">Details</h2>
         <ul class="small">
-            <li>Location: ${listing.cityName}, ${listing.stateName}</li>
+            <li>Location: ${listing.location}</li>
             <li>Game: ${listing.card.game}</li>
             <li>Set: ${listing.card.set}</li>
-            <li>Rarity: ${listing.rarity}</li>
+            <li>Rarity: ${listing.card.rarity}</li>
             <li>Condition: ${listing.condition}</li>
             <li>Grading: ${listing.grade}</li>
             <li>Seller: ${listing.provider.name}</li>

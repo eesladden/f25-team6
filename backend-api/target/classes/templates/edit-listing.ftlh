@@ -34,69 +34,82 @@
     <!--Breadcrumb End-->
     <!--Different for For Trade or For Sale-->
     <!--Edit Listing Form-->
-    <div class="container d-flex justify-content-center align-items-start align-items-md-center mt-5">
-        <div class="edit-listing-form-container card shadow-sm p-4 signup-card mt-3 mt-md-0 listing-container justify-content-center" style="width: 900px; height: 400px;">
+    <div class="container d-flex justify-content-center align-items-start align-items-md-center mt-4 mb-5">
+        <div class="create-listing-form-container card shadow-sm p-4 signup-card mt-3 mt-md-0 listing-container">
             <h2 class="h5 mb-3 text-center">Edit Listing</h2>
-
-            <form class="edit-listing-form row align-items-center justify-content-center" action="/listings/${listing.id?c}/update" method="post" enctype="multipart/form-data">
-                <input type="hidden" id="id" name="id" value="${listing.id?c}">
+            <form class="create-listing-form row align-items-center justify-content-center" action="/listings/${listing.id}/update" method="post" enctype="multipart/form-data" novalidate>
                 <div class="col-md-9">
                     <div class="row mb-3">
                         <div class="card-condition-container col">
                             <label for="condition">Card Condition:</label>
-                            <input type="text" id="condition" name="condition" placeholder="Condition"class="form-control" value="${listing.condition}" required>
+                            <input type="text" id="condition" name="condition" placeholder="${listing.condition!'Fair'}" class="form-control" value="${listing.condition}" required>
+                            <#if editError??>
+                                <div class="text-danger mt-1">Card condition cannot be empty.</div>
+                            </#if>
                         </div>
                         <div class="card-grade-container col">
                             <label for="card-grade">Card Grade:</label>
-                            <input type="text" id="card-grade" name="crade" placeholder="Grade" class="form-control" value="${listing.grade} ">
+                            <input type="text" id="card-grade" name="grade" placeholder="${listing.grade!'Gem Mint'}" class="form-control" value="${listing.grade}" required>
+                            <#if editError??>
+                                <div class="text-danger mt-1">Card grade cannot be empty.</div>
+                            </#if>
                         </div>
                     </div>
-                    <#if listing.forSaleOrTrade == "For Sale">
                     <div class="row mb-3">
+                        <div class="card-sale-or-trade-container col mt-2">
+                            <label for="forSaleOrTrade">For Sale or For Trade?</label>
+                            <select id="forSaleOrTrade" name="forSaleOrTrade" required>
+                                <option value="For Sale">For Sale</option>
+                                <option value="For Trade">For Trade</option>
+                            </select>
+                        </div>
                         <div class="card-market-price-container col">
                             <label for="card-market-price">Market Price:</label>
                             <div class="d-flex">
-                                <label class="dollar-sign">$</label><input type="number" id="marketPrice" name="marketPrice" value="${listing.marketPrice}" placeholder="0.00" min="0" step="0.01" class="form-control" required>
+                                <label class="dollar-sign">$</label><input type="number" id="card-market-price" name="marketPrice" value="${listing.marketPrice}" placeholder="${listing.marketPrice!'2.00'}" min="0" step="0.01" class="form-control" required>
                             </div>
+                            <#if editError??>
+                                <div class="text-danger mt-1">Market price cannot be empty. Enter 0 if trading.</div>
+                            </#if>
                         </div>
                         <div class="card-price-high-low-inputs-container col-md-6">
                             <label for="card-price-high">Price Range:</label>
-                            <div class="d-flex">
-                                <label class="dollar-sign">$</label><input type="number" id="lowPrice" name="lowPrice" value="${listing.lowPrice}" placeholder="Low" min="0" step="0.01" class="form-control me-2" required>
-                                <label class="dollar-sign">$</label><input type="number" id="highPrice" name="highPrice" value="${listing.highPrice}" placeholder="High" min="0" step="0.01" class="form-control" required>
+                            <div class="flex-fill d-flex gap-2">
+                                <div class="col align-items-center d-flex gap-2">
+                                    <label class="dollar-sign">$</label><input type="number" id="card-price-low" name="lowPrice" value="${listing.lowPrice}" placeholder="${listing.lowPrice!'1.00'}" min="0" step="0.01" class="form-control" required>
+                                </div>
+                                <label class="to-label align-self-center">–</label>
+                                <div class="col align-items-center d-flex gap-2">
+                                    <label class="dollar-sign">$</label><input type="number" id="card-price-high" name="highPrice" value="${listing.highPrice}" placeholder="${listing.highPrice!'3.00'}" min="0" step="0.01" class="form-control" required>
+                                </div>
                             </div>
+                            <#if editError??>
+                                <div class="text-danger mt-1">Price range cannot be empty. Enter 0 – 0 if trading.</div>
+                            </#if>
                         </div>
+                        <input type="hidden" id="isAvailable" name="isAvailable" value="true">
                     </div>
-                    <input type="hidden" id="isAvailable" name="isAvailable" value="${listing.isAvailable?c}">
-                    <div class="row mb-3">
-                        <input type="hidden" id="forSaleOrTrade" name="forSaleOrTrade" value="For Sale">
-                        <input type="hidden" id="tradingFor" name="tradingFor" value="N/A">
-                        <div class="card-location-container col">
-                            <label for="location">Location (City, State):</label>
-                            <input type="text" id="location" name="location" placeholder="City, State" class="form-control" value="${listing.location}" required>
-                        </div>
-                    </div>
-                    <#else>
-                    <input type="hidden" id="marketPrice" name="marketPrice" value="0.00">
-                    <input type="hidden" id="lowPrice" name="lowPrice" value="0.00">
-                    <input type="hidden" id="highPrice" name="highPrice" value="0.00">
                     <div class="row mb-3">
                         <div class="card-trading-for-container col">
-                            <label for="tradingFor">Trading For:</label>
-                            <input type="text" id="tradingFor" name="tradingFor" placeholder="Trading For" class="form-control" value="${listing.tradingFor}" required>
-                        </div>
-                        <input type="hidden" id="isAvailable" name="isAvailable" value="${listing.isAvailable?c}">
-                        <input type="hidden" id="forSaleOrTrade" name="forSaleOrTrade" value="For Trade">
-                        <div class="card-location-container col">
-                            <label for="location">Location (City, State):</label>
-                            <input type="text" id="location" name="location" placeholder="City, State" class="form-control" value="${listing.location}" required>
+                            <label for="trading-for">Trading For:</label>
+                            <input type="text" id="trading-for" name="tradingFor" value="${listing.tradingFor}" placeholder="${listing.tradingFor!'Squirtle'}" class="form-control">
+                            <#if editError??>
+                                <div class="text-danger mt-1">Trading for cannot be empty. Enter N/A if for sale.</div>
+                            </#if>
                         </div>
                     </div>
-                    </#if>
+                    <div class="row mb-3">
+                        <div class="card-location-container col">
+                            <label for="location">Location (City, State):</label>
+                            <input type="text" id="location" name="location" value="${listing.location}" placeholder="${listing.location!'Los Angeles, CA'}" class="form-control" required>
+                            <#if editError??>
+                                <div class="text-danger mt-1">Location cannot be empty.</div>
+                            </#if>
+                        </div>
+                    </div>
                 </div>
                 <div class="button-container text-center mb-3 mt-4">
-                    <button class="btn btn-primary w-25 me-2" type="submit">Edit Listing</button>
-                    <button class="btn btn-secondary w-25 ms-2" type="button" onclick="window.location.href='/listings/${listing.id?c}'">Cancel</button>
+                    <button class="btn btn-primary w-50" type="submit">Edit Listing</button>
                 </div>
             </form>
         </div>

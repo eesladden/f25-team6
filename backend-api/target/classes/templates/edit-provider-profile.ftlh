@@ -34,27 +34,39 @@
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="border p-4 mb-5" style="max-width: 500px; width: 100%;">
             <h2>Edit Profile</h2>
-            <form action="/providers/profile/update" method="post" enctype="multipart/form-data">
+            <form action="/providers/profile/update" method="post" enctype="multipart/form-data" novalidate>
                 <input type="hidden" name="id" value="${provider.id}">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="${provider.name}" required>
+                    <input type="text" class="form-control" id="name" name="name" value="${provider.name}" placeholder="${provider.name!'John Doe'}" required>
+                    <#if editProfileError?? && editProfileError>
+                        <div class="text-danger mt-2">Name cannot be empty.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" value="${provider.username}" required>
+                    <input type="text" class="form-control" id="username" name="username" value="${provider.username}" placeholder="${provider.username!'johndoe'}" required>
+                    <#if editProfileError?? && editProfileError>
+                        <div class="text-danger mt-2">Username cannot be empty.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="${provider.email}" required>
+                    <input type="email" class="form-control" id="email" name="email" value="${provider.email}" placeholder="${provider.email!'johndoe@example.com'}" required>
+                    <#if editProfileError?? && editProfileError>
+                        <div class="text-danger mt-2">Email cannot be empty.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="phoneNumber" class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${provider.phoneNumber}" required>
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${provider.phoneNumber}" placeholder="${provider.phoneNumber!'(123) 456-7890'}" required>
+                    <#if editProfileError?? && editProfileError>
+                        <div class="text-danger mt-2">Phone Number cannot be empty.</div>
+                    </#if>
                 </div>
                 <input type="hidden" name="birthdate" value="${provider.birthdate}">
                 <input type="hidden" name="password" value="${provider.password}">
-                <input type="hidden" id="imagePath" name="imagePath" value="${(provider.profileImagePath)!'default-profile.png'}" readonly />
+                <input type="hidden" id="profileImagePath" name="profileImagePath" value="${(provider.profileImagePath)!'default-profile.png'}" readonly />
                 <div class="mb-3">
                     <label for="imageFile" class="form-label">Profile Image</label>
                     <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">

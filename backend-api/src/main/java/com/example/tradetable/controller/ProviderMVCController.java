@@ -130,6 +130,12 @@ public class ProviderMVCController {
     @PostMapping("/providers/profile/update")
     public String updateProvider(Provider provider, @RequestParam MultipartFile imageFile, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
+        if(provider.getName() == null || provider.getName().isEmpty() ||
+           provider.getUsername() == null || provider.getUsername().isEmpty() ||
+           provider.getEmail() == null || provider.getEmail().isEmpty() ||
+           provider.getPhoneNumber() == null || provider.getPhoneNumber().isEmpty()) {
+            return "redirect:/providers/profile/edit?error=true";
+        }
         providerService.updateProvider(providerId, provider, imageFile);
         return "redirect:/providers/profile";
     }
@@ -140,8 +146,11 @@ public class ProviderMVCController {
      * @return the change password view
      */
     @GetMapping("/providers/profile/change-password")
-    public String viewChangePassword(HttpSession session, Model model) {
+    public String viewChangePassword(@RequestParam(required = false) String error, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
+        if (error != null) {
+            model.addAttribute("changePasswordError", true);
+        }
         if (providerId == null) {
             return "redirect:/providers/login";
         }
@@ -172,10 +181,13 @@ public class ProviderMVCController {
      * @return the edit profile view
      */
     @GetMapping("/providers/profile/edit")
-    public String editProfilePage(HttpSession session, Model model) {
+    public String editProfilePage(@RequestParam(required = false) String error, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
             return "redirect:/providers/login";
+        }
+        if (error != null) {
+            model.addAttribute("editProfileError", true);
         }
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
@@ -405,10 +417,13 @@ public class ProviderMVCController {
      * @return the card edit view
      */
     @GetMapping("/cards/{cardId}/edit")
-    public String editCardForm(@PathVariable Long cardId, HttpSession session, Model model) {
+    public String editCardForm(@RequestParam(required = false) String error, @PathVariable Long cardId, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
             return "redirect:/providers/login";
+        }
+        if(error != null) {
+            model.addAttribute("editError", true);
         }
         model.addAttribute("card", cardService.getCardById(cardId));
         Provider provider = providerService.getProviderById(providerId);
@@ -466,6 +481,12 @@ public class ProviderMVCController {
      */
     @PostMapping("/cards/{cardId}/update")
     public String updateCard(@PathVariable Long cardId, Card card, @RequestParam MultipartFile imageFile) {
+        if(card.getName() == null || card.getName().isEmpty() ||
+           card.getGame() == null || card.getGame().isEmpty() ||
+           card.getSet() == null || card.getSet().isEmpty() ||
+           card.getRarity() == null || card.getRarity().isEmpty()) {
+            return "redirect:/cards/" + cardId + "/edit?error=true";
+        }
         cardService.updateCard(cardId, card, imageFile);
         return "redirect:/cards/view/" + cardId;
     }
@@ -514,9 +535,6 @@ public class ProviderMVCController {
     @PostMapping("/listings/create/card/{cardId}")
     public String createListing(@PathVariable Long cardId, Listing listing, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
-        Listing newListing = new Listing();
-        newListing.setProvider(providerService.getProviderById(providerId));
-        newListing.setCard(cardService.getCardById(cardId));
         if(listing.getCondition() == null || listing.getCondition().isEmpty() ||
            listing.getGrade() == null || listing.getGrade().isEmpty() ||
            listing.getMarketPrice() == null ||
@@ -524,9 +542,11 @@ public class ProviderMVCController {
            listing.getHighPrice() == null ||
            listing.getTradingFor() == null || listing.getTradingFor().isEmpty() ||
            listing.getLocation() == null || listing.getLocation().isEmpty()) {
-            return "redirect:/listings/create/card/" + cardId + "?error=true";
+            return "redirect:/listings/new/card/" + cardId + "?error=true";
         }
-        listingService.createListing(newListing);
+        listing.setProvider(providerService.getProviderById(providerId));
+        listing.setCard(cardService.getCardById(cardId));
+        listingService.createListing(listing);
         providerService.incrementListingsListed(providerId);
         return "redirect:/listings/my-listings";
     }
@@ -537,7 +557,19 @@ public class ProviderMVCController {
      * @return redirect to the provider's listings view
      */
     @PostMapping("/listings/{id}/update")
-    public String updateListing(@PathVariable Long id, Listing listing) {
+    public String updateListing(@PathVariable Long id, Listing listing, HttpSession session) {
+        if(listing.getCondition() == null || listing.getCondition().isEmpty() ||
+           listing.getGrade() == null || listing.getGrade().isEmpty() ||
+           listing.getMarketPrice() == null ||
+           listing.getLowPrice() == null ||
+           listing.getHighPrice() == null ||
+           listing.getTradingFor() == null || listing.getTradingFor().isEmpty() ||
+           listing.getLocation() == null || listing.getLocation().isEmpty()) {
+            return "redirect:/listings/" + id + "/edit?error=true";
+        }
+        listing.setCard(listingService.getListingById(id).getCard());
+        Long providerId = (Long) session.getAttribute("providerId");
+        listing.setProvider(providerService.getProviderById(providerId));
         listingService.updateListing(id, listing);
         return "redirect:/listings/my-listings";
     }
@@ -821,10 +853,13 @@ public class ProviderMVCController {
      * @return the view for the edit listing form
      */
     @GetMapping("/listings/{id}/edit")
-    public String showEditListingForm(@PathVariable Long id, HttpSession session,Model model) {
+    public String showEditListingForm(@RequestParam(required = false) String error, @PathVariable Long id, HttpSession session,Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
             return "redirect:/providers/login";
+        }
+        if(error != null) {
+            model.addAttribute("editError", true);
         }
         Listing listing = listingService.getListingById(id);
         model.addAttribute("listing", listing);

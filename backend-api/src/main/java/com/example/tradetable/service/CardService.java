@@ -21,7 +21,7 @@ import java.util.List;
 public class CardService {
     private final CardRepository cardRepository;
 
-    private static final String UPLOAD_DIR = "src/main/resources/static/card-images/";
+    private static final String UPLOAD_DIR = "backend-api/src/main/resources/static/card-images/";
 
     /**
      * Create a new card.
