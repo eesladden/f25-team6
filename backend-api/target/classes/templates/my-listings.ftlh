@@ -45,7 +45,7 @@
                 <a href="/listings/my-listings" class="btn btn-dark mt-2 w-100" style="margin-right: 25px;">Clear Search</a>
             </div>
             <!--Sorts-->
-            <div class="row mb-4 mt-2 w-100">
+            <div class="row mb-3 mt-2 w-100">
                 <div class="col">
                     <form id="filterForm" action="/listings/my-listings/filter" method="get" class="filterForm row g-2">
                         <div class="col">
@@ -150,35 +150,37 @@
                     </form> 
                 </div>
             </div>
-            <#if listings?size == 0>
-                <p>You have no listings. <a href="/cards">Find a card you want to list</a> to get started!</p>
-            <#else>
-                <#list listings as listing>
-                    <div class="col-md-4 mb-4">
-                        <a href="/listings/${listing.id}" class="text-decoration-none text-dark">
-                            <div class="card h-100">
-                                <img src="/card-images/${(listing.card.imagePath)!'default-listing.png'}" class="card-img-top" alt="${listing.card.name}"> 
-                                <div class="card-body">
-                                    <#if listing.isAvailable == true>
-                                    <h5 class="card-title">${listing.card.name} <span class="badge bg-success ms-2 mb-1">Available</span></h5>
-                                        <#else>
-                                    <h5 class="card-title">${listing.card.name} <span class="badge bg-secondary ms-2 mb-1">Not Available</span></h5>
-                                    </#if>
-                                    <p class="card-text">Grade: ${listing.grade! 'N/A'}</p>
-                                    <p class="card-text">Condition: ${listing.condition! 'N/A'}</p>
-                                    <p class="card-text">${listing.forSaleOrTrade}</p>
+            <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-1">
+                <#if listings?size == 0>
+                    <p>You have no listings. <a href="/cards">Find a card you want to list</a> to get started!</p>
+                <#else>
+                    <#list listings as listing>
+                        <div class="col-md-4 mb-4">
+                            <a href="/listings/${listing.id}" class="text-decoration-none text-dark">
+                                <div class="card h-100">
+                                    <img src="/card-images/${(listing.card.imagePath)!'default-listing.png'}" class="card-img-top" alt="${listing.card.name}"> 
+                                    <div class="card-body">
+                                        <#if listing.isAvailable == true>
+                                        <h5 class="card-title">${listing.card.name} <span class="badge bg-success ms-2 mb-1">Available</span></h5>
+                                            <#else>
+                                        <h5 class="card-title">${listing.card.name} <span class="badge bg-secondary ms-2 mb-1">Not Available</span></h5>
+                                        </#if>
+                                        <p class="card-text">Grade: ${listing.grade! 'N/A'}</p>
+                                        <p class="card-text">Condition: ${listing.condition! 'N/A'}</p>
+                                        <p class="card-text">${listing.forSaleOrTrade}</p>
+                                    </div>
+                                    <div class="card-footer align-items-center d-flex gap-2">
+                                        <a href="/listings/${listing.id}/edit" class="btn btn-primary" style="width: 210px; margin-left: -10px;">Edit Listing</a>
+                                        <form action="/listings/${listing.id}/delete" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-danger" style="width: 190px;">Delete Listing</button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="card-footer align-items-center d-flex gap-2">
-                                    <a href="/listings/${listing.id}/edit" class="btn btn-primary" style="width: 210px; margin-left: -10px;">Edit Listing</a>
-                                    <form action="/listings/${listing.id}/delete" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-danger" style="width: 190px;">Delete Listing</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </#list>
-            </#if>
+                            </a>
+                        </div>
+                    </#list>
+                </#if>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

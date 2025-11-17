@@ -27,6 +27,7 @@
         <ol class="breadcrumb ms-3">
             <li class="breadcrumb-item"><a href="/providers/dashboard">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/cards">Cards</a></li>
+            <li class="breadcrumb-item"><a href="/cards/${card.id}">Card Details</a></li>
             <li class="breadcrumb-item active" aria-current="page">Create Listing</li>
         </ol>
     </nav>

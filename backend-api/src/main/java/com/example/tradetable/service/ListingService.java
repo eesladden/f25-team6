@@ -230,4 +230,12 @@ public class ListingService {
     public java.util.List<Listing> searchListingsByCardNameAndProvider(String cardName, Long providerId) {
         return listingRepository.searchListingsByCardNameAndProvider(cardName, providerId);
     }
+    /**
+     * Get all available listings by location.
+     * @param location the location to filter by
+     * @return list of available listings in the specified location
+     */
+    public java.util.List<Listing> getAllAvailableListingsByLocation(String location) {
+        return listingRepository.findAllAvailableListingsByLocation(location);
+    }
 }

@@ -152,7 +152,7 @@
                 </div>
             </div>
             <form id="sortForm" action="/listings/sort" method="get" class="sortForm row g-2">
-                <div class="col ms-2">
+                <div class="col-md-2 ms-2">
                     <select id="sortBy" name="sortBy" class="form-select">
                         <option value="" selected>Sort By</option>
                         <option value="marketPrice">Market Price</option>
@@ -160,41 +160,66 @@
                         <option value="createdAt">Low Price</option>
                     </select>   
                 </div>
-                <div class="col">
+                <div class="col-md-2">
                     <select id="order" name="order" class="form-select">
                         <option value="" selected>Order</option>
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>
                 </div>
-                <div class="col">
+                <div class="col-md-2">
                     <button type="submit" class="applySort btn btn-info flex-fill w-100" style="width: 100%;">Apply Sort</button>
                 </div>
-                <div class="col me-4">
+                <div class="col-md-2">
                     <a href="/listings" class="clearSort btn btn-secondary flex-fill w-100" style="width: 100%;">Clear Sort</a>
                 </div>
+                <form id="locationForm" action="/listings/location" method="get" class="locationForm gap-2">
+                    <div class="col">
+                        <select id="sortLocation" name="location" class="form-select">
+                            <option value="" selected>Sort by Location</option>
+                            <#assign listingLocations = []>
+                            <#list listings as listing>
+                                <#assign listingLocations = listingLocations + [listing.location]>
+                            </#list>
+                            <#assign seenElements = []>
+                            <#list listingLocations as location>
+                                <#if !(seenElements?seq_contains(location))>
+                                    <#assign seenElements = seenElements + [location]>
+                                </#if>
+                            </#list>
+                            <#list seenElements as uniqueLocation>
+                                <option value="${uniqueLocation}">${uniqueLocation}</option>
+                            </#list>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-info" style="width: 88%;">Apply Location</button>
+                    </div>
+                </form>
             </form>
         </div>
-        
-        <#if listings?size == 0>
-            <p>There are no available listings at this time.</p>
-        <#else>
-            <#list listings as listing>
-                <div class="col-md-4 mb-4">
-                    <a href="/listings/${listing.id}" style="text-decoration: none; color: inherit;">
-                        <div class="card h-100">
-                            <img src="/card-images/${(listing.card.imagePath)!'default-listing.png'}" class="card-img-top" alt="${listing.card.name}">
-                            <div class="card-body">
-                                <h5 class="card-title">${listing.card.name}</h5>
-                                <p class="card-text">Game: ${listing.card.game}</p>
-                                <p class="card-text">${listing.forSaleOrTrade}</p>
-                                <p class="card-text mt-3">Provider: <a href="/listings/provider/${listing.provider.username}">${listing.provider.username}</a></p>
+        <!---Card List-->
+        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-2">
+            <#if listings?size == 0>
+                <p>There are no available listings at this time.</p>
+            <#else>
+                <#list listings as listing>
+                    <div class="col-md-4 mb-4">
+                        <a href="/listings/${listing.id}" style="text-decoration: none; color: inherit;">
+                            <div class="card h-100">
+                                <img src="/card-images/${(listing.card.imagePath)!'default-listing.png'}" class="card-img-top" alt="${listing.card.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${listing.card.name}</h5>
+                                    <p class="card-text">Game: ${listing.card.game}</p>
+                                    <p class="card-text">${listing.forSaleOrTrade}</p>
+                                    <p class="card-text mt-3">Provider: <a href="/listings/provider/${listing.provider.username}">${listing.provider.username}</a></p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            </#list>
-        </#if>
+                        </a>
+                    </div>
+                </#list>
+            </#if>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="/js-provider/listing.js"></script>

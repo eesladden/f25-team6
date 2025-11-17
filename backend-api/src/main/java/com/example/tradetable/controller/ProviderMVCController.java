@@ -700,6 +700,24 @@ public class ProviderMVCController {
         return "listings";
     }
     /**
+     * Get available listings by location
+     * @param location the location to filter by
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for listings by location
+     */
+    @GetMapping("/listings/location")
+    public String getAvailableListingsByLocation(@RequestParam String location, Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("listings", listingService.getAllAvailableListingsByLocation(location));
+        return "listings";
+    }
+    /**
      * Get available listings by provider username
      * @param username the provider's username
      * @param model the model
