@@ -30,9 +30,24 @@
                     <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile Picture" class="rounded-circle" width="150" height="150">
                     <h2 class="mt-3">${provider.username}</h2>
                     <p class="lead">${(provider.bio)!"No bio available."}</p>
-                    <a href="/providers/dashboard" class="btn btn-primary mb-2">View Dashboard</a>
-                    <a href="/providers/profile/change-password" class="btn btn-secondary mb-2">Change Password</a>
-                    <a href="/providers/profile/edit" class="btn btn-outline-secondary mb-2 flex-fill">Edit Profile</a>
+                    <div class="row mb-2 g-2 ms-3 me-3">
+                        <div class="col">
+                            <a href="/providers/dashboard" class="btn btn-primary w-100">View Dashboard</a>
+                        </div>
+                        <div class="col">
+                            <a href="/providers/profile/change-password" class="btn btn-secondary w-100">Change Password</a>
+                        </div>
+                    </div>
+                    <div class="row mb-3 g-2 ms-3 me-3">
+                        <div class="col">
+                            <a href="/providers/profile/edit" class="btn btn-outline-secondary w-100">Edit Profile</a>
+                        </div>
+                        <div class="col">
+                            <form id="deleteAccountForm" action="/providers/delete-account" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-danger w-100">Delete Account</button>
+                            </form>
+                        </div>
+                    </div>
                     <!--Rating Stars (static for now)-->
                     <div class="mb-3">
                         <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>

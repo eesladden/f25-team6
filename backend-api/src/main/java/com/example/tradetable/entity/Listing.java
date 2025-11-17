@@ -33,17 +33,22 @@ public class Listing {
     @NotBlank
     private String grade;
 
+    @NotBlank
     private Double marketPrice = 0.0;
 
+    @NotBlank
     private Double highPrice = 0.0;
-
+    
+    @NotBlank
     private Double lowPrice = 0.0;
 
     // Indicates if the listing is still available for trade/sale
     private Boolean isAvailable = true;
 
+    @NotBlank
     private String forSaleOrTrade = "For Sale";
 
+    @NotBlank
     private String tradingFor = "N/A";
 
     @NotBlank

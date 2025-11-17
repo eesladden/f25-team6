@@ -1,14 +1,15 @@
-//password validation
-function validatePassword() {
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('confirm-password');
-    if (password.value !== confirmPassword.value) {
-        confirmPassword.setCustomValidity("Passwords do not match");
-    } else {
-        confirmPassword.setCustomValidity("");
+function validatePassword(event) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const form = document.getElementById('providerSignupForm');
+
+    if (password !== confirmPassword) {
+        event.preventDefault();
+        window.location.href = "/providers/signup?error=password_mismatch"
     }
 }
 
-//attach event listeners
-document.getElementById('password').addEventListener('input', validatePassword);
-document.getElementById('confirm-password').addEventListener('input', validatePassword);
+
+document.getElementById('providerSignupForm').addEventListener('submit', function(event) {
+    validatePassword(event);
+});

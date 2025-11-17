@@ -43,18 +43,30 @@
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Charizard" required>
+                    <#if creationError?? && creationError>
+                        <div class="text-danger">Card name is required.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="game" class="form-label">Game</label>
                     <input type="text" class="form-control" id="game" name="game" placeholder="Pokémon" required>
+                    <#if creationError?? && creationError>
+                        <div class="text-danger">Card game is required.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="set" class="form-label">Set</label>
                     <input type="text" class="form-control" id="set" name="set" placeholder="Scarlet & Violet" required>
+                    <#if creationError?? && creationError>
+                        <div class="text-danger">Card set is required.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <label for="rarity" class="form-label">Rarity</label>
                     <input type="text" class="form-control" id="rarity" name="rarity" placeholder="Ultra Rare" required>
+                    <#if creationError?? && creationError>
+                        <div class="text-danger">Card rarity is required.</div>
+                    </#if>
                 </div>
                 <div class="mb-3">
                     <div class="form-text">The new card will be added to your collection upon creation.</div>

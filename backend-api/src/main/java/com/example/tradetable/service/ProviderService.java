@@ -180,4 +180,14 @@ public class ProviderService {
         return providerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Provider not found with id: " + id));
     }
+    /**
+     * Delete a provider by ID.
+     * @param id the ID of the provider to delete
+     */
+    public void deleteProviderById(Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Provider ID cannot be null");
+        }
+        providerRepository.deleteById(id);
+    }
 }

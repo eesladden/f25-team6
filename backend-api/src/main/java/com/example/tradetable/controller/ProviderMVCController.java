@@ -36,6 +36,14 @@ public class ProviderMVCController {
      */
     @PostMapping("/providers/signup")
     public Object signUp(Provider provider, @RequestParam MultipartFile imageFile) {
+        if(provider.getName() == null || provider.getName().isEmpty() ||
+           provider.getUsername() == null || provider.getUsername().isEmpty() ||
+           provider.getEmail() == null || provider.getEmail().isEmpty() ||
+           provider.getPhoneNumber() == null || provider.getPhoneNumber().isEmpty() ||
+           provider.getPassword() == null || provider.getPassword().isEmpty() ||
+           provider.getBirthdate() == null || provider.getBirthdate().isEmpty()) {
+            return "redirect:/providers/signup?error=empty_fields";
+        }
         providerService.createProvider(provider, imageFile);
         return "redirect:/providers/login";
     }
@@ -48,15 +56,19 @@ public class ProviderMVCController {
      */
     @PostMapping("/providers/login")
     public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-        if(username == null || username.isEmpty() || password == null || password.isEmpty()) {
-            return "redirect:/providers/login?error=true";
+        if ((username == null || username.isEmpty()) && (password == null || password.isEmpty())) {
+            return "redirect:/providers/login?error=missing_fields";
+        } else if(username == null || username.isEmpty()) {
+            return "redirect:/providers/login?error=username_required";
+        } else if (password == null || password.isEmpty()) {
+            return "redirect:/providers/login?error=password_required";
         }
         try {
             Provider provider = providerService.authenticate(username, password);
             session.setAttribute("providerId", provider.getId());
             return "redirect:/providers/profile";
         } catch (Exception e) {
-            return "redirect:/providers/login?error=true";
+            return "redirect:/providers/login?error=invalid_credentials";
         }
     }
     /**
@@ -67,6 +79,26 @@ public class ProviderMVCController {
     @PostMapping("/providers/logout")
     public String logout(HttpSession session) {
         session.invalidate();
+        return "redirect:/providers/login";
+    }
+    /**
+     * Delete a provider account
+     * @param session the HTTP session
+     * @return redirect to the login page
+     */
+    @PostMapping("/providers/delete-account")
+    public String deleteAccount(HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        for(Listing listing : providerService.getProviderById(providerId).getListings()) {
+            listingService.deleteListing(listing.getId());
+        }
+        for(Card card : cardService.getCardsByProvider(providerId)) {
+            cardService.removeCardFromProviderCollection(card.getId(), providerId);
+        }
+        if (providerId != null) {
+            providerService.deleteProviderById(providerId);
+            session.invalidate();
+        }
         return "redirect:/providers/login";
     }
     /**
@@ -173,17 +205,33 @@ public class ProviderMVCController {
      */
     @GetMapping("/providers/login")
     public String viewLoginPage(@RequestParam(required = false) String error, Model model) {
-        if (error != null && error.equals("true")) {
-            model.addAttribute("loginError", true);
+        if ("username_required".equals(error)) {
+            model.addAttribute("usernameError", "Username is required.");
+        }
+        else if ("password_required".equals(error)) {
+            model.addAttribute("passwordError", "Password is required.");
+        }
+        else if ("invalid_credentials".equals(error)) {
+            model.addAttribute("loginError", "Invalid username or password.");
+        } else if ("missing_fields".equals(error)) {
+            model.addAttribute("usernameError", "Username is required.");
+            model.addAttribute("passwordError", "Password is required.");
         }
         return "provider-login";
     }
     /**
      * View signup page
+     * @param error optional error parameter
+     * @param model the model
      * @return the provider signup view
      */
     @GetMapping("/providers/signup")
-    public String viewSignupPage() {
+    public String viewSignupPage(@RequestParam(required = false) String error, Model model) {
+        if ("empty_fields".equals(error)) {
+            model.addAttribute("signupError", true);
+        } else if ("password_mismatch".equals(error)) {
+            model.addAttribute("passwordMismatchError", true);
+        }
         return "provider-signup";
     }
 
@@ -374,10 +422,13 @@ public class ProviderMVCController {
      * @return the card creation view
      */
     @GetMapping("/cards/new")
-    public String newCardForm(HttpSession session, Model model) {
+    public String newCardForm(@RequestParam(required = false) String error,HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
             return "redirect:/providers/login";
+        }
+        if(error != null) {
+            model.addAttribute("creationError", true);
         }
         model.addAttribute("card", new Card());
         Provider provider = providerService.getProviderById(providerId);
@@ -395,6 +446,12 @@ public class ProviderMVCController {
     public Object createCard(Card card, @RequestParam MultipartFile imageFile, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
         Provider provider = providerService.getProviderById(providerId);
+        if(card.getName() == null || card.getName().isEmpty() ||
+           card.getGame() == null || card.getGame().isEmpty() ||
+           card.getSet() == null || card.getSet().isEmpty() ||
+           card.getRarity() == null || card.getRarity().isEmpty()) {
+            return "redirect:/cards/new?error=true";
+        }
         card.getProviders().add(provider);
         cardService.createCard(card, imageFile);
         providerService.incrementCollectionSize(providerId);
@@ -460,15 +517,15 @@ public class ProviderMVCController {
         Listing newListing = new Listing();
         newListing.setProvider(providerService.getProviderById(providerId));
         newListing.setCard(cardService.getCardById(cardId));
-        newListing.setGrade(listing.getGrade());
-        newListing.setCondition(listing.getCondition());
-        newListing.setForSaleOrTrade(listing.getForSaleOrTrade());
-        newListing.setMarketPrice(listing.getMarketPrice());
-        newListing.setLowPrice(listing.getLowPrice());
-        newListing.setHighPrice(listing.getHighPrice());
-        newListing.setIsAvailable(listing.getIsAvailable());
-        newListing.setTradingFor(listing.getTradingFor());  
-        newListing.setLocation(listing.getLocation());
+        if(listing.getCondition() == null || listing.getCondition().isEmpty() ||
+           listing.getGrade() == null || listing.getGrade().isEmpty() ||
+           listing.getMarketPrice() == null ||
+           listing.getLowPrice() == null ||
+           listing.getHighPrice() == null ||
+           listing.getTradingFor() == null || listing.getTradingFor().isEmpty() ||
+           listing.getLocation() == null || listing.getLocation().isEmpty()) {
+            return "redirect:/listings/create/card/" + cardId + "?error=true";
+        }
         listingService.createListing(newListing);
         providerService.incrementListingsListed(providerId);
         return "redirect:/listings/my-listings";
@@ -783,10 +840,13 @@ public class ProviderMVCController {
      * @return the view for the create listing form
      */
     @GetMapping("/listings/new/card/{cardId}")
-    public String showCreateListingForm(@PathVariable Long cardId, Model model, HttpSession session) {
+    public String showCreateListingForm(@RequestParam(required = false) String error, @PathVariable Long cardId, Model model, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
             return "redirect:/providers/login";
+        }
+        if(error != null) {
+            model.addAttribute("creationError", true);
         }
         model.addAttribute("card", cardService.getCardById(cardId));
         model.addAttribute("listing", new Listing());

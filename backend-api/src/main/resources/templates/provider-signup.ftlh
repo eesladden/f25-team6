@@ -15,61 +15,78 @@
         </div>
     </nav>
     <!--Signup Form-->
-    <div class="container mt-2 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="w-75 border p-4 rounded" style="height: 90vh;">
+    <div class="container mt-2 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="w-75 border p-4 rounded">
           <h2 class="mb-4">Create Provider Account</h2>
-          <form action="/providers/signup" method="post" enctype="multipart/form-data" class="row g-3 needs-validation" novalidate>
+          <!--need action to go to /providers/signup?error=password_mismatch if passwords do not match-->
+          <form id="providerSignupForm" action="/providers/signup" method="post" enctype="multipart/form-data" class="row g-2" novalidate>
             <div class="col-md-6">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" id="name" name="name" class="form-control" required>
-                <div class="invalid-feedback">Name required.</div>
+                <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+                <#if signupError?? && signupError>
+                  <div class="invalid-feedback d-block">Name required.</div>
+                </#if>
             </div>
 
             <div class="col-md-6">
               <label for="username" class="form-label">Username</label>
-              <input type="text" id="username" name="username" class="form-control" required>
-              <div class="invalid-feedback">Username required.</div>
+              <input type="text" id="username" name="username" class="form-control" placeholder="johndoe" required>
+              <#if signupError?? && signupError>
+                <div class="invalid-feedback d-block">Username required.</div>
+              </#if>
             </div>
 
             <div class="col-md-6">
               <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" name="email" class="form-control" required>
-              <div class="invalid-feedback">Valid email required.</div>
+              <input type="email" id="email" name="email" class="form-control" placeholder="johndoe@example.com" required>
+              <#if signupError?? && signupError>
+                <div class="invalid-feedback d-block">Valid email required.</div>
+              </#if>
             </div>
 
             <div class="col-md-6">
               <label for="phoneNumber" class="form-label">Phone Number</label>
-              <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" required>
-              <div class="invalid-feedback">Phone number required.</div>
+              <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="(123) 456-7890" required>
+              <#if signupError?? && signupError>
+                <div class="invalid-feedback d-block">Phone number required.</div>
+              </#if>
             </div>
-
+            
             <div class="col-md-6">
               <label for="password" class="form-label">Password</label>
               <input type="password" id="password" name="password" class="form-control" required>
-              <div class="invalid-feedback">Password required.</div>
+              <#if signupError?? && signupError>
+                <div class="invalid-feedback d-block">Password required.</div>
+              </#if>
             </div>
 
             <div class="col-md-6">
               <label for="confirm-password" class="form-label">Confirm Password</label>
               <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
-              <div class="invalid-feedback">Please confirm your password.</div>
+              <#if signupError?? && signupError>
+                <div class="invalid-feedback d-block">Please confirm your password.</div>
+              </#if>
+              <#if passwordMismatchError?? && passwordMismatchError>
+                <div class="invalid-feedback d-block">Password does not match.</div>
+              </#if>
             </div>
 
             <div class="col-md-6">
               <label for="birthdate" class="form-label">Birth Date</label>
               <input type="date" id="birthdate" name="birthdate" class="form-control" max="2007-11-13" required>
-              <div class="invalid-feedback">Please provide a valid birth date.</div>
+              <#if signupError?? && signupError>
+                <div class="invalid-feedback d-block">Valid birth date required.</div>
+              </#if>
             </div>
 
             <div class="col-md-6">
               <label for="imageFile" class="form-label">Profile Image</label>
               <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" required>
-              <div class="invalid-feedback">Profile image required.</div>
             </div>
 
             <div class="col-12">
               <label for="bio" class="form-label">Bio</label>
-              <textarea id="bio" name="bio" class="form-control" rows="3" required></textarea>
+              <textarea id="bio" name="bio" class="form-control" rows="3"></textarea>
             </div>
 
             <div class="col-12 d-grid">
