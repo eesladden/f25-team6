@@ -31,7 +31,7 @@ public class CustomerMvcController {
     // ---------------- Temporary mock login so you can test without real auth ----------------
     @GetMapping("/mock-login")
     public String mockLogin(HttpSession session, RedirectAttributes ra) {
-        Long demoId = 1L; // make sure this Customer exists in the DB
+        Long demoId = 1L; 
         session.setAttribute("customerId", demoId);
         ra.addFlashAttribute("msg", "Mock logged in as customer id=" + demoId);
         return "redirect:/customer/dashboard";
@@ -78,7 +78,7 @@ public class CustomerMvcController {
                                 HttpSession session) {
         Long customerId = currentCustomerId(session);
 
-        // Fast path: avoid duplicates
+        //  avoid duplicates
         if (wishlistItems.existsByCustomer_IdAndListing_Id(customerId, listingId)) {
             ra.addFlashAttribute("msg", "That listing is already in your wishlist.");
             return "redirect:/customer/wishlist";
@@ -154,7 +154,7 @@ public class CustomerMvcController {
         return "redirect:/customer/offers";
     }
 
-    // simple search endpoint to show how you can filter listings from MVC
+    // ---------------- Browse Listings ----------------    
     @GetMapping("/browse")
     public String browse(@RequestParam(required = false) String city,
                          @RequestParam(required = false) String condition,
