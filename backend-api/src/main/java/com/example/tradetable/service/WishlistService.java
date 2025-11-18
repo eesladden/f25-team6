@@ -101,18 +101,18 @@ public class WishlistService {
     }
 
     /**
-     * Remove by composite key (recommended from UI):
+     * Remove by composite key 
      */
     public void remove(Long customerId, Long listingId) {
         long deleted = repo.deleteByCustomer_IdAndListing_Id(customerId, listingId);
         if (deleted == 0) {
-            // Silent no-op is also fine if you prefer
+            
             throw new IllegalArgumentException("Wishlist item not found for customer/listing");
         }
     }
 
     /**
-     * Remove by itemId with ownership check (safer than a blind delete):
+     * Remove by itemId with ownership check 
      */
     public void removeByItemId(Long customerId, Long itemId) {
         WishlistItem item = repo.findById(itemId)
