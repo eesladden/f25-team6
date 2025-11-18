@@ -32,7 +32,6 @@
         </ol>
     </nav>
     <!--Breadcrumb End-->
-    <!--Different for For Trade or For Sale-->
     <!--Edit Listing Form-->
     <div class="container d-flex justify-content-center align-items-start align-items-md-center mt-4 mb-5">
         <div class="create-listing-form-container card shadow-sm p-4 signup-card mt-3 mt-md-0 listing-container">

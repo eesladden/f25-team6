@@ -178,6 +178,7 @@ public class ProviderMVCController {
      * View edit profile page
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the edit profile view
      */
     @GetMapping("/providers/profile/edit")
@@ -213,6 +214,7 @@ public class ProviderMVCController {
      * View login page
      * @param error optional error parameter
      * @param model the model
+     * @param error optional error parameter
      * @return the provider login view
      */
     @GetMapping("/providers/login")
@@ -235,6 +237,7 @@ public class ProviderMVCController {
      * View signup page
      * @param error optional error parameter
      * @param model the model
+     * @param error optional error parameter
      * @return the provider signup view
      */
     @GetMapping("/providers/signup")
@@ -414,6 +417,7 @@ public class ProviderMVCController {
      * @param cardId the ID of the card
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the card edit view
      */
     @GetMapping("/cards/{cardId}/edit")
@@ -434,6 +438,7 @@ public class ProviderMVCController {
      * View form to create a new card
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the card creation view
      */
     @GetMapping("/cards/new")
@@ -850,6 +855,7 @@ public class ProviderMVCController {
      * @param id the ID of the listing
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the view for the edit listing form
      */
     @GetMapping("/listings/{id}/edit")
@@ -872,6 +878,7 @@ public class ProviderMVCController {
      * @param cardId the ID of the card
      * @param model the model
      * @param session the HTTP session
+     * @param error optional error parameter
      * @return the view for the create listing form
      */
     @GetMapping("/listings/new/card/{cardId}")
