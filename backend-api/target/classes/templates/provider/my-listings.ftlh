@@ -7,14 +7,13 @@
     <title>TradeTable - My Listings</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
-<body>
+<body style="background-image: url(&quot;/provider-images/${(provider.bgImagePath)!'tcg-bg.jpg'}&quot;); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
-            <a class="listingNav nav-link align-items-start" style="margin-left: -1200px;" href="/listings">Listings</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
-                <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
+            <form id="logoutForm" action="/providers/logout" class="position-absolute end-0 me-5 pe-2" method="post">
+                <button type="submit" class="btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
                 <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile" width="30" height="30" class="d-inline-block align-top">
@@ -31,7 +30,7 @@
     </nav>
     <!--Breadcrumbs End-->
     <!---My Listings Content-->
-    <div class="container mt-4">
+    <div class="container mt-4 mb-5 p-4 bg-white bg-opacity-75 rounded">
         <h2>My Listings</h2>
         <div class="row">
             <!--Search Bar-->
@@ -45,7 +44,7 @@
                 <a href="/listings/my-listings" class="btn btn-dark mt-2 w-100" style="margin-right: 25px;">Clear Search</a>
             </div>
             <!--Sorts-->
-            <div class="row mb-3 mt-2 w-100">
+            <div class="row mb-2 mt-2 w-100">
                 <div class="col">
                     <form id="filterForm" action="/listings/my-listings/filter" method="get" class="filterForm row g-2">
                         <div class="col">
@@ -156,7 +155,7 @@
             <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-1">
                 <#list listings as listing>
                     <div class="col-md-4 mb-4">
-                        <a href="/listings/${listing.id}" class="text-decoration-none text-dark">
+                        <a href="/listings/my-listings/${listing.id}" class="text-decoration-none text-dark">
                             <div class="card h-100">
                                 <img src="/card-images/${(listing.card.imagePath)!'default-listing.png'}" class="card-img-top" alt="${listing.card.name}"> 
                                 <div class="card-body">
@@ -171,14 +170,14 @@
                                 </div>
                                 <#if listing.isAvailable == true>
                                     <div class="card-footer text-center d-flex gap-2 justify-content-center">
-                                        <a href="/listings/${listing.id}/edit" class="btn btn-primary flex-fill">Edit Listing</a>
-                                        <form action="/listings/${listing.id}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');" class="d-inline">
+                                        <a href="/listings/my-listings/${listing.id}/edit" class="btn btn-primary flex-fill">Edit Listing</a>
+                                        <form action="/listings/my-listings/${listing.id}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');" class="d-inline">
                                             <button type="submit" class="btn btn-danger flex-fill me-2" style="width: 170px; height: 38px;">Delete Listing</button>
                                         </form>
                                     </div>
                                  <#else>
                                     <div class="card-footer text-center justify-content-center">
-                                        <form action="/listings/${listing.id}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');" class="d-inline">
+                                        <form action="/listings/my-listings/${listing.id}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');" class="d-inline">
                                             <button type="submit" class="btn btn-danger" style="width: 200px; height: 38px;">Delete Listing</button>
                                         </form>
                                     </div>

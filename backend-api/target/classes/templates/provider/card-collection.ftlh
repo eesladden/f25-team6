@@ -7,14 +7,13 @@
     <title>TradeTable - Card Collection</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
-<body>
+<body style="background-image: url(&quot;/provider-images/${(provider.bgImagePath)!'tcg-bg.jpg'}&quot;); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="/providers/dashboard">TradeTable</a>
-            <a class="listingNav nav-link align-items-start" style="margin-left: -1200px;" href="/listings">Listings</a>
-            <form id="logoutForm" action="/providers/logout" method="post" class="logoutForm d-inline">
-                <button type="submit" class="logoutButton btn btn-outline-danger">Logout</button>
+            <form id="logoutForm" action="/providers/logout" class="position-absolute end-0 me-5 pe-2" method="post">
+                <button type="submit" class="btn btn-outline-danger">Logout</button>
             </form>
             <a class="nav-link" href="/providers/profile">
                 <img src="/profile-pictures/${(provider.profileImagePath)!'default-profile.png'}" alt="Profile" width="30" height="30" class="d-inline-block align-top">
@@ -31,20 +30,22 @@
     </nav>
     <!--Breadcrumbs End-->
     <!---Card Collection-->
-    <div class="container mt-4">
+    <div class="container mt-4 mb-5 p-4 bg-white bg-opacity-75 rounded">
         <h1 class="mb-3">My Collection</h1>
         <!--Search Bar-->
-        <div class="col d-flex w-100 gap-2">
-            <div class="col mt-2">
-                <form id="searchForm" action="/cards/collection/search" method="get" class="searchForm" style="width: 924px;">
-                    <input type="text" name="name" id="searchBar" class="form-control" placeholder="Search cards by name">
-                </form>
+        <div class="row mb-3">
+            <div class="col d-flex w-100 gap-2 text-center justify-content-center align-items-center">
+                <div class="col mt-2">
+                    <form id="searchForm" action="/cards/collection/search" method="get" class="searchForm" style="width: 924px;">
+                        <input type="text" name="name" id="searchBar" class="form-control" placeholder="Search cards by name">
+                    </form>
+                </div>
+                <a href="#" onclick="document.getElementById('searchForm').submit();" class="btn btn-primary mt-2 w-100" style="width: 100px;">Search</a>
+                <a href="/cards/collection" class="btn btn-dark mt-2 w-100">Clear Search</a>
             </div>
-            <a href="#" onclick="document.getElementById('searchForm').submit();" class="btn btn-primary mt-2 w-100" style="width: 100px;">Search</a>
-            <a href="/cards/collection" class="btn btn-dark mt-2 w-100">Clear Search</a>
         </div>
         <!--Filter Form and Buttons-->
-        <div class="row row-cols-1 row-cols-md-3 g-4 mt-2" style="width: 101%">
+        <div class="row mb-3 text-center justify-content-center align-items-center pb-3">
             <form id="filterForm" action="/cards/collection/filter" method="get" class="filterFormCollection row g-2 w-100" style="margin-left: 6px;">
                 <div class="col">
                     <a href="/cards/new" class="createCardButton btn btn-success w-100">Create New Card</a>
@@ -109,7 +110,7 @@
                 <div class="col">
                     <button type="submit" class="applyFiltersCollection btn btn-info w-100">Apply Filters</button>
                 </div>
-                <div class="col">
+                <div class="col me-2">
                     <a href="/cards/collection" class="clearFiltersCollection btn btn-secondary w-100">Clear Filters</a>
                 </div>
             </form>
@@ -118,20 +119,21 @@
             <p class="mt-4 mb-2">You have no cards in your collection. <a href="/cards">Browse cards</a> to add to your collection!</p>
         <#else>
         <!---Card List-->
-        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-2">
+        <!--Needs to be centered horizontally-->
+        <div class="row mt-4">
             <#list cards as card>
                 <div class="col mb-4">
                     <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
                         <div class="card h-100">
                             <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
                             <div class="card-body">
-                                <h5 class="card-title">${card.name}</h5>
-                                <p class="card-text">Game: ${card.game}</p>
-                                <p class="card-text">Set: ${card.set}</p>
-                                <p class="card-text">Rarity: ${card.rarity}</p>
+                                <h5 class="card-title mb-3">${card.name}</h5>
+                                <p class="card-text"><strong>Game:</strong> ${card.game}</p>
+                                <p class="card-text"><strong>Set:</strong> ${card.set}</p>
+                                <p class="card-text"><strong>Rarity:</strong> ${card.rarity}</p>
                             </div>
                             <div class="card-footer text-center d-flex gap-2 justify-content-center">
-                                <a href="/listings/new/card/${card.id}" class="btn btn-primary flex-fill">Create Listing</a>
+                                <a href="/listings/my-listings/new/card/${card.id}" class="btn btn-primary flex-fill">Create Listing</a>
                                 <form id="removeCardForm" action="/cards/${card.id}/removeFromProvider" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-danger flex-fill me-2">Remove from Collection</button>
                                 </form>

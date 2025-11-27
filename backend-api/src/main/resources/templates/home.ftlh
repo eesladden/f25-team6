@@ -11,7 +11,7 @@
     <!--Navbar with static title-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">TradeTable</a>
+            <a class="navbar-brand" href="#">TradeTable</a>
         </div>
     </nav>
     <!--Home Content-->
