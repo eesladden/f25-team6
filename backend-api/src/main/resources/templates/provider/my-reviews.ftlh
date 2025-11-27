@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>TradeTable - Change Password</title>
+    <title>TradeTable - My Reviews</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
 <body style="background-image: url(&quot;/provider-images/${(provider.bgImagePath)!'tcg-bg.jpg'}&quot;); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
@@ -25,34 +25,37 @@
     <nav aria-label="breadcrumb" class="mt-4 ms-5">
         <ol class="breadcrumb ms-3">
             <li class="breadcrumb-item"><a href="/providers/profile">Profile</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Change Password</li>
+            <li class="breadcrumb-item"><a href="/providers/dashboard">Provider Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Reviews</li>
         </ol>
     </nav>
     <!--Breadcrumbs End-->
-    <!---Change Password Form-->
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="border p-4" style="max-width: 500px; width: 100%;">
-        <h2 class="text-center">Change Password</h2>
-        <form action="/providers/profile/change-password" method="post" novalidate>
-            <div class="mb-3">
-                <label for="currentPassword" class="form-label">Current Password</label>
-                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                <#if changePasswordError?? && changePasswordError>
-                    <div class="text-danger mt-2">Current password is incorrect.</div>
-                </#if>
-            </div>
-            <div class="mb-3">
-                <label for="newPassword" class="form-label">New Password</label>
-                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-            </div>
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary" style="flex: 1.3;">Update Password</button>
-                <a class="btn btn-secondary flex-fill" href="/providers/profile" style="flex: 0.4;">Cancel</a>
-            </div>
-        </form>
+    <!--My Reviews-->
+    <div class="container mt-4">
+        <h1 class="mb-4">My Reviews</h1>
+        <div class="list-group">
+            <#if provider.receivedReviews?size == 0>
+                <p class="text-muted">You have not received any reviews yet.</p>
+            <#else>
+                <#list provider.receivedReviews as review>
+                    <div class="list-group-item mb-3">
+                        <h5 class="mb-1">Rating: ${review.rating} / 5</h5>
+                        <p class="mb-1">${review.comment}</p>
+                        <small class="text-muted">From: ${review.customer.username} | Date: ${review.createdAtString}</small>
+                        <#if review.tags?has_content>
+                            <div class="mt-2">
+                                <strong>Tags:</strong>
+                                <#list review.tags as tag>
+                                    <span class="badge bg-info text-dark">${tag}</span>
+                                </#list>
+                            </div>
+                        </#if>
+                    </div>
+                </#list>
+            </#if>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="/js-provider/provider-logout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

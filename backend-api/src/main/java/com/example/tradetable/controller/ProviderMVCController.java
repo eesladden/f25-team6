@@ -907,7 +907,7 @@ public class ProviderMVCController {
         }
         Review review = reviewService.getReviewById(id);
         if (review.getProvider().getId() != providerId) {
-            return "redirect:/my-reviews";
+            return "redirect:/reviews/my-reviews";
         }
         model.addAttribute("review", review);
         Provider provider = providerService.getProviderById(providerId);
@@ -924,7 +924,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("reviews", reviewService.getReviewsByProviderId(providerId));
-        return "provider/reviews";
+        return "provider/my-reviews";
     }
 }
 

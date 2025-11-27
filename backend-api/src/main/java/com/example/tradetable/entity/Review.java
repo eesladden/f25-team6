@@ -21,12 +21,12 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties({"receivedReviews", "messages", "listings", "collection"})
+    @JsonIgnoreProperties({"receivedReviews", "listings", "collection"})
     private Provider provider;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties({"sentReviews", "messages", "listings", "collection"})
+    @JsonIgnoreProperties({"sentReviews"})
     private Customer customer;
     
     private java.util.List<ReviewTags> tags;
@@ -42,17 +42,24 @@ public class Review {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(updatable = false)
+    private String createdAtString;
+
     private String providerResponse;
 
     private LocalDateTime responseAt;
 
+    private String responseAtString;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.createdAtString = this.createdAt.toString();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.responseAt = LocalDateTime.now();
+        this.responseAtString = this.responseAt.toString();
     }
 }
