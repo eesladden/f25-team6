@@ -2,10 +2,13 @@ package com.example.tradetable.repository;
 
 import com.example.tradetable.entity.Listing;
 
+//import com.example.tradetable.entity.Listing; unused import
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
+import java.util.Collection;
+import java.util.List;
 @Repository
 public interface ListingRepository extends JpaRepository<Listing, Long> {
     @Query("SELECT l FROM Listing l WHERE LOWER(l.condition) LIKE LOWER(CONCAT('%', :condition, '%'))")
@@ -60,4 +63,19 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     java.util.List<Listing> searchListingsByCardNameAndProvider(String cardName, Long providerId);
     @Query("SELECT l FROM Listing l WHERE l.isAvailable = true AND LOWER(l.location) LIKE LOWER(CONCAT('%', :location, '%'))")
     java.util.List<Listing> findAllAvailableListingsByLocation(String location);
+
+    // --- helpers (no @Query needed) ---
+    List<Listing> findAllByProvider_Id(Long providerId);              
+    List<Listing> findAllByIsForSaleTrue();                           
+    List<Listing> findAllByIsForSaleFalse();                          
+    List<Listing> findAllByIsAvailableTrue();                         
+
+    // Useful for “recent listings” without writing JPQL — assume updatedAt may be null
+    List<Listing> findAllByIsAvailableTrueOrderByUpdatedAtDesc();    
+
+    // Batch fetch by IDs 
+    List<Listing> findByIdIn(Collection<Long> ids);
+
+    // Simple pagination hook for any filter
+    List<Listing> findAllByIsAvailableTrue(Pageable pageable);
 }
