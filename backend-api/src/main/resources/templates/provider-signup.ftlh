@@ -7,16 +7,16 @@
     <title>TradeTable - Sign Up</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
-<body>
+<body style="background-image: url('/provider-images/tcg-bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
     <!--Navbar with static title-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TradeTable</a>
+            <a class="navbar-brand" href="/">TradeTable</a>
         </div>
     </nav>
     <!--Signup Form-->
     <div class="container mt-2 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="w-75 border p-4 rounded">
+        <div class="card w-75 border p-4 rounded">
           <h2 class="mb-4">Create Provider Account</h2>
           <!--need action to go to /providers/signup?error=password_mismatch if passwords do not match-->
           <form id="providerSignupForm" action="/providers/signup" method="post" enctype="multipart/form-data" class="row g-2" novalidate>
@@ -73,7 +73,7 @@
 
             <div class="col-md-6">
               <label for="birthdate" class="form-label">Birth Date</label>
-              <input type="date" id="birthdate" name="birthdate" class="form-control" max="2007-11-20" required>
+              <input type="date" id="dobInput" name="birthdate" class="form-control" required>
               <#if signupError?? && signupError>
                 <div class="invalid-feedback d-block">Valid birth date required.</div>
               </#if>

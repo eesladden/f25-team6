@@ -31,3 +31,8 @@
     display: flex !important;
     padding-right: 40px !important;
 }
+/* Change font throughout the provider pages to 'Palatino Linotype', 'Book Antiqua', Palatino, serif */
+body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+}
+/* End of font change */

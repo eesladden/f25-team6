@@ -53,17 +53,13 @@
             <span>Low / High</span><strong>$${listing.lowPrice} / $${listing.highPrice}</strong>
             </div>
         </div>
-        <#if availability>
+        
         <div class="d-flex gap-2 mb-3">
-            <form action="/listings/${listing.id}/trade" method="post">
-                <button type="submit" class="btn btn-primary">Make Offer</button>
+            <a href="/listings/${listing.id}/edit" class="btn btn-primary">Edit Listing</a>
+            <form id="deleteListingForm" action="/listings/${listing.id}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Delete Listing</button>
             </form>
         </div>
-        <#else>
-        <div class="d-flex gap-2 mb-3">
-            <button type="button" class="btn btn-secondary" disabled>Closed</button>
-        </div>
-        </#if>
 
         <hr>
         <h2 class="h6">Details</h2>
@@ -96,17 +92,12 @@
             </div>
         </div>
 
-        <#if availability>
         <div class="d-flex gap-2 mb-3">
-            <form action="/listings/${listing.id}/trade" method="post">
-                <button type="submit" class="btn btn-primary">Propose Trade</button>
+            <a href="/listings/${listing.id}/edit" class="btn btn-primary">Edit Listing</a>
+            <form id="deleteListingForm" action="/listings/${listing.id}/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Delete Listing</button>
             </form>
         </div>
-        <#else>
-        <div class="d-flex gap-2 mb-3">
-            <button type="button" class="btn btn-secondary" disabled>Closed</button>
-        </div>
-        </#if>
 
         <hr>
         <h2 class="h6">Details</h2>

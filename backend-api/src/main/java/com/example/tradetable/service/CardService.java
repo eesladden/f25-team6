@@ -54,36 +54,6 @@ public class CardService {
         return cardRepository.save(newCard);
     }
     /**
-     * Update an existing card.
-     * @param id the ID of the card to update
-     * @param card the updated card data
-     * @param imageFile the new image file
-     * @return the updated card
-     */
-    public Card updateCard(Long id, Card card, MultipartFile imageFile) {
-        if(card == null) {
-            throw new EntityNotFoundException("Card not found with id " + id);
-        }
-        String originalFileName = imageFile.getOriginalFilename();
-        
-        try {
-            if (originalFileName != null && originalFileName.contains(".")) {
-                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-                String fileName = String.valueOf(id) + fileExtension;
-                Path filePath = Paths.get(UPLOAD_DIR + fileName);
-
-                InputStream inputStream = imageFile.getInputStream();
-
-                Files.createDirectories(Paths.get(UPLOAD_DIR));
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                card.setImagePath(fileName);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return cardRepository.save(card);
-    }
-    /**
      * Get a card by ID.
      * @param id the ID of the card
      * @return the card with the specified ID

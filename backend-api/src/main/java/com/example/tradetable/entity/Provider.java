@@ -47,6 +47,8 @@ public class Provider {
 
     private String bio;
 
+    private String bgImagePath = "tcg-bg.jpg";
+
     @Column(updatable = false)
     private String yearCreated;
     

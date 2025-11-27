@@ -3,9 +3,11 @@ package com.example.tradetable.controller;
 import com.example.tradetable.entity.Card;
 import com.example.tradetable.entity.Listing;
 import com.example.tradetable.entity.Provider;
+import com.example.tradetable.entity.Review;
 import com.example.tradetable.service.CardService;
 import com.example.tradetable.service.ProviderService;
 import com.example.tradetable.service.ListingService;
+import com.example.tradetable.service.ReviewService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +24,26 @@ public class ProviderMVCController {
     private final ProviderService providerService;
     private final CardService cardService;
     private final ListingService listingService;
+    private final ReviewService reviewService;
 
-    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService) {
+    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService, ReviewService reviewService) {
         this.providerService = providerService;
         this.cardService = cardService;
         this.listingService = listingService;
+        this.reviewService = reviewService;
     }
+
+    /**
+     * Home page
+     * @return the home view
+     */
+    @GetMapping("/")
+    public String homePage() {
+        return "home";
+    }
+
+    //PROVIDER STARTS HERE
+
     /**
      * Create a new provider
      * @param provider the provider to create
@@ -70,6 +86,18 @@ public class ProviderMVCController {
         } catch (Exception e) {
             return "redirect:/providers/login?error=invalid_credentials";
         }
+    }
+    /**
+     * Update provider background image preference
+     * @param bgImagePath the new background image path
+     * @param session the HTTP session
+     * @return redirect to the provider's profile page
+     */
+    @PostMapping("/providers/profile/change-bg")
+    public String changeBackgroundPreference(@RequestParam String bgImagePath, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        providerService.updateBgImagePath(providerId, bgImagePath);
+        return "redirect:/providers/profile";
     }
     /**
      * Logout a provider
@@ -413,28 +441,6 @@ public class ProviderMVCController {
         return "card-details";
     }
     /**
-     * View form to edit an existing card
-     * @param cardId the ID of the card
-     * @param session the HTTP session
-     * @param model the model
-     * @param error optional error parameter
-     * @return the card edit view
-     */
-    @GetMapping("/cards/{cardId}/edit")
-    public String editCardForm(@RequestParam(required = false) String error, @PathVariable Long cardId, HttpSession session, Model model) {
-        Long providerId = (Long) session.getAttribute("providerId");
-        if (providerId == null) {
-            return "redirect:/providers/login";
-        }
-        if(error != null) {
-            model.addAttribute("editError", true);
-        }
-        model.addAttribute("card", cardService.getCardById(cardId));
-        Provider provider = providerService.getProviderById(providerId);
-        model.addAttribute("provider", provider);
-        return "card-edit";
-    }
-    /**
      * View form to create a new card
      * @param session the HTTP session
      * @param model the model
@@ -476,24 +482,6 @@ public class ProviderMVCController {
         cardService.createCard(card, imageFile);
         providerService.incrementCollectionSize(providerId);
         return "redirect:/cards/view/" + card.getId();
-    }
-    /**
-     * Update an existing card
-     * @param cardId the ID of the card
-     * @param card the updated card
-     * @param imageFile the image file for the card
-     * @return redirect to the card details view
-     */
-    @PostMapping("/cards/{cardId}/update")
-    public String updateCard(@PathVariable Long cardId, Card card, @RequestParam MultipartFile imageFile) {
-        if(card.getName() == null || card.getName().isEmpty() ||
-           card.getGame() == null || card.getGame().isEmpty() ||
-           card.getSet() == null || card.getSet().isEmpty() ||
-           card.getRarity() == null || card.getRarity().isEmpty()) {
-            return "redirect:/cards/" + cardId + "/edit?error=true";
-        }
-        cardService.updateCard(cardId, card, imageFile);
-        return "redirect:/cards/view/" + cardId;
     }
     /**
      * Add card to provider's collection
@@ -590,14 +578,6 @@ public class ProviderMVCController {
             providerService.decrementListingsListed(providerId);
         }
         listingService.deleteListing(id);
-        return "redirect:/listings/my-listings";
-    }
-    @PostMapping("/listings/{id}/trade")
-    public String trade(@PathVariable Long id, HttpSession session) {
-        Long providerId = (Long) session.getAttribute("providerId");
-        listingService.markListingAsUnavailable(id);
-        providerService.decrementListingsListed(providerId);
-        providerService.incrementTradesCompleted(providerId);
         return "redirect:/listings/my-listings";
     }
     /**
@@ -895,6 +875,42 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         return "create-listing";
+    }
+
+    //PROVIDER-SIDE REVIEW STARTS HERE
+    //Reply to customer review
+    @PostMapping("/reviews/{id}/reply")
+    public String respondToReview(@PathVariable Long id, Review review, HttpSession session) {
+        reviewService.respondToReview(id, review);
+        return "redirect:/reviews";
+    }
+    //Get respond to review form
+    @GetMapping("/reviews/{id}/replyForm")
+    public String getRespondToReviewForm(@PathVariable Long id, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Review review = reviewService.getReviewById(id);
+        if (review.getProvider().getId() != providerId) {
+            return "redirect:/reviews";
+        }
+        model.addAttribute("review", review);
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        return "respond-to-review";
+    }
+    //View reviews by provider
+    @GetMapping("/reviews")
+    public String viewReviewsByProvider(HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderId(providerId));
+        return "reviews";
     }
 }
 

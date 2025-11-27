@@ -71,7 +71,7 @@
                         </div>
                         <div class="card-market-price-container col">
                             <label for="card-market-price">Market Price:</label>
-                            <div class="d-flex">
+                            <div class="col align-items-center d-flex gap-2">
                                 <label class="dollar-sign">$</label><input type="number" id="card-market-price" name="marketPrice" value="0.00" placeholder="2.00" min="0" step="0.01" class="form-control" required>
                             </div>
                             <#if creationError?? && creationError>

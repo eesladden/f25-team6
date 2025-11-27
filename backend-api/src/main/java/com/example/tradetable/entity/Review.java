@@ -28,6 +28,8 @@ public class Review {
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnoreProperties({"sentReviews", "messages", "listings", "collection"})
     private Customer customer;
+    
+    private java.util.List<ReviewTags> tags;
 
     @NotNull
     @Min(1)

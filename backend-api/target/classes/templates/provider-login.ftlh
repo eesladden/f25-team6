@@ -7,11 +7,11 @@
     <title>TradeTable - Log In</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
-<body>
+<body style="background-image: url('/provider-images/tcg-bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
     <!--Navbar with static title-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TradeTable</a>
+            <a class="navbar-brand" href="/">TradeTable</a>
         </div>
     </nav>
     <!--Login Form-->

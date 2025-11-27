@@ -7,7 +7,7 @@
     <title>TradeTable - Provider Profile</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
-<body>
+<body style="background-image: url(&quot;/provider-images/${(provider.bgImagePath)!'tcg-bg.jpg'}&quot;); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
@@ -61,6 +61,19 @@
             </div>
         </div>
     </div>
+    <div id="bgSelector" class="bg-selector position-fixed bottom-0 end-0 m-3 p-2 bg-light border rounded">
+        <form id="bgForm" action="/providers/profile/change-bg" method="post">
+            <div class="mb-2">
+                <label for="bgSelect" class="form-label">Background:</label>
+                <select id="bgSelect" name="bgImagePath" class="form-select">
+                    <option value="tcg-bg.jpg">Default</option>
+                    <option value="magic-bg.jpg">Magic: The Gathering</option>
+                    <option value="pokemon-bg.jpg">Pokémon</option>
+                    <option value="yugioh-bg.webp">Yu-Gi-Oh!</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm w-100">Change Background</button>
+        </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="/js-provider/provider-logout.js"></script>
 </body>

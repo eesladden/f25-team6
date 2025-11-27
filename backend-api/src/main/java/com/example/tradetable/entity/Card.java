@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -23,6 +24,7 @@ public class Card {
         joinColumns = @JoinColumn(name = "card_id"),
         inverseJoinColumns = @JoinColumn(name = "provider_id")
     )
+
     @JsonIgnoreProperties({"collection", "providers"})
     private List<Provider> providers = new ArrayList<>();
 

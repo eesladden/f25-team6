@@ -16,6 +16,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public Review createReview(Review review) {
+        if (review == null) {
+            throw new IllegalArgumentException("Review cannot be null");
+        }
         return reviewRepository.save(review);
     }
 
@@ -26,6 +29,9 @@ public class ReviewService {
     }
 
     public Review getReviewById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Review id cannot be null");
+        }
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found with id " + id));
     }

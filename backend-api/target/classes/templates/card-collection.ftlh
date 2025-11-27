@@ -113,25 +113,35 @@
                     <a href="/cards/collection" class="clearFiltersCollection btn btn-secondary w-100">Clear Filters</a>
                 </div>
             </form>
-             <!---Card List-->
-            <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-2">
-                <#list cards as card>
-                    <div class="col mb-4">
-                        <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
-                            <div class="card h-100">
-                                <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${card.name}</h5>
-                                    <p class="card-text">Game: ${card.game}</p>
-                                    <p class="card-text">Set: ${card.set}</p>
-                                    <p class="card-text">Rarity: ${card.rarity}</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </#list>
-            </div>
         </div>
+        <#if cards?size == 0>
+            <p class="mt-4 mb-2">You have no cards in your collection. <a href="/cards">Browse cards</a> to add to your collection!</p>
+        <#else>
+        <!---Card List-->
+        <div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-2">
+            <#list cards as card>
+                <div class="col mb-4">
+                    <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                            <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${card.name}</h5>
+                                <p class="card-text">Game: ${card.game}</p>
+                                <p class="card-text">Set: ${card.set}</p>
+                                <p class="card-text">Rarity: ${card.rarity}</p>
+                            </div>
+                            <div class="card-footer text-center d-flex gap-2 justify-content-center">
+                                <a href="/listings/new/card/${card.id}" class="btn btn-primary flex-fill">Create Listing</a>
+                                <form id="removeCardForm" action="/cards/${card.id}/removeFromProvider" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger flex-fill me-2">Remove from Collection</button>
+                                </form>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </#list>
+        </div>
+        </#if>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="/js-provider/card.js"></script>

@@ -7,7 +7,7 @@
     <title>TradeTable - Provider Dashboard</title>
     <link rel="stylesheet" type="text/css" href="/css/provider-style.css">
 </head>
-<body>
+<body style="background-image: url(&quot;/provider-images/${(provider.bgImagePath)!'tcg-bg.jpg'}&quot;); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-color: rgba(255, 255, 255, 0.8); background-blend-mode: lighten;">
     <!---NAVBAR Start-->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">

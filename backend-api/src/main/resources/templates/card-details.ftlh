@@ -49,10 +49,14 @@
                 </div>
             </div>
             <div class="card-footer text-end">
-                <a href="/cards/${card.id}/edit" class="btn btn-primary">Edit Card</a>
-                <form id="addToCollectionForm" action="/cards/${card.id}/addToProvider" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-success">Add to My Collection</button>
-                </form>
+                <#assign cardProvider = card.providers?filter(p -> p.id == provider.id)>
+                <#if cardProvider?size == 0>
+                    <form id="addToCollectionForm" action="/cards/${card.id}/addToProvider" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-success">Add to My Collection</button>
+                    </form>
+                <#else>
+                    <button type="button" class="btn btn-secondary flex-fill me-2" disabled>Add to My Collection</button>
+                </#if>
                 <a href="/listings/new/card/${card.id}" class="btn btn-secondary">Create Listing</a>
             </div>
         </div>

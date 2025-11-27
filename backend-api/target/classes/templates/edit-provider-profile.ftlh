@@ -75,6 +75,7 @@
                     <label for="bio" class="form-label">Bio</label>
                     <textarea class="form-control" id="bio" name="bio" rows="3">${provider.bio!''}</textarea>
                 </div>
+                <input type="hidden" name="bgImagePath" value="${(provider.bgImagePath)!'tcg-bg.jpg'}">
                 <input type="hidden" name="listingsListed" value="${provider.listingsListed}">
                 <input type="hidden" name="tradesCompleted" value="${provider.tradesCompleted}">
                 <input type="hidden" name="collectionSize" value="${provider.collectionSize}">
