@@ -1,7 +1,6 @@
 package com.example.tradetable.repository;
 
 import com.example.tradetable.entity.Review;
-import com.example.tradetable.entity.ReviewTags;
 
 import java.util.List;
 

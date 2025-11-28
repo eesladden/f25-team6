@@ -1,13 +1,7 @@
 package com.example.tradetable.controller;
 
-import com.example.tradetable.entity.Card;
-import com.example.tradetable.entity.Listing;
-import com.example.tradetable.entity.Provider;
-import com.example.tradetable.entity.Review;
-import com.example.tradetable.service.CardService;
-import com.example.tradetable.service.ProviderService;
-import com.example.tradetable.service.ListingService;
-import com.example.tradetable.service.ReviewService;
+import com.example.tradetable.entity.*;
+import com.example.tradetable.service.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
+import java.util.List;
 
 @Controller
 public class ProviderMVCController {
@@ -25,12 +20,18 @@ public class ProviderMVCController {
     private final CardService cardService;
     private final ListingService listingService;
     private final ReviewService reviewService;
+    private final MessageService messageService;
+    private final ConversationService conversationService;
+    private final CustomerService customerService;
 
-    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService, ReviewService reviewService) {
+    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService, ReviewService reviewService, MessageService messageService, ConversationService conversationService, CustomerService customerService) {
         this.providerService = providerService;
         this.cardService = cardService;
         this.listingService = listingService;
         this.reviewService = reviewService;
+        this.messageService = messageService;
+        this.conversationService = conversationService;
+        this.customerService = customerService;
     }
 
     /**
@@ -1003,6 +1004,102 @@ public class ProviderMVCController {
             model.addAttribute("reviews", reviewService.getReviewsByProviderIdOrderByCreatedAtDesc(providerId));
         }
         return "provider/my-reviews";
+    }
+
+    //PROVIDER-SIDE CONVERSATION STARTS HERE
+
+    /**
+     * View conversations for the provider
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's conversations
+     */
+    @GetMapping("providers/messages/conversations/my-conversations")
+    public String viewConversationsByProvider(HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        List<Conversation> conversations = conversationService.getConversationsByProviderId(providerId);
+        model.addAttribute("conversations", conversations);
+        model.addAttribute("provider", providerService.getProviderById(providerId));
+        return "provider/my-conversations";
+    }
+    /**
+     * View conversation messages by conversation ID and customer ID
+     * @param conversationId the ID of the conversation
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for the conversation messages
+     */
+    @GetMapping("providers/messages/conversations/my-conversations/{conversationId}")
+    public String viewConversationMessagesByIdAndCustomerId(@PathVariable Long conversationId, Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(conversationService.getConversationById(conversationId).getProvider() != providerService.getProviderById(providerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        Conversation conversation = conversationService.getConversationById(conversationId);
+        Long customerId = conversation.getCustomer().getId();
+        if(!conversation.getProvider().getId().equals(providerId) || !conversation.getCustomer().getId().equals(customerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        model.addAttribute("provider", providerService.getProviderById(providerId));
+        model.addAttribute("conversation", conversation);
+        model.addAttribute("messages", messageService.getMessagesByConversationId(conversationId));
+        return "provider/conversation-messages";
+    }
+    /**
+     * Send a message from the provider
+     * @param conversationId the ID of the conversation
+     * @param message the message to send
+     * @param session the HTTP session
+     * @return redirect to the conversation messages view
+     */
+    @PostMapping("providers/messages/conversations/{conversationId}/send")
+    public String sendMessageFromProvider(@PathVariable Long conversationId, Message message, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(conversationService.getConversationById(conversationId).getProvider() != providerService.getProviderById(providerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        Sender sender = Sender.valueOf("PROVIDER");
+        message.setSender(sender);
+        Recipient recipient = Recipient.valueOf("CUSTOMER");
+        Long customerId = conversationService.getConversationById(conversationId).getCustomer().getId();
+        message.setRecipient(recipient);
+        message.setProvider(providerService.getProviderById(providerId));
+        message.setCustomer(customerService.get(customerId));
+        message.setConversation(conversationService.getConversationById(conversationId));
+        messageService.sendMessage(message);
+        conversationService.updateLastUpdated(conversationId);
+        return "redirect:/providers/messages/conversations/my-conversations/" + conversationId;
+    }
+    /**
+     * Delete a conversation by ID
+     * @param conversationId the ID of the conversation
+     * @param session the HTTP session
+     * @return redirect to the provider's conversations view
+     */
+    @PostMapping("providers/messages/conversations/my-conversations/{conversationId}/delete")
+    public String deleteConversationById(@PathVariable Long conversationId, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(conversationService.getConversationById(conversationId).getProvider() != providerService.getProviderById(providerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        java.util.List<Message> messages = messageService.getMessagesByConversationId(conversationId);
+        for (Message message : messages) {
+            messageService.deleteMessageById(message.getId());
+        }
+        conversationService.deleteConversation(conversationId);
+        return "redirect:/providers/messages/conversations/my-conversations";
     }
 }
 

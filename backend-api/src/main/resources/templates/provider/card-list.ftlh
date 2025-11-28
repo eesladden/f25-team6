@@ -122,35 +122,33 @@
             <p class="mt-1 mb-2">No cards found. <a href="/cards/new">Create a new card</a> to get started!</p>
         <#else>
         <!---Card List-->
-            <div class="row mt-4">
-                <#list cards as card>
-                    <div class="col-md-4 mb-4">
-                        <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
-                            <div class="card h-100">
-                                <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${card.name}</h5>
-                                    <p class="card-text">Game: ${card.game}</p>
-                                    <p class="card-text">Set: ${card.set}</p>
-                                    <p class="card-text">Rarity: ${card.rarity}</p>
-                                </div>
-                                <div class="card-footer text-center d-flex gap-2 justify-content-center">
-                                    <a href="/listings/my-listings/new/card/${card.id}" class="btn btn-primary flex-fill">Create Listing</a>
-                                    <!--Only make clickable if card isn't included in provider's collection-->
-                                    <#assign cardProvider = card.providers?filter(p -> p.id == provider.id)>
-                                    <#if cardProvider?size == 0>
-                                        <form id="addToCollectionForm" action="/cards/${card.id}/addToProvider" method="post" class="d-inline">
-                                            <button type="submit" class="btn btn-success flex-fill me-2">Add to My Collection</button>
-                                        </form>
-                                    <#else>
-                                        <button type="button" class="btn btn-secondary flex-fill me-2" disabled>Add to My Collection</button>
-                                    </#if>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </#list>
-            </div>
+        <div class="row mt-4">
+            <#list cards as card>
+                <div class="col-md-4 mb-4">
+                    <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                        <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${card.name}</h5>
+                            <p class="card-text">Game: ${card.game}</p>
+                            <p class="card-text">Set: ${card.set}</p>
+                            <p class="card-text">Rarity: ${card.rarity}</p>
+                        </div>
+                        <div class="card-footer text-center d-flex gap-2 justify-content-center">
+                            <a href="/listings/my-listings/new/card/${card.id}" class="btn btn-primary flex-fill">Create Listing</a>
+                            <#assign cardProvider = card.providers?filter(p -> p.id == provider.id)>
+                            <#if cardProvider?size == 0>
+                                <form id="addToCollectionForm" action="/cards/${card.id}/addToProvider" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-success flex-fill me-2">Add to My Collection</button>
+                                </form>
+                            <#else>
+                                <button type="button" class="btn btn-secondary flex-fill me-2" disabled>Add to My Collection</button>
+                            </#if>
+                        </div>
+                    </a>
+                </div>
+            </#list>
+        </div>
         </#if>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

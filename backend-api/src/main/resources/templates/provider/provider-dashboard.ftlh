@@ -63,6 +63,16 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <!--Messages-->
+                        <h5 class="card-title">Messages</h5>
+                        <p class="card-text flex-grow-1">View and manage your conversations with customers.</p>
+                        <a href="/providers/messages/conversations/my-conversations" class="btn btn-info mt-auto">Go to Messages</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="/js-provider/provider-logout.js"></script>

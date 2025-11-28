@@ -1,54 +1,53 @@
 package com.example.tradetable.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "messages")
-public class Message {
+@Table(name = "conversations")
+public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Sender sender;
-    private Recipient recipient;
-
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @ManyToOne
-    @JoinColumn(name = "provider_id", nullable = true)
+    @JoinColumn(name = "provider_id", nullable = false)
     @JsonIgnoreProperties({"messages", "sentReviews", "receivedReviews", "listings", "collection"})
     private Provider provider;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = true)
+    @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnoreProperties({"messages", "sentReviews", "receivedReviews", "listings", "collection"})
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "conversation_id", nullable = false)
-    @JsonIgnoreProperties({"messages"})
-    private Conversation conversation;
+    @JoinColumn(name = "listing_id", nullable = false)
+    @JsonIgnoreProperties({"conversations"})
+    private Listing listing;
 
-    @NotBlank
-    private String content;
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"conversation"})
+    private List<Message> messages;
 
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime lastUpdated;
 
-    private String createdAtString;
+    private String lastUpdatedString;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.createdAtString = this.createdAt.format(formatter);
+        this.lastUpdated = LocalDateTime.now();
+        this.lastUpdatedString = this.lastUpdated.format(formatter);
     }
 }

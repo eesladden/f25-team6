@@ -119,18 +119,17 @@
             <p class="mt-4 mb-2">You have no cards in your collection. <a href="/cards">Browse cards</a> to add to your collection!</p>
         <#else>
         <!---Card List-->
-        <!--Needs to be centered horizontally-->
         <div class="row mt-4">
             <#list cards as card>
-                <div class="col mb-4">
+                <div class="col-md-4 mb-4">
                     <a href="/cards/view/${card.id}" class="text-decoration-none text-dark">
                         <div class="card h-100">
                             <img src="/card-images/${(card.imagePath)!'image-not-found.png'}" class="card-img-top" alt="${card.name}">
                             <div class="card-body">
-                                <h5 class="card-title mb-3">${card.name}</h5>
-                                <p class="card-text"><strong>Game:</strong> ${card.game}</p>
-                                <p class="card-text"><strong>Set:</strong> ${card.set}</p>
-                                <p class="card-text"><strong>Rarity:</strong> ${card.rarity}</p>
+                                <h5 class="card-title">${card.name}</h5>
+                                <p class="card-text">Game: ${card.game}</p>
+                                <p class="card-text">Set: ${card.set}</p>
+                                <p class="card-text">Rarity: ${card.rarity}</p>
                             </div>
                             <div class="card-footer text-center d-flex gap-2 justify-content-center">
                                 <a href="/listings/my-listings/new/card/${card.id}" class="btn btn-primary flex-fill">Create Listing</a>

@@ -32,7 +32,7 @@
     <!-- Breadcrumbs End -->
     <#if listing.forSaleOrTrade == "For Sale">
     <!--For Sale Listing Details-->
-    <div class="containerSale py-4 border rounded mx-auto mt-5 w-100 d-flex bg-white bg-opacity-100" style="max-width: 900px;">
+    <div class="containerSale py-4 pe-3 border rounded mx-auto mt-5 w-100 d-flex bg-white bg-opacity-100" style="max-width: 900px;">
         <!-- Image -->
         <div class="col-md-5 ps-3">
             <img src="/card-images/${listing.card.imagePath!'image-not-found.png'}" class="card-img-top" style="width: 90%;" alt="${listing.card.name}">
@@ -74,7 +74,7 @@
     </div>
     <#else>
     <!--For Trade Listing Details-->
-    <div class="containerTrade py-4 border rounded mx-auto mt-5 w-100 d-flex bg-white bg-opacity-100" style="max-width: 900px;">
+    <div class="containerTrade py-4 pe-3 border rounded mx-auto mt-5 w-100 d-flex bg-white bg-opacity-100" style="max-width: 900px;">
         <!-- Image -->
         <div class="col-md-5 ps-3">
             <img src="/card-images/${listing.card.imagePath!'image-not-found.png'}" class="card-img-top" style="width: 90%;" alt="${listing.card.name}">

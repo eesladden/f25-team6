@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findByProviderId(Long providerId);
-    List<Message> findByCustomerId(Long customerId);
+    List<Message> findByProviderIdAndCustomerId(Long providerId, Long customerId);
 }

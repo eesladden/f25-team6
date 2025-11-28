@@ -79,6 +79,10 @@ public class Provider {
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"provider", "listings", "collection"})
     private List<Review> receivedReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"provider", "customer", "listing", "messages"})
+    private List<Conversation> conversations = new ArrayList<>();
 }
 
 
