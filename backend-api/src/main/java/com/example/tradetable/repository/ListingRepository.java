@@ -66,8 +66,6 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
 
     // --- helpers (no @Query needed) ---
     List<Listing> findAllByProvider_Id(Long providerId);              
-    List<Listing> findAllByIsForSaleTrue();                           
-    List<Listing> findAllByIsForSaleFalse();                          
     List<Listing> findAllByIsAvailableTrue();                         
 
     // Useful for “recent listings” without writing JPQL — assume updatedAt may be null

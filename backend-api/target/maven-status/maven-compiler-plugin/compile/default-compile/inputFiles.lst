@@ -14,8 +14,10 @@
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/entity/Message.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/entity/Provider.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/entity/Review.java
+/Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/entity/ReviewTags.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/entity/TradeOffer.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/entity/WishlistItem.java
+/Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/mvc/CustomerMvcController.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/repository/CardRepository.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/repository/CustomerRepository.java
 /Users/emmasladden/Library/CloudStorage/OneDrive-UNCG/csc340-workspace/f25-team6/backend-api/src/main/java/com/example/tradetable/repository/ListingRepository.java

@@ -1,33 +1,5 @@
-/* Fix logout button style in navbar to be right next to the profile picture in the left side of the navbar */
-.logoutForm {
-    left: 1290px;
-    position: absolute;
+/* Change font throughout the provider pages to 'Palatino Linotype', 'Book Antiqua', Palatino, serif */
+body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
 }
-.logoutFormNS {
-    left: 1305px !important;
-    position: absolute;
-}
-/* End of CSS for logout button style fix */
-.listingNav {
-    font-size: 17px;
-    font-weight: bold;
-    color: #000000;
-    margin-bottom: -1px;
-}
-.listingNav:hover {
-    color: #0d6efd;
-    text-decoration: none;
-}
-.listingNavActive {
-    font-size: 17px;
-    font-weight: bold;
-    color: #0d6efd;
-    margin-bottom: -1px;
-    border-bottom: 3px solid #0d6efd;
-}
-.containerTrade {
-    align-items: center !important;
-    justify-content: center !important;
-    display: flex !important;
-    padding-right: 40px !important;
-}
+/* End of font change */

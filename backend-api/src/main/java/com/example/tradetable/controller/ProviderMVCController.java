@@ -1,11 +1,7 @@
 package com.example.tradetable.controller;
 
-import com.example.tradetable.entity.Card;
-import com.example.tradetable.entity.Listing;
-import com.example.tradetable.entity.Provider;
-import com.example.tradetable.service.CardService;
-import com.example.tradetable.service.ProviderService;
-import com.example.tradetable.service.ListingService;
+import com.example.tradetable.entity.*;
+import com.example.tradetable.service.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,18 +12,39 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
+import java.util.List;
 
 @Controller
 public class ProviderMVCController {
     private final ProviderService providerService;
     private final CardService cardService;
     private final ListingService listingService;
+    private final ReviewService reviewService;
+    private final MessageService messageService;
+    private final ConversationService conversationService;
+    private final CustomerService customerService;
 
-    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService) {
+    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService, ReviewService reviewService, MessageService messageService, ConversationService conversationService, CustomerService customerService) {
         this.providerService = providerService;
         this.cardService = cardService;
         this.listingService = listingService;
+        this.reviewService = reviewService;
+        this.messageService = messageService;
+        this.conversationService = conversationService;
+        this.customerService = customerService;
     }
+
+    /**
+     * Home page
+     * @return the home view
+     */
+    @GetMapping("/")
+    public String homePage() {
+        return "home";
+    }
+
+    //PROVIDER STARTS HERE
+
     /**
      * Create a new provider
      * @param provider the provider to create
@@ -72,6 +89,18 @@ public class ProviderMVCController {
         }
     }
     /**
+     * Update provider background image preference
+     * @param bgImagePath the new background image path
+     * @param session the HTTP session
+     * @return redirect to the provider's profile page
+     */
+    @PostMapping("/providers/profile/change-bg")
+    public String changeBackgroundPreference(@RequestParam String bgImagePath, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        providerService.updateBgImagePath(providerId, bgImagePath);
+        return "redirect:/providers/profile";
+    }
+    /**
      * Logout a provider
      * @param session the HTTP session
      * @return redirect to the login page
@@ -94,6 +123,11 @@ public class ProviderMVCController {
         }
         for(Card card : cardService.getCardsByProvider(providerId)) {
             cardService.removeCardFromProviderCollection(card.getId(), providerId);
+        }
+        if(reviewService.getReviewsByProviderId(providerId) != null) {
+            for(Review review : reviewService.getReviewsByProviderId(providerId)) {
+                reviewService.deleteReview(review.getId());
+            }
         }
         if (providerId != null) {
             providerService.deleteProviderById(providerId);
@@ -156,7 +190,7 @@ public class ProviderMVCController {
         }
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "change-provider-password";
+        return "provider/change-provider-password";
     }
     /**
      * View provider profile page
@@ -172,12 +206,13 @@ public class ProviderMVCController {
         }
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "provider-profile";
+        return "provider/provider-profile";
     }
     /** 
      * View edit profile page
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the edit profile view
      */
     @GetMapping("/providers/profile/edit")
@@ -191,7 +226,7 @@ public class ProviderMVCController {
         }
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "edit-provider-profile";
+        return "provider/edit-provider-profile";
     }
     /**
      * View provider dashboard
@@ -207,12 +242,13 @@ public class ProviderMVCController {
         }
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "provider-dashboard";
+        return "provider/provider-dashboard";
     }
     /**
      * View login page
      * @param error optional error parameter
      * @param model the model
+     * @param error optional error parameter
      * @return the provider login view
      */
     @GetMapping("/providers/login")
@@ -229,12 +265,13 @@ public class ProviderMVCController {
             model.addAttribute("usernameError", "Username is required.");
             model.addAttribute("passwordError", "Password is required.");
         }
-        return "provider-login";
+        return "provider/provider-login";
     }
     /**
      * View signup page
      * @param error optional error parameter
      * @param model the model
+     * @param error optional error parameter
      * @return the provider signup view
      */
     @GetMapping("/providers/signup")
@@ -244,7 +281,7 @@ public class ProviderMVCController {
         } else if ("password_mismatch".equals(error)) {
             model.addAttribute("passwordMismatchError", true);
         }
-        return "provider-signup";
+        return "provider/provider-signup";
     }
 
     //CARD STARTS HERE
@@ -264,7 +301,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("cards", cardService.getAllCards());
-        return "card-list";
+        return "provider/card-list";
     }
     /**
      * Search cards by name
@@ -282,7 +319,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("cards", cardService.searchCardsByName(name));
-        return "card-list";
+        return "provider/card-list";
     }
     /**
      * Filter cards by game, set, or rarity
@@ -314,7 +351,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("cards", filteredCards);
-        return "card-list";
+        return "provider/card-list";
     }
     /**
      * Get all cards for a specific provider
@@ -331,7 +368,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("cards", cardService.getCardsByProvider(providerId));
-        return "card-collection";
+        return "provider/card-collection";
     }
     /**
      * Search cards by name for a specific provider
@@ -356,7 +393,7 @@ public class ProviderMVCController {
             }
         }
         model.addAttribute("cards", filteredCards);
-        return "card-collection";
+        return "provider/card-collection";
     }
     /**
      * Filter cards by game, set, or rarity for a specific provider
@@ -389,7 +426,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("cards", filteredCards);
-        return "card-collection";
+        return "provider/card-collection";
     }
     /**
      * Get a card by ID
@@ -407,33 +444,13 @@ public class ProviderMVCController {
         model.addAttribute("card", cardService.getCardById(cardId));
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "card-details";
-    }
-    /**
-     * View form to edit an existing card
-     * @param cardId the ID of the card
-     * @param session the HTTP session
-     * @param model the model
-     * @return the card edit view
-     */
-    @GetMapping("/cards/{cardId}/edit")
-    public String editCardForm(@RequestParam(required = false) String error, @PathVariable Long cardId, HttpSession session, Model model) {
-        Long providerId = (Long) session.getAttribute("providerId");
-        if (providerId == null) {
-            return "redirect:/providers/login";
-        }
-        if(error != null) {
-            model.addAttribute("editError", true);
-        }
-        model.addAttribute("card", cardService.getCardById(cardId));
-        Provider provider = providerService.getProviderById(providerId);
-        model.addAttribute("provider", provider);
-        return "card-edit";
+        return "provider/card-details";
     }
     /**
      * View form to create a new card
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the card creation view
      */
     @GetMapping("/cards/new")
@@ -448,7 +465,7 @@ public class ProviderMVCController {
         model.addAttribute("card", new Card());
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "card-new";
+        return "provider/card-new";
     }
     /**
      * Create a new card
@@ -471,24 +488,6 @@ public class ProviderMVCController {
         cardService.createCard(card, imageFile);
         providerService.incrementCollectionSize(providerId);
         return "redirect:/cards/view/" + card.getId();
-    }
-    /**
-     * Update an existing card
-     * @param cardId the ID of the card
-     * @param card the updated card
-     * @param imageFile the image file for the card
-     * @return redirect to the card details view
-     */
-    @PostMapping("/cards/{cardId}/update")
-    public String updateCard(@PathVariable Long cardId, Card card, @RequestParam MultipartFile imageFile) {
-        if(card.getName() == null || card.getName().isEmpty() ||
-           card.getGame() == null || card.getGame().isEmpty() ||
-           card.getSet() == null || card.getSet().isEmpty() ||
-           card.getRarity() == null || card.getRarity().isEmpty()) {
-            return "redirect:/cards/" + cardId + "/edit?error=true";
-        }
-        cardService.updateCard(cardId, card, imageFile);
-        return "redirect:/cards/view/" + cardId;
     }
     /**
      * Add card to provider's collection
@@ -578,21 +577,16 @@ public class ProviderMVCController {
      * @param id the ID of the listing
      * @return redirect to the provider's listings view
      */
-    @PostMapping("/listings/{id}/delete")
+    @PostMapping("/listings/my-listings/{id}/delete")
     public String deleteListing(@PathVariable Long id, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
+        if(!listingService.getListingById(id).getProvider().getId().equals(providerId)) {
+            return "redirect:/listings/my-listings?error=unauthorized";
+        }
         if(listingService.getListingById(id).getIsAvailable()) {
             providerService.decrementListingsListed(providerId);
         }
         listingService.deleteListing(id);
-        return "redirect:/listings/my-listings";
-    }
-    @PostMapping("/listings/{id}/trade")
-    public String trade(@PathVariable Long id, HttpSession session) {
-        Long providerId = (Long) session.getAttribute("providerId");
-        listingService.markListingAsUnavailable(id);
-        providerService.decrementListingsListed(providerId);
-        providerService.incrementTradesCompleted(providerId);
         return "redirect:/listings/my-listings";
     }
     /**
@@ -610,7 +604,7 @@ public class ProviderMVCController {
         model.addAttribute("listings", listingService.getListingsByProvider(providerId));
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "my-listings";
+        return "provider/my-listings";
     }
     /**
      * Search provider's listings by card name
@@ -628,7 +622,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("listings", listingService.searchListingsByCardNameAndProvider(name, providerId));
-        return "my-listings";
+        return "provider/my-listings";
     }
     /**
      * Filter provider's listings by condition or grade
@@ -663,7 +657,7 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("listings", filteredProviderListings);
-        return "my-listings";
+        return "provider/my-listings";
     }
     /**
      * View available listings
@@ -831,11 +825,13 @@ public class ProviderMVCController {
      * @param model the model
      * @return the view for the listing details
      */
-    @GetMapping("/listings/{id}")
+    @GetMapping("listings/my-listings/{id}")
     public String viewListingDetails(@PathVariable Long id, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
             return "redirect:/providers/login";
+        } else if (!listingService.getListingById(id).getProvider().getId().equals(providerId) || listingService.getListingById(id) == null) {
+            return "redirect:/listings/my-listings";
         }
         Listing listing = listingService.getListingById(id);
         model.addAttribute("listing", listing);
@@ -843,16 +839,17 @@ public class ProviderMVCController {
         model.addAttribute("availability", availability);
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "listing-details";
+        return "provider/listing-details";
     }
     /**
      * View update listing form
      * @param id the ID of the listing
      * @param session the HTTP session
      * @param model the model
+     * @param error optional error parameter
      * @return the view for the edit listing form
      */
-    @GetMapping("/listings/{id}/edit")
+    @GetMapping("listings/my-listings/{id}/edit")
     public String showEditListingForm(@RequestParam(required = false) String error, @PathVariable Long id, HttpSession session,Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
@@ -861,20 +858,24 @@ public class ProviderMVCController {
         if(error != null) {
             model.addAttribute("editError", true);
         }
+        if(!listingService.getListingById(id).getProvider().getId().equals(providerId)) {
+            return "redirect:/listings/my-listings";
+        }
         Listing listing = listingService.getListingById(id);
         model.addAttribute("listing", listing);
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "edit-listing";
+        return "provider/edit-listing";
     }
     /**
      * View create listing form
      * @param cardId the ID of the card
      * @param model the model
      * @param session the HTTP session
+     * @param error optional error parameter
      * @return the view for the create listing form
      */
-    @GetMapping("/listings/new/card/{cardId}")
+    @GetMapping("listings/my-listings/new/card/{cardId}")
     public String showCreateListingForm(@RequestParam(required = false) String error, @PathVariable Long cardId, Model model, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
@@ -887,7 +888,218 @@ public class ProviderMVCController {
         model.addAttribute("listing", new Listing());
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
-        return "create-listing";
+        return "provider/create-listing";
+    }
+
+    //PROVIDER-SIDE REVIEW STARTS HERE
+
+    /**
+     * Respond to a review
+     * @param id the ID of the review
+     * @param response the response to the review
+     * @param session the HTTP session
+     * @return redirect to the provider's reviews view
+     */
+    @PostMapping("reviews/my-reviews/{id}/reply")
+    public String respondToReview(@PathVariable Long id, @RequestParam String response, HttpSession session) {
+        reviewService.respondToReview(id, response);
+        return "redirect:/reviews/my-reviews";
+    }
+    /**
+     * View reviews for the provider
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews")
+    public String viewReviewsByProvider(HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderId(providerId));
+        return "provider/my-reviews";
+    }
+    /**
+     * Search reviews by substring of content
+     * @param content the substring to search for in review comments
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/search")
+    public String searchReviewsByContent(@RequestParam String content, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderIdAndCommentSubstring(providerId, content));
+        return "provider/my-reviews";
+    }
+    /**
+     * Filter reviews by tag
+     * @param tag the tag to filter by
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/filter")
+    public String filterReviewsByTag(@RequestParam String tag, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        String reviewTag = tag.toUpperCase();
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(!reviewTag.equals("FRIENDLY") && !reviewTag.equals("PUNCTUAL") && !reviewTag.equals("PROFESSIONAL") &&
+           !reviewTag.equals("HIGH_QUALITY") && !reviewTag.equals("RECOMMENDED") && !reviewTag.equals("RESPONSIVE") &&
+           !reviewTag.equals("FLEXIBLE") && !reviewTag.equals("KNOWLEDGEABLE") && !reviewTag.equals("HELPFUL") &&
+           !reviewTag.equals("COURTEOUS")) {
+            return "redirect:/reviews/my-reviews";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderIdAndTagName(providerId, reviewTag));
+        return "provider/my-reviews";
+    }
+    /**
+     * Filter reviews by rating
+     * @param rating the rating to filter by
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/rating")
+    public String filterReviewsByRating(@RequestParam int rating, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderIdAndRating(providerId, rating));
+        return "provider/my-reviews";
+    }
+    /**
+     * Sort reviews by date
+     * @param order the order of sorting (asc or desc)
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/sort")
+    public String sortReviewsByDate(@RequestParam String order, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        if(order.equals("asc")) {
+            model.addAttribute("reviews", reviewService.getReviewsByProviderIdOrderByCreatedAtAsc(providerId));
+        } else {
+            model.addAttribute("reviews", reviewService.getReviewsByProviderIdOrderByCreatedAtDesc(providerId));
+        }
+        return "provider/my-reviews";
+    }
+
+    //PROVIDER-SIDE CONVERSATION STARTS HERE
+
+    /**
+     * View conversations for the provider
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's conversations
+     */
+    @GetMapping("providers/messages/conversations/my-conversations")
+    public String viewConversationsByProvider(HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        List<Conversation> conversations = conversationService.getConversationsByProviderId(providerId);
+        model.addAttribute("conversations", conversations);
+        model.addAttribute("provider", providerService.getProviderById(providerId));
+        return "provider/my-conversations";
+    }
+    /**
+     * View conversation messages by conversation ID and customer ID
+     * @param conversationId the ID of the conversation
+     * @param model the model
+     * @param session the HTTP session
+     * @return the view for the conversation messages
+     */
+    @GetMapping("providers/messages/conversations/my-conversations/{conversationId}")
+    public String viewConversationMessagesByIdAndCustomerId(@PathVariable Long conversationId, Model model, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(conversationService.getConversationById(conversationId).getProvider() != providerService.getProviderById(providerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        Conversation conversation = conversationService.getConversationById(conversationId);
+        Long customerId = conversation.getCustomer().getId();
+        if(!conversation.getProvider().getId().equals(providerId) || !conversation.getCustomer().getId().equals(customerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        model.addAttribute("provider", providerService.getProviderById(providerId));
+        model.addAttribute("conversation", conversation);
+        model.addAttribute("messages", messageService.getMessagesByConversationId(conversationId));
+        return "provider/conversation-messages";
+    }
+    /**
+     * Send a message from the provider
+     * @param conversationId the ID of the conversation
+     * @param message the message to send
+     * @param session the HTTP session
+     * @return redirect to the conversation messages view
+     */
+    @PostMapping("providers/messages/conversations/{conversationId}/send")
+    public String sendMessageFromProvider(@PathVariable Long conversationId, Message message, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(conversationService.getConversationById(conversationId).getProvider() != providerService.getProviderById(providerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        Sender sender = Sender.valueOf("PROVIDER");
+        message.setSender(sender);
+        Recipient recipient = Recipient.valueOf("CUSTOMER");
+        Long customerId = conversationService.getConversationById(conversationId).getCustomer().getId();
+        message.setRecipient(recipient);
+        message.setProvider(providerService.getProviderById(providerId));
+        message.setCustomer(customerService.get(customerId));
+        message.setConversation(conversationService.getConversationById(conversationId));
+        messageService.sendMessage(message);
+        conversationService.updateLastUpdated(conversationId);
+        return "redirect:/providers/messages/conversations/my-conversations/" + conversationId;
+    }
+    /**
+     * Delete a conversation by ID
+     * @param conversationId the ID of the conversation
+     * @param session the HTTP session
+     * @return redirect to the provider's conversations view
+     */
+    @PostMapping("providers/messages/conversations/my-conversations/{conversationId}/delete")
+    public String deleteConversationById(@PathVariable Long conversationId, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(conversationService.getConversationById(conversationId).getProvider() != providerService.getProviderById(providerId)) {
+            return "redirect:/messages/conversations/my-conversations";
+        }
+        java.util.List<Message> messages = messageService.getMessagesByConversationId(conversationId);
+        for (Message message : messages) {
+            messageService.deleteMessageById(message.getId());
+        }
+        conversationService.deleteConversation(conversationId);
+        return "redirect:/providers/messages/conversations/my-conversations";
     }
 }
 

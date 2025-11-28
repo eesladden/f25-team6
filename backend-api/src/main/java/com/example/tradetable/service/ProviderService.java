@@ -191,4 +191,14 @@ public class ProviderService {
         }
         providerRepository.deleteById(id);
     }
+    /**
+     * Update provider background image preference.
+     * @param providerId the ID of the provider
+     * @param bgImagePath the new background image path
+     */
+    public void updateBgImagePath(Long providerId, String bgImagePath) {
+        Provider provider = getProviderById(providerId);
+        provider.setBgImagePath(bgImagePath);
+        providerRepository.save(provider);
+    }
 }

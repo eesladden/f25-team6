@@ -47,6 +47,10 @@ public class Provider {
 
     private String bio;
 
+    private String bgImagePath = "tcg-bg.jpg";
+
+    private Double overallRating;
+
     @Column(updatable = false)
     private String yearCreated;
     
@@ -65,12 +69,20 @@ public class Provider {
     }
 
     @ManyToMany(mappedBy = "providers")
-    @JsonIgnoreProperties({"providers", "listings", "messages", "sentReviews", "receivedReviews"})
+    @JsonIgnoreProperties({"providers", "listings", "receivedReviews"})
     private java.util.Set<Card> collection = new java.util.HashSet<>();
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"provider", "messages", "collection", "sentReviews", "receivedReviews"})
+    @JsonIgnoreProperties({"provider", "collection", "receivedReviews"})
     private List<Listing> listings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"provider", "listings", "collection"})
+    private List<Review> receivedReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"provider", "customer", "listing", "messages"})
+    private List<Conversation> conversations = new ArrayList<>();
 }
 
 

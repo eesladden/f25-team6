@@ -38,17 +38,6 @@ public class CardController {
         return ResponseEntity.ok(createdCard);
     }
     /**
-     * Update an existing card.
-     * @param id   the ID of the card to update
-     * @param card the updated card data
-     * @return the updated card
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Card> updateCard(@PathVariable Long id, @Valid @RequestBody Card card, @RequestParam(required = false) MultipartFile imageFile) {
-        Card updatedCard = cardService.updateCard(id, card, imageFile);
-        return ResponseEntity.ok(updatedCard);
-    }
-    /**
      * Get a card by ID.
      * @param id the ID of the card
      * @return the card with the specified ID
