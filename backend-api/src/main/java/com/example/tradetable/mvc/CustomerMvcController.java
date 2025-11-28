@@ -162,9 +162,7 @@ public class CustomerMvcController {
                          Model model) {
         List<Listing> results;
 
-        if (StringUtils.hasText(city)) {
-            results = listings.findByCityNameContaining(city);
-        } else if (StringUtils.hasText(condition)) {
+        if (StringUtils.hasText(condition)) {
             results = listings.findByConditionContaining(condition);
         } else if (StringUtils.hasText(grade)) {
             results = listings.findByGradeContaining(grade);

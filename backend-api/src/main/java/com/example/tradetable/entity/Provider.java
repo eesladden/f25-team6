@@ -49,7 +49,7 @@ public class Provider {
 
     private String bgImagePath = "tcg-bg.jpg";
 
-    private Double overallRating = 0.0;
+    private Double overallRating;
 
     @Column(updatable = false)
     private String yearCreated;

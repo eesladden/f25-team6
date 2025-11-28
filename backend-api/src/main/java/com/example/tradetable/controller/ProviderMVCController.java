@@ -892,29 +892,24 @@ public class ProviderMVCController {
 
     //PROVIDER-SIDE REVIEW STARTS HERE
 
-    //Reply to customer review
+    /**
+     * Respond to a review
+     * @param id the ID of the review
+     * @param response the response to the review
+     * @param session the HTTP session
+     * @return redirect to the provider's reviews view
+     */
     @PostMapping("reviews/my-reviews/{id}/reply")
-    public String respondToReview(@PathVariable Long id, Review review, HttpSession session) {
-        reviewService.respondToReview(id, review);
-        return "redirect:/my-reviews";
+    public String respondToReview(@PathVariable Long id, @RequestParam String response, HttpSession session) {
+        reviewService.respondToReview(id, response);
+        return "redirect:/reviews/my-reviews";
     }
-    //Get respond to review form
-    @GetMapping("reviews/my-reviews/{id}/replyForm")
-    public String getRespondToReviewForm(@PathVariable Long id, HttpSession session, Model model) {
-        Long providerId = (Long) session.getAttribute("providerId");
-        if (providerId == null) {
-            return "redirect:/providers/login";
-        }
-        Review review = reviewService.getReviewById(id);
-        if (review.getProvider().getId() != providerId) {
-            return "redirect:/reviews/my-reviews";
-        }
-        model.addAttribute("review", review);
-        Provider provider = providerService.getProviderById(providerId);
-        model.addAttribute("provider", provider);
-        return "provider/respond-to-review";
-    }
-    //View reviews by provider
+    /**
+     * View reviews for the provider
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
     @GetMapping("reviews/my-reviews")
     public String viewReviewsByProvider(HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
@@ -924,6 +919,89 @@ public class ProviderMVCController {
         Provider provider = providerService.getProviderById(providerId);
         model.addAttribute("provider", provider);
         model.addAttribute("reviews", reviewService.getReviewsByProviderId(providerId));
+        return "provider/my-reviews";
+    }
+    /**
+     * Search reviews by substring of content
+     * @param content the substring to search for in review comments
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/search")
+    public String searchReviewsByContent(@RequestParam String content, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderIdAndCommentSubstring(providerId, content));
+        return "provider/my-reviews";
+    }
+    /**
+     * Filter reviews by tag
+     * @param tag the tag to filter by
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/filter")
+    public String filterReviewsByTag(@RequestParam String tag, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        String reviewTag = tag.toUpperCase();
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        if(!reviewTag.equals("FRIENDLY") && !reviewTag.equals("PUNCTUAL") && !reviewTag.equals("PROFESSIONAL") &&
+           !reviewTag.equals("HIGH_QUALITY") && !reviewTag.equals("RECOMMENDED") && !reviewTag.equals("RESPONSIVE") &&
+           !reviewTag.equals("FLEXIBLE") && !reviewTag.equals("KNOWLEDGEABLE") && !reviewTag.equals("HELPFUL") &&
+           !reviewTag.equals("COURTEOUS")) {
+            return "redirect:/reviews/my-reviews";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderIdAndTagName(providerId, reviewTag));
+        return "provider/my-reviews";
+    }
+    /**
+     * Filter reviews by rating
+     * @param rating the rating to filter by
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/rating")
+    public String filterReviewsByRating(@RequestParam int rating, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        model.addAttribute("reviews", reviewService.getReviewsByProviderIdAndRating(providerId, rating));
+        return "provider/my-reviews";
+    }
+    /**
+     * Sort reviews by date
+     * @param order the order of sorting (asc or desc)
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's reviews
+     */
+    @GetMapping("reviews/my-reviews/sort")
+    public String sortReviewsByDate(@RequestParam String order, HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        Provider provider = providerService.getProviderById(providerId);
+        model.addAttribute("provider", provider);
+        if(order.equals("asc")) {
+            model.addAttribute("reviews", reviewService.getReviewsByProviderIdOrderByCreatedAtAsc(providerId));
+        } else {
+            model.addAttribute("reviews", reviewService.getReviewsByProviderIdOrderByCreatedAtDesc(providerId));
+        }
         return "provider/my-reviews";
     }
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
@@ -28,6 +29,8 @@ public class Review {
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnoreProperties({"sentReviews"})
     private Customer customer;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
     private java.util.List<ReviewTags> tags;
 
@@ -54,12 +57,12 @@ public class Review {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        this.createdAtString = this.createdAt.toString();
+        this.createdAtString = this.createdAt.format(formatter);
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.responseAt = LocalDateTime.now();
-        this.responseAtString = this.responseAt.toString();
+        this.responseAtString = this.responseAt.format(formatter);
     }
 }
