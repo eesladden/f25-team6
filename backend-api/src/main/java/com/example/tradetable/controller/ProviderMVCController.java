@@ -23,8 +23,9 @@ public class ProviderMVCController {
     private final MessageService messageService;
     private final ConversationService conversationService;
     private final CustomerService customerService;
+    private final TradeService tradeService;
 
-    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService, ReviewService reviewService, MessageService messageService, ConversationService conversationService, CustomerService customerService) {
+    public ProviderMVCController(ProviderService providerService, CardService cardService, ListingService listingService, ReviewService reviewService, MessageService messageService, ConversationService conversationService, CustomerService customerService, TradeService tradeService) {
         this.providerService = providerService;
         this.cardService = cardService;
         this.listingService = listingService;
@@ -32,6 +33,7 @@ public class ProviderMVCController {
         this.messageService = messageService;
         this.conversationService = conversationService;
         this.customerService = customerService;
+        this.tradeService = tradeService;
     }
 
     /**
@@ -586,6 +588,18 @@ public class ProviderMVCController {
         if(listingService.getListingById(id).getIsAvailable()) {
             providerService.decrementListingsListed(providerId);
         }
+        List<TradeOffer> trades = tradeService.getTradesByListingId(id);
+        for(TradeOffer trade : trades) {
+            tradeService.deleteTrade(trade.getId());
+        }
+        List<Conversation> conversations = conversationService.getConversationsByListingId(id);
+        for(Conversation conversation : conversations) {
+            List<Message> messages = messageService.getMessagesByConversationId(conversation.getId());
+            for(Message message : messages) {
+                messageService.deleteMessageById(message.getId());
+            }
+            conversationService.deleteConversation(conversation.getId());
+        }
         listingService.deleteListing(id);
         return "redirect:/listings/my-listings";
     }
@@ -903,7 +917,7 @@ public class ProviderMVCController {
     @PostMapping("reviews/my-reviews/{id}/reply")
     public String respondToReview(@PathVariable Long id, @RequestParam String response, HttpSession session) {
         reviewService.respondToReview(id, response);
-        return "redirect:/reviews/my-reviews";
+        return "redirect:/providers/reviews/my-reviews";
     }
     /**
      * View reviews for the provider
@@ -911,7 +925,7 @@ public class ProviderMVCController {
      * @param model the model
      * @return the view for the provider's reviews
      */
-    @GetMapping("reviews/my-reviews")
+    @GetMapping("providers/reviews/my-reviews")
     public String viewReviewsByProvider(HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
@@ -929,7 +943,7 @@ public class ProviderMVCController {
      * @param model the model
      * @return the view for the provider's reviews
      */
-    @GetMapping("reviews/my-reviews/search")
+    @GetMapping("providers/reviews/my-reviews/search")
     public String searchReviewsByContent(@RequestParam String content, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
@@ -947,7 +961,7 @@ public class ProviderMVCController {
      * @param model the model
      * @return the view for the provider's reviews
      */
-    @GetMapping("reviews/my-reviews/filter")
+    @GetMapping("providers/reviews/my-reviews/filter")
     public String filterReviewsByTag(@RequestParam String tag, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         String reviewTag = tag.toUpperCase();
@@ -972,7 +986,7 @@ public class ProviderMVCController {
      * @param model the model
      * @return the view for the provider's reviews
      */
-    @GetMapping("reviews/my-reviews/rating")
+    @GetMapping("providers/reviews/my-reviews/rating")
     public String filterReviewsByRating(@RequestParam int rating, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
@@ -990,7 +1004,7 @@ public class ProviderMVCController {
      * @param model the model
      * @return the view for the provider's reviews
      */
-    @GetMapping("reviews/my-reviews/sort")
+    @GetMapping("providers/reviews/my-reviews/sort")
     public String sortReviewsByDate(@RequestParam String order, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
         if (providerId == null) {
@@ -1100,6 +1114,89 @@ public class ProviderMVCController {
         }
         conversationService.deleteConversation(conversationId);
         return "redirect:/providers/messages/conversations/my-conversations";
+    }
+
+    // PROVIDER-SIDE TRADE OFFER STARTS HERE
+
+    /**
+     * View trade offers for the provider
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the provider's trade offers
+     */
+    @GetMapping("providers/trade-offers/my-trade-offers")
+    public String viewTradeOffersByProvider(HttpSession session, Model model) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        List<TradeOffer> tradeOffers = tradeService.offersForSeller(providerId);
+        model.addAttribute("tradeOffers", tradeOffers);
+        model.addAttribute("provider", providerService.getProviderById(providerId));
+        return "provider/my-trade-offers";
+    }
+    /**
+     * Accept a trade offer
+     * @param offerId the ID of the trade offer
+     * @param session the HTTP session
+     * @return redirect to the provider's trade offers view
+     */
+    @PostMapping("providers/trade-offers/{offerId}/accept")
+    public String acceptTradeOffer(@PathVariable Long offerId, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.ACCEPTED);
+        return "redirect:/providers/trade-offers/my-trade-offers";
+    }
+    /**
+     * Counter a trade offer
+     * @param offerId the ID of the trade offer
+     * @param counterAmount the counter offer amount
+     * @param session the HTTP session
+     * @return redirect to the provider's trade offers view
+     */
+    @PostMapping("providers/trade-offers/{offerId}/counter")
+    public String counterTradeOffer(@PathVariable Long offerId, @RequestParam Double counterAmount, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.COUNTERED);
+        offer.setCounterOfferCents((int)(counterAmount * 100));
+        tradeService.updateOffer(offerId, offer);
+        return "redirect:/providers/trade-offers/my-trade-offers";
+    }
+    /**
+     * Reject a trade offer
+     * @param offerId the ID of the trade offer
+     * @param session the HTTP session
+     * @return redirect to the provider's trade offers view
+     */
+    @PostMapping("providers/trade-offers/{offerId}/reject")
+    public String rejectTradeOffer(@PathVariable Long offerId, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.REJECTED);
+        return "redirect:/providers/trade-offers/my-trade-offers";
+    }
+    /**
+     * Complete a trade offer
+     * @param offerId the ID of the trade offer
+     * @param session the HTTP session
+     * @return redirect to the provider's trade offers view
+     */
+    @PostMapping("providers/trade-offers/{offerId}/complete")
+    public String completeTradeOffer(@PathVariable Long offerId, HttpSession session) {
+        Long providerId = (Long) session.getAttribute("providerId");
+        if (providerId == null) {
+            return "redirect:/providers/login";
+        }
+        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.COMPLETED);
+        return "redirect:/providers/trade-offers/my-trade-offers";
     }
 }
 

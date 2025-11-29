@@ -59,7 +59,7 @@
                         <!--Reviews-->
                         <h5 class="card-title">Reviews</h5>
                         <p class="card-text flex-grow-1">View and respond to feedback and reviews from your customers.</p>
-                        <a href="/reviews/my-reviews" class="btn btn-success mt-auto">Go to Reviews</a>
+                        <a href="/providers/reviews/my-reviews" class="btn btn-success mt-auto">Go to Reviews</a>
                     </div>
                 </div>
             </div>
@@ -70,6 +70,18 @@
                         <h5 class="card-title">Messages</h5>
                         <p class="card-text flex-grow-1">View and manage your conversations with customers.</p>
                         <a href="/providers/messages/conversations/my-conversations" class="btn btn-info mt-auto">Go to Messages</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <!--Offers-->
+                        <h5 class="card-title">Offers</h5>
+                        <p class="card-text flex-grow-1">View and manage your trade offers.</p>
+                        <a href="/providers/trade-offers/my-trade-offers" class="btn btn-warning mt-auto">Go to Offers</a>
                     </div>
                 </div>
             </div>

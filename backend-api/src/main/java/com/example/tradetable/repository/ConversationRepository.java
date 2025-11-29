@@ -9,4 +9,5 @@ import java.util.List;
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
     List<Conversation> findByProviderId(Long providerId);
     List<Conversation> findByCustomerId(Long customerId);
+    List<Conversation> findByListingId(Long listingId);
 }
