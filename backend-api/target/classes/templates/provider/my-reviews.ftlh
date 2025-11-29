@@ -37,7 +37,7 @@
         <div class="row mb-3">
             <div class="col-md-3">
                 <div class="input-group">
-                    <form id="filterForm" action="/reviews/my-reviews/sort" method="get" class="d-flex w-100 gap-2">
+                    <form id="filterForm" action="/providers/reviews/my-reviews/sort" method="get" class="d-flex w-100 gap-2">
                         <select class="form-select rounded" id="sortSelect" name="order">
                             <option value="" selected>Sort by Date</option>
                             <option value="desc">Newest First</option>
@@ -49,10 +49,10 @@
             </div>
             <div class="col">
                 <div class="input-group">
-                    <form id="searchForm" action="/reviews/my-reviews/search" method="get" class="d-flex w-100 gap-2">
+                    <form id="searchForm" action="/providers/reviews/my-reviews/search" method="get" class="d-flex w-100 gap-2">
                         <input type="text" class="form-control rounded" placeholder="Search reviews..." aria-label="Search reviews" id="searchInput" name="content">
                         <button class="btn btn-primary rounded" type="submit" id="searchButton">Search</button>
-                        <a href="/reviews/my-reviews" class="btn btn-dark rounded">Clear</a>
+                        <a href="/providers/reviews/my-reviews" class="btn btn-dark rounded">Clear</a>
                     </form>
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <#else>
                 <#list reviews as review>
                     <div class="list-group-item mb-3 rounded">
-                        <a href="/reviews/my-reviews/rating?rating=${review.rating}" style="text-decoration: none; color: inherit;">
+                        <a href="/providers/reviews/my-reviews/rating?rating=${review.rating}" style="text-decoration: none; color: inherit;">
                             <div>
                                 <strong>Rating:</strong>
                                 <#list 1..5 as star>
@@ -82,7 +82,7 @@
                             <div class="mt-2">
                                 <strong>Tags:</strong>
                                 <#list review.tags as tag>
-                                <a href="/reviews/my-reviews/filter?tag=${tag}" style="text-decoration: none;">
+                                <a href="/providers/reviews/my-reviews/filter?tag=${tag}" style="text-decoration: none;">
                                     <#if tag == "HIGH_QUALITY">
                                         <span class="badge bg-info text-dark">HIGH QUALITY</span>
                                     <#else>
@@ -99,7 +99,7 @@
                                 <small class="text-muted">Date: ${review.responseAtString}</small>
                             </div>
                         <#else>
-                            <form action="/reviews/my-reviews/${review.id}/reply" method="post" class="mt-3 pb-2">
+                            <form action="/providers/reviews/my-reviews/${review.id}/reply" method="post" class="mt-3 pb-2">
                                 <div class="mb-3">
                                     <label for="response-${review.id}" class="form-label">Respond to this review:</label>
                                     <textarea class="form-control" id="response-${review.id}" name="response" rows="3" required></textarea>

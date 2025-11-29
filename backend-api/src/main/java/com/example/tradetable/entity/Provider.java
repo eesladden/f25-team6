@@ -83,6 +83,10 @@ public class Provider {
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"provider", "customer", "listing", "messages"})
     private List<Conversation> conversations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"seller", "buyer", "listing"})
+    private List<TradeOffer> receivedTradeOffers = new ArrayList<>();
 }
 
 

@@ -10,7 +10,7 @@ import java.time.Instant;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class TradeOffer {
 
-    public enum Status { PENDING, ACCEPTED, DECLINED, CANCELLED }
+    public enum Status { PENDING, ACCEPTED, DECLINED, CANCELLED, COUNTERED, REJECTED, COMPLETED }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +35,16 @@ public class TradeOffer {
 
     // Amount of the offer in cents
     private Integer offeredValueCents;
+
+    private Integer counterOfferCents;
+
+    // Offered card details
+    private String offeredCardName;
+    private String offeredCardGame;
+    private String offeredCardSet;
+    private String offeredCardRarity;
+    private String offeredCardGrade;
+    private String offeredCondition;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)

@@ -57,6 +57,14 @@ public class ConversationService {
         return conversationRepository.findByCustomerId(customerId);
     }
     /**
+     * Get conversations by listingId
+     * @param listingId the ID of the listing
+     * @return
+     */
+    public List<Conversation> getConversationsByListingId(Long listingId) {
+        return conversationRepository.findByListingId(listingId);
+    }
+    /**
      * Retrieves a conversation by its ID.
      * @param conversationId the ID of the conversation
      * @return the conversation with the specified ID

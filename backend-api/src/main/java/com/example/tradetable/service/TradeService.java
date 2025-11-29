@@ -67,4 +67,36 @@ public class TradeService {
         t.setUpdatedAt(Instant.now());
         return repo.save(t);
     }
+
+    //update offer
+    public TradeOffer updateOffer(Long offerId, TradeOffer updatedOffer) {
+        if (updatedOffer == null) {
+            throw new IllegalArgumentException("Updated offer must not be null");
+        } else if (offerId == null) {
+            throw new IllegalArgumentException("offerId cannot be null");
+        }
+        TradeOffer existingOffer = repo.findById(offerId)
+                .orElseThrow(() -> new IllegalArgumentException("Offer not found"));
+
+        if (updatedOffer.getOfferedValueCents() != null) {
+            existingOffer.setOfferedValueCents(updatedOffer.getOfferedValueCents());
+        }
+        if (updatedOffer.getStatus() != null) {
+            existingOffer.setStatus(updatedOffer.getStatus());
+        }
+        existingOffer.setUpdatedAt(Instant.now());
+        return repo.save(existingOffer);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TradeOffer> getTradesByListingId(Long listingId) {
+        return repo.findByListingId(listingId);
+    }
+
+    public void deleteTrade(Long tradeId) {
+        if (tradeId == null) {
+            throw new IllegalArgumentException("tradeId cannot be null");
+        }
+        repo.deleteById(tradeId);
+    }
 }
