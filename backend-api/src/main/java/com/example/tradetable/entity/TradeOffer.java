@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "trade_offers")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class TradeOffer {
 
-    public enum Status { PENDING, ACCEPTED, DECLINED, CANCELLED, COUNTERED, REJECTED, COMPLETED }
+    public enum Status { PENDING, ACCEPTED, DECLINED, CANCELLED, COUNTERED, REJECTED, COMPLETED, WITHDRAWN }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -78,5 +79,9 @@ public class TradeOffer {
 
     public Integer getAmountCents() {
         return this.offeredValueCents;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

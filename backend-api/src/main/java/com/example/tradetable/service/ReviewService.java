@@ -2,8 +2,12 @@ package com.example.tradetable.service;
 
 import com.example.tradetable.entity.Review;
 import com.example.tradetable.entity.ReviewTags;
+import com.example.tradetable.entity.Customer;
+import com.example.tradetable.entity.Provider;
+import com.example.tradetable.entity.Listing;
 import com.example.tradetable.repository.ReviewRepository;
 import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    // add these if you want service to handle IDs -> entities
+    private final CustomerService customerService;
+    private final ProviderService providerService;
+    private final ListingService listingService;
+
     /**
      * Creates a new review.
      * @param review the review to create
@@ -27,6 +36,53 @@ public class ReviewService {
         }
         return reviewRepository.save(review);
     }
+
+    // Customer-friendly overload: create a Review from IDs + fields
+    public Review createReview(Long customerId,
+                               Long providerId,
+                               Long listingId,
+                               int rating,
+                               String comment,
+                               List<String> tags) {
+
+        if (customerId == null || providerId == null) {
+            throw new IllegalArgumentException("Customer and provider IDs are required");
+        }
+
+        Customer customer = customerService.get(customerId);
+        Provider provider = providerService.getProviderById(providerId);
+
+        Listing listing = null;
+        if (listingId != null) {
+            listing = listingService.getListingById(listingId);
+        }
+
+        Review review = new Review();
+        review.setCustomer(customer);
+        review.setProvider(provider);
+        if (listing != null) {
+            review.setListing(listing); // assumes Review has a listing field
+        }
+        review.setRating(rating);
+        review.setComment(comment);
+
+        // Convert String tags -> ReviewTags enum list, safely
+        if (tags != null && !tags.isEmpty()) {
+            List<ReviewTags> tagEnums = new ArrayList<>();
+            for (String name : tags) {
+                if (name == null) continue;
+                try {
+                    tagEnums.add(ReviewTags.valueOf(name.toUpperCase()));
+                } catch (IllegalArgumentException ignored) {
+                    // ignore invalid tag names instead of crashing
+                }
+            }
+            review.setTags(tagEnums);
+        }
+
+        return reviewRepository.save(review);
+    }
+
     /**
      * Responds to a review by adding a provider response.
      * @param id the id of the review to respond to

@@ -73,4 +73,10 @@ public class Customer {
     void onUpdate() {
         updatedAt = Instant.now();
     }
+
+    @Column(length = 500)
+    private String ProfileImageUrl;
+
+    @Column(unique = true, length = 30)
+    private String phoneNumber; 
 }
