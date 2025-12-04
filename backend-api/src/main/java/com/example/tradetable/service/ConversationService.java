@@ -1,6 +1,9 @@
 package com.example.tradetable.service;
 
 import com.example.tradetable.entity.Conversation;
+import com.example.tradetable.entity.Customer;
+import com.example.tradetable.entity.Listing;
+import com.example.tradetable.entity.Provider;
 import com.example.tradetable.repository.ConversationRepository;
 import java.util.List;
 
@@ -14,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ConversationService {
     private final ConversationRepository conversationRepository;
+    private final CustomerService customerService;   // used in getOrCreateConversation
+    private final ListingService listingService;     // used in getOrCreateConversation
 
     /**
      * Creates a new conversation.
@@ -56,6 +61,37 @@ public class ConversationService {
     public List<Conversation> getConversationsByCustomerId(Long customerId) {
         return conversationRepository.findByCustomerId(customerId);
     }
+
+    // NEW: get or create a conversation for this listing + customer
+    public Conversation getOrCreateConversation(Long listingId, Long customerId) {
+        if (listingId == null || customerId == null) {
+            throw new IllegalArgumentException("Listing ID and Customer ID must not be null");
+        }
+
+        Listing listing = listingService.getListingById(listingId);
+        Provider provider = listing.getProvider();
+        Customer customer = customerService.get(customerId);
+
+        // Look for an existing conversation for this (listing, customer, provider)
+        List<Conversation> existing =
+                conversationRepository.findByListingIdAndCustomerIdAndProviderId(
+                        listingId, customerId, provider.getId());
+
+        if (!existing.isEmpty()) {
+            return existing.get(0);
+        }
+
+        // Otherwise create a new one
+        Conversation convo = new Conversation();
+        convo.setListing(listing);
+        convo.setCustomer(customer);
+        convo.setProvider(provider);
+        convo.setLastUpdated(java.time.LocalDateTime.now());
+        // lastUpdatedString can be set by entity or here if needed
+
+        return conversationRepository.save(convo);
+    }
+
     /**
      * Get conversations by listingId
      * @param listingId the ID of the listing

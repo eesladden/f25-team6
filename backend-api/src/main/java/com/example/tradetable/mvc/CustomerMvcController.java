@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.servlet.http.HttpSession;   // <-- added
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -28,30 +28,23 @@ public class CustomerMvcController {
     private final TradeOfferRepository tradeOffers;
     private final ListingRepository listings;
 
-    // ---------------- Temporary mock login so you can test without real auth ----------------
-    @GetMapping("/mock-login")
-    public String mockLogin(HttpSession session, RedirectAttributes ra) {
-        Long demoId = 1L; 
-        session.setAttribute("customerId", demoId);
-        ra.addFlashAttribute("msg", "Mock logged in as customer id=" + demoId);
-        return "redirect:/customer/dashboard";
-    }
-
-    // TODO: Replace with real session/authenticated user
+    // ---------------- Session helper ----------------
     private Long currentCustomerId(HttpSession session) {
         Object id = session.getAttribute("customerId");
         if (id == null) {
-            throw new IllegalStateException(
-                    "No current customer in session. Use /customer/mock-login or implement real login.");
+            // If this happens, user is not logged in via /customers/login
+            throw new IllegalStateException("No current customer in session. Please log in first.");
         }
         return (Long) id;
     }
 
     // ---------------- Dashboard ----------------
     @GetMapping("/dashboard")
-    public String dashboard(Model model, RedirectAttributes ra, HttpSession session) {
-        Customer me = customers.findById(currentCustomerId(session))
-                .orElseThrow(() -> new IllegalStateException("Demo user not found (id=1). Seed a Customer row."));
+    public String dashboard(Model model, HttpSession session) {
+        Long customerId = currentCustomerId(session);
+
+        Customer me = customers.findById(customerId)
+                .orElseThrow(() -> new IllegalStateException("Customer not found."));
 
         long wishCount = wishlistItems.countByCustomer_Id(me.getId());
         long offerCount = tradeOffers.countByBuyer_Id(me.getId());
@@ -78,11 +71,12 @@ public class CustomerMvcController {
                                 HttpSession session) {
         Long customerId = currentCustomerId(session);
 
-        //  avoid duplicates
+        // avoid duplicates
         if (wishlistItems.existsByCustomer_IdAndListing_Id(customerId, listingId)) {
             ra.addFlashAttribute("msg", "That listing is already in your wishlist.");
             return "redirect:/customer/wishlist";
         }
+
         // Verify listing exists
         Listing listing = listings.findById(listingId)
                 .orElseThrow(() -> new IllegalArgumentException("Listing not found: " + listingId));
@@ -124,7 +118,7 @@ public class CustomerMvcController {
         List<TradeOffer> mine =
                 tradeOffers.findAllByBuyer_IdOrderByCreatedAtDesc(currentCustomerId(session));
         model.addAttribute("offers", mine);
-        return "customer/offers";
+        return "customer/customer-offers";
     }
 
     @PostMapping("/offers/create")
@@ -132,8 +126,9 @@ public class CustomerMvcController {
                               @RequestParam Integer amountCents,
                               RedirectAttributes ra,
                               HttpSession session) {
+
         if (amountCents == null || amountCents <= 0) {
-            ra.addFlashAttribute("err", "Offer must be a positive amount (cents).");
+            ra.addFlashAttribute("offerError", "Offer must be a positive amount (in cents).");
             return "redirect:/customer/offers";
         }
 
@@ -141,20 +136,55 @@ public class CustomerMvcController {
                 .orElseThrow(() -> new IllegalArgumentException("Listing not found: " + listingId));
 
         TradeOffer offer = new TradeOffer();
+
         // Set the buyer to the current Customer
         customers.findById(currentCustomerId(session)).ifPresent(offer::setBuyer);
 
+        // Seller is the listing's provider
         offer.setSeller(listing.getProvider());
         offer.setListing(listing);
         offer.setAmountCents(amountCents);
 
+        // Status is an enum, and @PrePersist defaults to PENDING,
+        // but setting it explicitly is fine:
+        offer.setStatus(TradeOffer.Status.PENDING);
+
         tradeOffers.save(offer);
 
-        ra.addFlashAttribute("msg", "Offer created.");
+        ra.addFlashAttribute("offerMessage", "Offer created.");
         return "redirect:/customer/offers";
     }
 
-    // ---------------- Browse Listings ----------------    
+    @PostMapping("/offers/{id}/withdraw")
+    public String withdrawOffer(@PathVariable Long id,
+                                RedirectAttributes ra,
+                                HttpSession session) {
+
+        Long customerId = currentCustomerId(session);
+
+        TradeOffer offer = tradeOffers.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Offer not found: " + id));
+
+        // Make sure the current user owns this offer
+        if (offer.getBuyer() == null || !offer.getBuyer().getId().equals(customerId)) {
+            ra.addFlashAttribute("offerError", "You can only withdraw your own offers.");
+            return "redirect:/customer/offers";
+        }
+
+        // Only allow withdrawing pending offers
+        if (offer.getStatus() != null && offer.getStatus() != TradeOffer.Status.PENDING) {
+            ra.addFlashAttribute("offerError", "Only pending offers can be withdrawn.");
+            return "redirect:/customer/offers";
+        }
+
+        offer.setStatus(TradeOffer.Status.WITHDRAWN);
+        tradeOffers.save(offer);
+
+        ra.addFlashAttribute("offerMessage", "Offer withdrawn.");
+        return "redirect:/customer/offers";
+    }
+
+    // ---------------- Browse Listings ----------------
     @GetMapping("/browse")
     public String browse(@RequestParam(required = false) String city,
                          @RequestParam(required = false) String condition,

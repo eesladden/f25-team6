@@ -65,4 +65,9 @@ public class Review {
         this.responseAt = LocalDateTime.now();
         this.responseAtString = this.responseAt.format(formatter);
     }
+
+    public void setListing(Listing listing) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setListing'");
+    }
 }
