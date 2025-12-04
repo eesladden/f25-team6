@@ -63,10 +63,8 @@ public class CustomerProfileController {
         patch.setPreferredSets(preferredSets);
         patch.setShippingRegion(shippingRegion);
         patch.setEmail(email);
-        patch.setPhoneNumber(phoneNumber);  
+        patch.setPhoneNumber(phoneNumber);
         patch.setProfileImageUrl(profileImageUrl);
-
-        customerService.updateProfile(me.getId(), patch);
 
         try {
             customerService.updateProfile(me.getId(), patch);
@@ -95,16 +93,17 @@ public class CustomerProfileController {
     ) {
         Customer me = getCurrentCustomer(session);
 
-        if (!customerService.checkLogin(me.getEmail(), currentPassword) &&
-            !customerService.checkLogin(me.getUsername(), currentPassword)) {
+        // Check current password using existing helper
+        boolean ok = customerService.checkLogin(me.getEmail(), currentPassword)
+                || customerService.checkLogin(me.getUsername(), currentPassword);
 
+        if (!ok) {
             model.addAttribute("changePasswordError", true);
             return "customer/customer-change-password";
         }
 
-        me.setPasswordHash(null); // reset old
-        me.setPassword(newPassword);
-        customerService.signup(me); // re-hash & save
+        // ✅ Safely update the password hash via service
+        customerService.updatePassword(me.getId(), newPassword);
 
         return "redirect:/customer/profile";
     }

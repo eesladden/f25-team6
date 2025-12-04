@@ -138,7 +138,8 @@
 
                                     <td>
                                         <#if offer.createdAt??>
-                                            ${offer.createdAt?string["yyyy-MM-dd HH:mm"]}
+                                            <td>${offer.createdAt!}</td>
+
                                         <#else>
                                             -
                                         </#if>

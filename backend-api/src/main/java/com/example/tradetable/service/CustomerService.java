@@ -106,9 +106,6 @@ public class CustomerService {
         if (patch.getBio() != null) {
             existing.setBio(patch.getBio());
         }
-        if (patch.getAvatarUrl() != null) {
-            existing.setAvatarUrl(patch.getAvatarUrl());
-        }
         if (patch.getPreferredSets() != null) {
             existing.setPreferredSets(patch.getPreferredSets());
         }
@@ -116,8 +113,28 @@ public class CustomerService {
             existing.setShippingRegion(patch.getShippingRegion());
         }
 
+        // ✅ profileImageUrl from profile edit form
+        if (patch.getProfileImageUrl() != null) {
+            existing.setProfileImageUrl(patch.getProfileImageUrl());
+        }
+
         // No explicit save needed; JPA dirty checking will persist on tx commit
         return existing;
+    }
+
+    // ----------------------------------------------------
+    // PASSWORD UPDATE
+    // ----------------------------------------------------
+    public void updatePassword(Long id, String newPassword) {
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("Password required");
+        }
+
+        Customer existing = get(id);
+
+        String hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        existing.setPasswordHash(hash);
+        // JPA dirty checking will flush this change
     }
 
     // ----------------------------------------------------

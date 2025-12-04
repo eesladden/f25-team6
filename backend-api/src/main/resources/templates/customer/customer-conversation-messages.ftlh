@@ -1,14 +1,28 @@
 <#macro renderContent>
     <div class="container mt-4">
         <h1 class="mb-3">
-            Conversation with ${conversation.provider.username}
+            Conversation with ${ (conversation.provider.username)!'Provider' }
         </h1>
 
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #f8f9fa;">
                 <h5 class="mb-0">
-                    Listing: ${conversation.listing.card.name}
-                    (${conversation.listing.card.game} - ${conversation.listing.card.set})
+                    Listing:
+                    <#if conversation.listing.card??>
+                        ${ (conversation.listing.card.name)!'Unknown card' }
+                        <#if conversation.listing.card.game?? || conversation.listing.card.set??>
+                            (
+                            <#if conversation.listing.card.game??>
+                                ${conversation.listing.card.game}<#if conversation.listing.card.set??> - </#if>
+                            </#if>
+                            <#if conversation.listing.card.set??>
+                                ${conversation.listing.card.set}
+                            </#if>
+                            )
+                        </#if>
+                    <#else>
+                        ${ (conversation.listing.tradingFor)!('Listing #' + conversation.listing.id) }
+                    </#if>
                 </h5>
             </div>
 
