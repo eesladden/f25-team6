@@ -45,4 +45,4 @@
     </div>
 </#macro>
 
-<#include "../layout.ftlh">
+<#include "layout.ftlh">

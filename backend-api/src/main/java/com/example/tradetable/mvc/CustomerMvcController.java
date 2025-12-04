@@ -190,17 +190,17 @@ public class CustomerMvcController {
                          @RequestParam(required = false) String condition,
                          @RequestParam(required = false) String grade,
                          Model model) {
-        List<Listing> results;
+        List<Listing> listingsList;
 
         if (StringUtils.hasText(condition)) {
-            results = listings.findByConditionContaining(condition);
+            listingsList = listings.findByConditionContaining(condition);
         } else if (StringUtils.hasText(grade)) {
-            results = listings.findByGradeContaining(grade);
+            listingsList = listings.findByGradeContaining(grade);
         } else {
-            results = listings.findAllAvailableListings();
+            listingsList = listings.findAllAvailableListings();
         }
 
-        model.addAttribute("results", results);
-        return "customer/browse";
+        model.addAttribute("listings", listingsList);
+        return "customer/customer-browse";
     }
 }

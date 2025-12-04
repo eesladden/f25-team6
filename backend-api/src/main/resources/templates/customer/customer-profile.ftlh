@@ -36,7 +36,7 @@
 
                     <dt class="col-sm-3">Bio</dt>
                     <dd class="col-sm-9">
-                        <#if me.bio?? && me.bio?length > 0>
+                        <#if me.bio?has_content>
                             ${me.bio}
                         <#else>
                             <span class="text-muted">Tell other traders about your interests.</span>

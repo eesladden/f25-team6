@@ -1,12 +1,11 @@
-<#import "/layout.ftl" as layout>
+<#-- File: templates/customer/customer-my-reviews.ftlh -->
+<#assign pageTitle = "My Reviews" />
 
-<@layout.page title="My Reviews">
+<#macro renderContent>
     <div class="container mt-4">
         <h1 class="mb-4">My Reviews</h1>
 
-        <#if reviews?size == 0>
-            <p class="text-muted">You have not written any reviews yet.</p>
-        <#else>
+        <#if reviews?? && (reviews?size > 0)>
             <div class="list-group">
                 <#list reviews as review>
                     <div class="list-group-item mb-3 rounded">
@@ -28,7 +27,7 @@
                             <div>
                                 <small class="text-muted">
                                     Provider: ${review.provider.username}
-                                    <#if review.listing??>
+                                    <#if review.listing?? && review.listing.card??>
                                         &nbsp;|&nbsp;
                                         Listing: ${review.listing.card.name}
                                     </#if>
@@ -41,7 +40,8 @@
                             Date: ${review.createdAtString}
                         </small>
 
-                        <#if review.tags?has_content>
+                        <#-- Tags: if tags is a list/collection -->
+                        <#if review.tags?? && review.tags?has_content>
                             <div class="mt-2">
                                 <strong>Tags:</strong>
                                 <#list review.tags as tag>
@@ -62,6 +62,10 @@
                     </div>
                 </#list>
             </div>
+        <#else>
+            <p class="text-muted">You have not written any reviews yet.</p>
         </#if>
     </div>
-</@layout.page>
+</#macro>
+
+<#include "layout.ftlh">

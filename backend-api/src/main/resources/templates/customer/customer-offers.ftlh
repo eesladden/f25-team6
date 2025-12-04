@@ -46,7 +46,7 @@
                                min="1"
                                required>
                         <div class="form-text">
-                            For example, 1500 = $15.00
+                            Example: 1500 = $15.00
                         </div>
                     </div>
 
@@ -82,8 +82,8 @@
                             <#list offers as offer>
                                 <tr>
                                     <td>${offer.id}</td>
+
                                     <td>
-                                        <#-- Try to show card-based name first, fall back to title -->
                                         <#if offer.listing??>
                                             <#if offer.listing.card??>
                                                 ${offer.listing.card.name!"(no title)"}
@@ -98,6 +98,7 @@
                                             -
                                         </#if>
                                     </td>
+
                                     <td>
                                         <#if offer.listing??>
                                             <#if offer.listing.card??>
@@ -109,14 +110,15 @@
                                             -
                                         </#if>
                                     </td>
+
                                     <td>
-                                        <#-- Convert cents to dollars if available -->
                                         <#if offer.amountCents??>
                                             $${(offer.amountCents / 100.0)?string["0.00"]}
                                         <#else>
                                             -
                                         </#if>
                                     </td>
+
                                     <td>
                                         <#if offer.status??>
                                             <span class="badge
@@ -133,6 +135,7 @@
                                             -
                                         </#if>
                                     </td>
+
                                     <td>
                                         <#if offer.createdAt??>
                                             ${offer.createdAt?string["yyyy-MM-dd HH:mm"]}
@@ -140,9 +143,11 @@
                                             -
                                         </#if>
                                     </td>
+
                                     <td>
                                         <div class="d-flex flex-column gap-1">
-                                            <#-- Withdraw button for PENDING offers (existing behavior) -->
+
+                                            <#-- Withdraw button for pending offers -->
                                             <#if offer.status == "PENDING">
                                                 <form method="post"
                                                       action="/customer/offers/${offer.id}/withdraw"
@@ -154,22 +159,24 @@
                                                 </form>
                                             </#if>
 
-                                            <#-- Message Provider: only if we have a listing -->
+                                            <#-- Message provider -->
                                             <#if offer.listing??>
                                                 <form method="post"
                                                       action="/customer/messages/conversations/start"
                                                       style="display:inline;">
-                                                    <input type="hidden" name="listingId"
+                                                    <input type="hidden"
+                                                           name="listingId"
                                                            value="${offer.listing.id}">
-                                                    <input type="hidden" name="content"
-                                                           value="Hi, I'm interested in your listing for ${offer.listing.card?? ? offer.listing.card.name!"" : offer.listing.title!"this card"} .">
+                                                    <input type="hidden"
+                                                           name="content"
+                                                           value="Hi, I'm interested in your listing.">
                                                     <button type="submit"
                                                             class="btn btn-sm btn-outline-primary w-100">
                                                         Message Provider
                                                     </button>
                                                 </form>
 
-                                                <#-- Write Review: only show when COMPLETED and we have a provider -->
+                                                <#-- Write review (if completed) -->
                                                 <#if offer.status == "COMPLETED" && offer.listing.provider??>
                                                     <a href="/customer/reviews/new?providerId=${offer.listing.provider.id}&listingId=${offer.listing.id}"
                                                        class="btn btn-sm btn-outline-success w-100">
@@ -177,6 +184,7 @@
                                                     </a>
                                                 </#if>
                                             </#if>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -194,4 +202,4 @@
     </div>
 </#macro>
 
-<#include "../layout.ftlh">
+<#include "layout.ftlh">

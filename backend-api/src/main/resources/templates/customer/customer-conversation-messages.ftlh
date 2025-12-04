@@ -1,6 +1,4 @@
-<#import "/layout.ftl" as layout>
-
-<@layout.page title="Conversation with ${conversation.provider.username}">
+<#macro renderContent>
     <div class="container mt-4">
         <h1 class="mb-3">
             Conversation with ${conversation.provider.username}
@@ -55,4 +53,6 @@
             </div>
         </div>
     </div>
-</@layout.page>
+</#macro>
+
+<#include "layout.ftlh">

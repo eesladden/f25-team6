@@ -74,7 +74,7 @@ public class Customer {
         updatedAt = Instant.now();
     }
 
-    @Column(length = 500)
+    @Column(length = 4096)
     private String ProfileImageUrl;
 
     @Column(unique = true, length = 30)
