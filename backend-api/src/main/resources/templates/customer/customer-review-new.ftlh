@@ -1,4 +1,4 @@
-<#import "/layout.ftl" as layout>
+<#import "/customer/layout.ftlh" as layout>
 
 <@layout.page title="Write a Review">
     <div class="container mt-4">

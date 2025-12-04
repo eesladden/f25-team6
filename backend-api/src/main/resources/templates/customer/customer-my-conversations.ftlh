@@ -1,12 +1,12 @@
-<#import "/layout.ftl" as layout>
-
-<@layout.page title="My Messages">
+<#macro renderContent>
     <div class="container mt-4">
         <h1 class="mb-4">Messages</h1>
 
         <#if conversations?size == 0>
             <p class="text-muted">You have no conversations yet.</p>
-        <#else>
+        </#if>
+
+        <#if conversations?size != 0>
             <div class="list-group">
                 <#list conversations as conversation>
                     <a href="/customer/messages/conversations/my-conversations/${conversation.id}"
@@ -36,4 +36,6 @@
             </div>
         </#if>
     </div>
-</@layout.page>
+</#macro>
+
+<#include "layout.ftlh">

@@ -30,8 +30,9 @@
         <a class="nav-link" href="/customer/offers">My Offers</a>
         <a class="nav-link" href="/customer/messages/conversations/my-conversations">Messages</a>
         <a class="nav-link" href="/customer/reviews/my-reviews">My Reviews</a>
-        <!-- Optional: mock login link for testing -->
-        <a class="btn btn-outline-primary ms-2" href="/customer/mock-login">Mock Login</a>
+        <a class="nav-link" href="/customer/profile">My Profile</a>
+
+    
       </div>
     </div>
   </nav>
