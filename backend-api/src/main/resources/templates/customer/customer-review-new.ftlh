@@ -1,6 +1,7 @@
-<#import "/customer/layout.ftlh" as layout>
+<#-- File: templates/customer/customer-review-new.ftlh -->
+<#assign pageTitle = "Write a Review" />
 
-<@layout.page title="Write a Review">
+<#macro renderContent>
     <div class="container mt-4">
         <h1 class="mb-3">Write a Review</h1>
 
@@ -9,8 +10,25 @@
             <strong>${provider.username}</strong>
             <#if listing??>
                 for listing
-                <strong>${listing.card.name}</strong>
-                (${listing.card.game} - ${listing.card.set})
+                <strong>
+                    <#-- Robust listing display, copied from your other templates style -->
+                    <#if listing.card??>
+                        ${ (listing.card.name)!'Unknown card' }
+                        <#if listing.card.game?? || listing.card.set??>
+                            (
+                            <#if listing.card.game??>
+                                ${listing.card.game}
+                                <#if listing.card.set??> - </#if>
+                            </#if>
+                            <#if listing.card.set??>
+                                ${listing.card.set}
+                            </#if>
+                            )
+                        </#if>
+                    <#else>
+                        ${ listing.tradingFor!('Listing #' + listing.id) }
+                    </#if>
+                </strong>
             </#if>
         </p>
 
@@ -62,4 +80,6 @@
             <a href="/customer/reviews/my-reviews" class="btn btn-secondary ms-2">Cancel</a>
         </form>
     </div>
-</@layout.page>
+</#macro>
+
+<#include "layout.ftlh">

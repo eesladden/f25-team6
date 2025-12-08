@@ -61,6 +61,13 @@
                     Delete Account
                 </button>
             </form>
+
+            
+            <form method="post" action="/customers/logout">
+                <button type="submit" class="btn btn-outline-dark">
+                    Log Out
+                </button>
+            </form>
         </div>
     </div>
 </#macro>
