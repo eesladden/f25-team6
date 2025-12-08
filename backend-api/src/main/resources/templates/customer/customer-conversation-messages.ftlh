@@ -1,8 +1,16 @@
 <#macro renderContent>
     <div class="container mt-4">
-        <h1 class="mb-3">
-            Conversation with ${ (conversation.provider.username)!'Provider' }
-        </h1>
+        <!-- Title + Write Review button side by side -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="mb-0">
+                Conversation with ${ (conversation.provider.username)!'Provider' }
+            </h1>
+
+            <a class="btn btn-outline-success"
+               href="/customer/reviews/new?providerId=${conversation.provider.id}<#if conversation.listing??>&listingId=${conversation.listing.id}</#if>">
+                Write a Review
+            </a>
+        </div>
 
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #f8f9fa;">

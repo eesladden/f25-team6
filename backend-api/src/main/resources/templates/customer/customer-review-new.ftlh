@@ -10,8 +10,25 @@
             <strong>${provider.username}</strong>
             <#if listing??>
                 for listing
-                <strong>${listing.card.name}</strong>
-                (${listing.card.game} - ${listing.card.set})
+                <strong>
+                    <#-- Robust listing display, copied from your other templates style -->
+                    <#if listing.card??>
+                        ${ (listing.card.name)!'Unknown card' }
+                        <#if listing.card.game?? || listing.card.set??>
+                            (
+                            <#if listing.card.game??>
+                                ${listing.card.game}
+                                <#if listing.card.set??> - </#if>
+                            </#if>
+                            <#if listing.card.set??>
+                                ${listing.card.set}
+                            </#if>
+                            )
+                        </#if>
+                    <#else>
+                        ${ listing.tradingFor!('Listing #' + listing.id) }
+                    </#if>
+                </strong>
             </#if>
         </p>
 
