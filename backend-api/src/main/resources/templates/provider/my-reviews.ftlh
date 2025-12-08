@@ -99,7 +99,7 @@
                                 <small class="text-muted">Date: ${review.responseAtString}</small>
                             </div>
                         <#else>
-                            <form action="/providers/reviews/my-reviews/${review.id}/reply" method="post" class="mt-3 pb-2">
+                            <form action="/reviews/my-reviews/${review.id}/reply" method="post" class="mt-3 pb-2">
                                 <div class="mb-3">
                                     <label for="response-${review.id}" class="form-label">Respond to this review:</label>
                                     <textarea class="form-control" id="response-${review.id}" name="response" rows="3" required></textarea>

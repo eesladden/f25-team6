@@ -40,7 +40,6 @@ public class ReviewService {
     // Customer-friendly overload: create a Review from IDs + fields
     public Review createReview(Long customerId,
                                Long providerId,
-                               Long listingId,
                                int rating,
                                String comment,
                                List<String> tags) {
@@ -52,17 +51,9 @@ public class ReviewService {
         Customer customer = customerService.get(customerId);
         Provider provider = providerService.getProviderById(providerId);
 
-        Listing listing = null;
-        if (listingId != null) {
-            listing = listingService.getListingById(listingId);
-        }
-
         Review review = new Review();
         review.setCustomer(customer);
         review.setProvider(provider);
-        if (listing != null) {
-            review.setListing(listing); // assumes Review has a listing field
-        }
         review.setRating(rating);
         review.setComment(comment);
 
@@ -185,7 +176,12 @@ public class ReviewService {
     public List<Review> getReviewsByProviderIdOrderByCreatedAtAsc(Long providerId) {
         return reviewRepository.findByProviderIdOrderByCreatedAtAsc(providerId);
     }
-    //findByProviderIdAndTagName
+    /**
+     * Retrieves reviews by provider ID and tag name.
+     * @param providerId the ID of the provider
+     * @param tagName the name of the tag to filter by
+     * @return a list of reviews matching the provider ID and tag name
+     */
     public List<Review> getReviewsByProviderIdAndTagName(Long providerId, String tagName) {
         List<Review> allReviews = reviewRepository.findByProviderId(providerId);
         List<Review> filteredReviews = new java.util.ArrayList<>();
@@ -199,5 +195,18 @@ public class ReviewService {
             }
         }
         return filteredReviews;
+    }
+    /**
+     * Updates the overall rating of a provider based on their reviews.
+     * @param providerId the ID of the provider
+     */
+    public void updateProviderOverallRating(Long providerId) {
+        List<Review> reviews = getReviewsByProviderId(providerId);
+        double total = 0.0;
+        for (Review review : reviews) {
+            total += review.getRating();
+        }
+        double overallRating = total / reviews.size();
+        providerService.updateOverallRating(providerId, overallRating);
     }
 }

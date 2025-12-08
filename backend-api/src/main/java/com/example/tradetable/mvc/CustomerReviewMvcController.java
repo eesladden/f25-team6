@@ -79,8 +79,8 @@ public class CustomerReviewMvcController {
                                RedirectAttributes ra) {
         Long customerId = currentCustomerId(session);
 
-        reviewService.createReview(customerId, providerId, listingId, rating, comment, tags);
-
+        reviewService.createReview(customerId, providerId, rating, comment, tags);
+        reviewService.updateProviderOverallRating(providerId);
         ra.addFlashAttribute("msg", "Review submitted. Thank you!");
         return "redirect:/customer/reviews/my-reviews";
     }

@@ -1,6 +1,7 @@
-<#import "/customer/layout.ftlh" as layout>
+<#-- File: templates/customer/customer-review-new.ftlh -->
+<#assign pageTitle = "Write a Review" />
 
-<@layout.page title="Write a Review">
+<#macro renderContent>
     <div class="container mt-4">
         <h1 class="mb-3">Write a Review</h1>
 
@@ -62,4 +63,6 @@
             <a href="/customer/reviews/my-reviews" class="btn btn-secondary ms-2">Cancel</a>
         </form>
     </div>
-</@layout.page>
+</#macro>
+
+<#include "layout.ftlh">

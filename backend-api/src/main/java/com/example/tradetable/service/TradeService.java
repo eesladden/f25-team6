@@ -68,6 +68,15 @@ public class TradeService {
         return repo.save(t);
     }
 
+    @Transactional(readOnly = true)
+    public TradeOffer getTradeOfferById(Long offerId) {
+        if (offerId == null) {
+            throw new IllegalArgumentException("offerId cannot be null");
+        }
+        return repo.findById(offerId)
+                .orElseThrow(() -> new IllegalArgumentException("Offer not found"));
+    }
+
     //update offer
     public TradeOffer updateOffer(Long offerId, TradeOffer updatedOffer) {
         if (updatedOffer == null) {

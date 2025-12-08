@@ -201,4 +201,14 @@ public class ProviderService {
         provider.setBgImagePath(bgImagePath);
         providerRepository.save(provider);
     }
+    /**
+     * Update provider overall rating.
+     * @param providerId the ID of the provider
+     * @param newRating the new overall rating
+     */
+    public void updateOverallRating(Long providerId, Double newRating) {
+        Provider provider = getProviderById(providerId);
+        provider.setOverallRating(newRating);
+        providerRepository.save(provider);
+    }
 }

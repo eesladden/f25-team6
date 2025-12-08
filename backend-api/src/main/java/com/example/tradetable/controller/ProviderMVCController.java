@@ -1153,7 +1153,7 @@ public class ProviderMVCController {
         if (providerId == null) {
             return "redirect:/providers/login";
         }
-        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.ACCEPTED);
+        tradeService.setStatus(offerId, TradeOffer.Status.ACCEPTED);
         return "redirect:/providers/trade-offers/my-trade-offers";
     }
     /**
@@ -1186,7 +1186,7 @@ public class ProviderMVCController {
         if (providerId == null) {
             return "redirect:/providers/login";
         }
-        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.REJECTED);
+        tradeService.setStatus(offerId, TradeOffer.Status.REJECTED);
         return "redirect:/providers/trade-offers/my-trade-offers";
     }
     /**
@@ -1201,7 +1201,20 @@ public class ProviderMVCController {
         if (providerId == null) {
             return "redirect:/providers/login";
         }
-        TradeOffer offer = tradeService.setStatus(offerId, TradeOffer.Status.COMPLETED);
+        // Mark the listing as unavailable
+        Listing listing = tradeService.getTradeOfferById(offerId).getListing();
+        listing.setIsAvailable(false);
+        listingService.updateListing(listing.getId(), listing);
+        // Update provider statistics
+        providerService.decrementListingsListed(providerId);
+        providerService.incrementTradesCompleted(providerId);
+        // Remove the card from the provider's collection if it exists
+        Provider provider = providerService.getProviderById(providerId);
+        if(provider.getCollection().contains(listing.getCard())) {
+            cardService.removeCardFromProviderCollection(listing.getCard().getId(), providerId);
+            providerService.decrementCollectionSize(providerId);
+        }
+        tradeService.setStatus(offerId, TradeOffer.Status.COMPLETED);
         return "redirect:/providers/trade-offers/my-trade-offers";
     }
 }
