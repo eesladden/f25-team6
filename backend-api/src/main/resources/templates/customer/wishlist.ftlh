@@ -41,7 +41,7 @@
                   <td>${it.id}</td>
                   <td>
                     <#if it.listing??>
-                      #${(it.listing.id)!} · ${(it.listing.tradingFor)!'Card name not set'}
+                      #${(it.listing.id)!} · ${(it.listing.card.name)!'Card name not set'}
                       <br>
                       <small class="text-muted">
                         ${(it.listing.condition)!''} ${(it.listing.grade)!''}

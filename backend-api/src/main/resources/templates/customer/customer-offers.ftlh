@@ -74,6 +74,8 @@
                                 <th>Game</th>
                                 <th>Amount</th>
                                 <th>Status</th>
+                                <th>Counter</th>
+                                <th></th>
                                 <th>Created</th>
                                 <th>Actions</th>
                             </tr>
@@ -136,6 +138,18 @@
                                         </#if>
                                     </td>
 
+                                    <#if offer.status == "COUNTERED">
+                                        <td>
+                                            <#if offer.counterOfferCents??>
+                                                $${(offer.counterOfferCents / 100.0)?string["0.00"]}
+                                            <#else>
+                                                -
+                                            </#if>
+                                        </td>
+                                    <#else>
+                                        <td>-</td>
+                                    </#if>
+
                                     <td>
                                         <#if offer.createdAt??>
                                             <td>${offer.createdAt!}</td>
@@ -156,6 +170,25 @@
                                                     <button type="submit"
                                                             class="btn btn-sm btn-outline-warning w-100">
                                                         Withdraw
+                                                    </button>
+                                                </form>
+                                            </#if>
+
+                                            <#if offer.status == "COUNTERED">
+                                                <form method="post"
+                                                      action="/customer/offers/${offer.id}/accept-counter"
+                                                      style="display:inline;">
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-success w-100">
+                                                        Accept Counter
+                                                    </button>
+                                                </form>
+                                                <form method="post"
+                                                      action="/customer/offers/${offer.id}/reject-counter"
+                                                      style="display:inline;">
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger w-100">
+                                                        Reject Counter
                                                     </button>
                                                 </form>
                                             </#if>

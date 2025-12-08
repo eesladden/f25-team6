@@ -184,6 +184,81 @@ public class CustomerMvcController {
         return "redirect:/customer/offers";
     }
 
+    // ---------------- Accept Counter-Offer ----------------
+    @PostMapping("/offers/{id}/accept-counter")
+    public String acceptCounterOffer(@PathVariable Long id,
+                                     RedirectAttributes ra,
+                                     HttpSession session) {
+
+        Long customerId = currentCustomerId(session);
+
+        TradeOffer offer = tradeOffers.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Offer not found: " + id));
+
+        // Make sure the current user owns this offer
+        if (offer.getBuyer() == null || !offer.getBuyer().getId().equals(customerId)) {
+            ra.addFlashAttribute("offerError", "You can only accept your own counter-offers.");
+            return "redirect:/customer/offers";
+        }
+
+        // Only allow accepting countered offers
+        if (offer.getStatus() != TradeOffer.Status.COUNTERED) {
+            ra.addFlashAttribute("offerError", "Only counter-offers can be accepted.");
+            return "redirect:/customer/offers";
+        }
+
+        // Ensure counter-offer amount is present
+        if(tradeOffers.findById(id).get().getCounterOfferCents() == null) {
+            ra.addFlashAttribute("offerError", "Counter-offer amount is missing.");
+            return "redirect:/customer/offers";
+        }
+
+        // Sanity check on ID
+        if(id == null || id <= 0) {
+            ra.addFlashAttribute("offerError", "Invalid offer ID.");
+            return "redirect:/customer/offers";
+        }
+
+        offer.setStatus(TradeOffer.Status.PENDING);
+        offer.setAmountCents(tradeOffers.findById(id).get().getCounterOfferCents());
+        offer.setCounterOfferCents(null);
+        tradeOffers.save(offer);
+
+        ra.addFlashAttribute("offerMessage", "Counter-offer accepted.");
+        return "redirect:/customer/offers";
+    }
+
+    // ---------------- Reject Counter Offer ----------------
+    @PostMapping("/offers/{id}/reject-counter")
+    public String rejectCounterOffer(@PathVariable Long id,
+                                     RedirectAttributes ra,
+                                     HttpSession session) {
+
+        Long customerId = currentCustomerId(session);
+
+        TradeOffer offer = tradeOffers.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Offer not found: " + id));
+
+        // Make sure the current user owns this offer
+        if (offer.getBuyer() == null || !offer.getBuyer().getId().equals(customerId)) {
+            ra.addFlashAttribute("offerError", "You can only reject your own counter-offers.");
+            return "redirect:/customer/offers";
+        }
+
+        // Only allow rejecting countered offers
+        if (offer.getStatus() != TradeOffer.Status.COUNTERED) {
+            ra.addFlashAttribute("offerError", "Only counter-offers can be rejected.");
+            return "redirect:/customer/offers";
+        }
+
+        offer.setStatus(TradeOffer.Status.PENDING);
+        offer.setCounterOfferCents(null);
+        tradeOffers.save(offer);
+
+        ra.addFlashAttribute("offerMessage", "Counter-offer rejected.");
+        return "redirect:/customer/offers";
+    }
+
     // ---------------- Browse Listings ----------------
     @GetMapping("/browse")
     public String browse(@RequestParam(required = false) String city,
@@ -202,5 +277,14 @@ public class CustomerMvcController {
 
         model.addAttribute("listings", listingsList);
         return "customer/customer-browse";
+    }
+    
+    // ---------------- View Listing Details ----------------
+    @GetMapping("/listing/{id}")
+    public String viewListingDetails(@PathVariable Long id, Model model) {
+        Listing listing = listings.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Listing not found: " + id));
+        model.addAttribute("listing", listing);
+        return "customer/listing-details-customer";
     }
 }

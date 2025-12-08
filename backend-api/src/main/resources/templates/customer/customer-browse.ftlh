@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="card-footer bg-white border-top-0">
-                                <a href="/listings/${listing.id}"
+                                <a href="/customer/listing/${listing.id}"
                                    class="btn btn-outline-primary w-100">
                                     View Listing
                                 </a>

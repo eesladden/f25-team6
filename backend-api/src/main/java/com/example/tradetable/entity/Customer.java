@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 import java.time.Instant;
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","fieldHandler"})
 @Entity

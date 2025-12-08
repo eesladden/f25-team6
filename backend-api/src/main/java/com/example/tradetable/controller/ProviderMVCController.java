@@ -166,12 +166,18 @@ public class ProviderMVCController {
     @PostMapping("/providers/profile/update")
     public String updateProvider(Provider provider, @RequestParam MultipartFile imageFile, HttpSession session) {
         Long providerId = (Long) session.getAttribute("providerId");
+        Provider loggedInProvider = providerService.getProviderById(providerId);
         if(provider.getName() == null || provider.getName().isEmpty() ||
            provider.getUsername() == null || provider.getUsername().isEmpty() ||
            provider.getEmail() == null || provider.getEmail().isEmpty() ||
            provider.getPhoneNumber() == null || provider.getPhoneNumber().isEmpty()) {
             return "redirect:/providers/profile/edit?error=true";
         }
+        provider.setCollection(loggedInProvider.getCollection());
+        provider.setListings(loggedInProvider.getListings());
+        provider.setReceivedReviews(loggedInProvider.getReceivedReviews());
+        provider.setConversations(loggedInProvider.getConversations());
+        provider.setReceivedTradeOffers(loggedInProvider.getReceivedTradeOffers());
         providerService.updateProvider(providerId, provider, imageFile);
         return "redirect:/providers/profile";
     }
