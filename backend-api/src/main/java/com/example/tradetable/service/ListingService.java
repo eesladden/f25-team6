@@ -2,6 +2,8 @@ package com.example.tradetable.service;
 
 import com.example.tradetable.entity.Listing;
 import com.example.tradetable.repository.ListingRepository;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.GeocodingResult;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,28 +15,61 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ListingService {
     private final ListingRepository listingRepository;
+    private final GeoApiContext geoApiContext;
 
     /**
      * Create a new listing.
      * @param listing the listing to create
+     * @param address the address of the listing
      * @return the created listing
      */
-    public Listing createListing(Listing listing) {
+    public Listing createListing(Listing listing, String address) {
         if(listing == null) {
             throw new IllegalArgumentException("Listing cannot be null");
         }
+        if (address == null || address.isEmpty()) {
+            throw new IllegalArgumentException("Address cannot be null or empty");
+        }
+        try {
+            GeocodingResult[] results = com.google.maps.GeocodingApi.geocode(geoApiContext, address).await();
+            if (results != null && results.length > 0) {
+                listing.setLatitude((float) results[0].geometry.location.lat);
+                listing.setLongitude((float) results[0].geometry.location.lng);
+            } else {
+                throw new IllegalArgumentException("Invalid address provided");
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error converting address to coordinates: " + e.getMessage());
+        }
+        listing.setAddress(address);
         return listingRepository.save(listing);
     }
     /**
      * Update an existing listing.
      * @param id the ID of the listing to update
-     * @param updatedListing the updated listing data
+     * @param listing the updated listing data
+     * @param address the address of the listing
      * @return the updated listing
      */
-    public Listing updateListing(Long id, Listing listing) {
+    public Listing updateListing(Long id, Listing listing, String address) {
         if(listing == null) {
             throw new IllegalArgumentException("Listing cannot be null");
         }
+        if (address == null || address.isEmpty()) {
+            throw new IllegalArgumentException("Address cannot be null or empty");
+        }
+        try {
+            GeocodingResult[] results = com.google.maps.GeocodingApi.geocode(geoApiContext, address).await();
+            if (results != null && results.length > 0) {
+                listing.setLatitude((float) results[0].geometry.location.lat);
+                listing.setLongitude((float) results[0].geometry.location.lng);
+            } else {
+                throw new IllegalArgumentException("Invalid address provided");
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error converting address to coordinates: " + e.getMessage());
+        }
+        listing.setAddress(address);
         return listingRepository.save(listing);
     }
     /**
@@ -230,12 +265,15 @@ public class ListingService {
     public java.util.List<Listing> searchListingsByCardNameAndProvider(String cardName, Long providerId) {
         return listingRepository.searchListingsByCardNameAndProvider(cardName, providerId);
     }
+
     /**
-     * Get all available listings by location.
-     * @param location the location to filter by
-     * @return list of available listings in the specified location
+     * Get all available listings near a specific location within a given radius.
+     * @param latitude the latitude of the location
+     * @param longitude the longitude of the location
+     * @param radius the radius within which to search
+     * @return list of available listings near the specified location
      */
-    public java.util.List<Listing> getAllAvailableListingsByLocation(String location) {
-        return listingRepository.findAllAvailableListingsByLocation(location);
+    public java.util.List<Listing> getAllAvailableListingsNearLocation(double latitude, double longitude, double radius) {
+        return listingRepository.findAllAvailableListingsNearLocation(latitude, longitude, radius);
     }
 }

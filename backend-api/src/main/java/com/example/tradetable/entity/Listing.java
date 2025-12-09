@@ -57,8 +57,14 @@ public class Listing {
     @NotBlank
     private String tradingFor = "N/A";
 
-    @NotBlank
-    private String location;
+    private Float longitude;
+    private Float latitude;
+    private String address;
+    private String streetAddress;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;

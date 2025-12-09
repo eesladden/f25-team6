@@ -24,7 +24,7 @@ public class ListingController {
      */
     @PostMapping
     public ResponseEntity<Listing> createListing(@Valid @RequestBody Listing listing) {
-        Listing createdListing = listingService.createListing(listing);
+        Listing createdListing = listingService.createListing(listing, listing.getAddress());
         return ResponseEntity.ok(createdListing);
     }
     /**
@@ -35,7 +35,7 @@ public class ListingController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Listing> updateListing(@PathVariable Long id, @Valid @RequestBody Listing listing) {
-        Listing updatedListing = listingService.updateListing(id, listing);
+        Listing updatedListing = listingService.updateListing(id, listing, listing.getAddress());
         return ResponseEntity.ok(updatedListing);
     }
     /**

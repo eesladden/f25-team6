@@ -79,5 +79,4 @@ public class Review {
         this.responseAt = LocalDateTime.now();
         this.responseAtString = this.responseAt.format(formatter);
     }
-
 }

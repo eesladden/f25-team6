@@ -60,16 +60,19 @@
         </div>
 
         <hr>
-        <h2 class="h6">Details</h2>
-        <ul class="small">
-            <li>Location: ${listing.location}</li>
-            <li>Game: ${listing.card.game}</li>
-            <li>Set: ${listing.card.set}</li>
-            <li>Rarity: ${listing.card.rarity}</li>
-            <li>Condition: ${listing.condition}</li>
-            <li>Grading: ${listing.grade}</li>
-            <li>Seller: ${listing.provider.name}</li>
-        </ul>
+        <div class="row">
+            <div class="col">
+                <h2 class="h6">Details</h2>
+                <ul class="small">
+                    <li>Location: ${listing.city}, ${listing.state}</li>
+                    <li>Game: ${listing.card.game}</li>
+                    <li>Set: ${listing.card.set}</li>
+                    <li>Rarity: ${listing.card.rarity}</li>
+                    <li>Condition: ${listing.condition}</li>
+                    <li>Grading: ${listing.grade}</li>
+                    <li>Seller: ${listing.provider.name}</li>
+                </ul>
+            </div>
         </div>
     </div>
     <#else>
@@ -98,15 +101,19 @@
         </div>
 
         <hr>
-        <h2 class="h6">Details</h2>
-        <ul class="small">
-            <li>Game: ${listing.card.game}</li>
-            <li>Set: ${listing.card.set}</li>
-            <li>Rarity: ${listing.card.rarity}</li>
-            <li>Condition: ${listing.condition}</li>
-            <li>Grading: ${listing.grade}</li>
-            <li>Seller: ${listing.provider.name}</li>
-        </ul>
+        <div class="row">
+            <div class="col">
+                <h2 class="h6">Details</h2>
+                <ul class="small">
+                    <li>Location: ${listing.city}, ${listing.state}</li>
+                    <li>Game: ${listing.card.game}</li>
+                    <li>Set: ${listing.card.set}</li>
+                    <li>Rarity: ${listing.card.rarity}</li>
+                    <li>Condition: ${listing.condition}</li>
+                    <li>Grading: ${listing.grade}</li>
+                    <li>Seller: ${listing.provider.name}</li>
+                </ul>
+            </div>
         </div>
     </div>
     </#if>
