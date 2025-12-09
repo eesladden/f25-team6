@@ -4,7 +4,6 @@ import com.example.tradetable.entity.Review;
 import com.example.tradetable.entity.ReviewTags;
 import com.example.tradetable.entity.Customer;
 import com.example.tradetable.entity.Provider;
-import com.example.tradetable.entity.Listing;
 import com.example.tradetable.repository.ReviewRepository;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class ReviewService {
     // add these if you want service to handle IDs -> entities
     private final CustomerService customerService;
     private final ProviderService providerService;
-    private final ListingService listingService;
 
     /**
      * Creates a new review.

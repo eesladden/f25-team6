@@ -24,7 +24,10 @@ trade table
     3. Subscribe to available services - <create watchlists and saved searches with notifications for new matches or price drops>.
     4. Write reviews for subscribed services - <after a completed trade, rate the trade based on condition accuracy, communication by leaving a short review under sellers profile>.
 2. Provider (the user with the provider role):
-    1. Create/modify/remove provider profile - .
-    2. Create services - .
-    3. View customer statistics - .
-    4. Reply to reviews - .
+    1. Create/modify/remove provider profile - <register/login, set profile picture, username, etc.>.
+    2. Create services - <create cards and listings for collection and trade offers>.
+    3. View customer statistics - <view how many trades completed, cards collected, etc.>.
+    4. Reply to reviews - <reply to any customer reviews>.
+
+## How To Run TradeTable
+> Go to the /f25-team6/backend-api/src/main/java/com/example/tradetable/TradeTableApplication.java and click Run.
