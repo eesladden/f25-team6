@@ -103,11 +103,41 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="card-location-container col">
-                            <label for="location">Location (City, State):</label>
-                            <input type="text" id="location" name="location" value="${listing.location}" placeholder="${listing.location!'Los Angeles, CA'}" class="form-control" required>
-                            <#if editError??>
-                                <div class="text-danger mt-1">Location cannot be empty.</div>
+                        <div class="street-address-container col">
+                            <label for="street-address">Street Address:</label>
+                            <input type="text" id="street-address" name="streetAddress" value="${listing.streetAddress}" placeholder="${listing.streetAddress!'123 Main St'}" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">Street address cannot be empty.</div>
+                            </#if>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="city-container col">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" name="city" value="${listing.city}" placeholder="${listing.city!'City'}" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">City cannot be empty.</div>
+                            </#if>
+                        </div>
+                        <div class="state-container col">
+                            <label for="state">State:</label>
+                            <input type="text" id="state" name="state" value="${listing.state}" placeholder="${listing.state!'State'}" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">State cannot be empty.</div>
+                            </#if>
+                        </div>
+                        <div class="zip-code-container col">
+                            <label for="zip-code">Zip Code:</label>
+                            <input type="text" id="zip-code" name="zipCode" value="${listing.zipCode}" placeholder="${listing.zipCode!'Zip Code'}" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">Zip code cannot be empty.</div>
+                            </#if>
+                        </div>
+                        <div class="country-container col">
+                            <label for="country">Country:</label>
+                            <input type="text" id="country" name="country" value="${listing.country}" placeholder="${listing.country!'Country'}" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">Country cannot be empty.</div>
                             </#if>
                         </div>
                     </div>

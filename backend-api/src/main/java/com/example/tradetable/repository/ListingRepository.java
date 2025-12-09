@@ -61,8 +61,6 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     java.util.List<Listing> findAllAvailableListingsByProviderUsername(String username);
     @Query("SELECT l FROM Listing l WHERE LOWER(l.card.name) LIKE LOWER(CONCAT('%', :cardName, '%')) AND l.provider.id = :providerId")
     java.util.List<Listing> searchListingsByCardNameAndProvider(String cardName, Long providerId);
-    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true AND LOWER(l.location) LIKE LOWER(CONCAT('%', :location, '%'))")
-    java.util.List<Listing> findAllAvailableListingsByLocation(String location);
 
     // --- helpers (no @Query needed) ---
     List<Listing> findAllByProvider_Id(Long providerId);              
@@ -76,4 +74,8 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
 
     // Simple pagination hook for any filter
     List<Listing> findAllByIsAvailableTrue(Pageable pageable);
+
+    @Query("SELECT l FROM Listing l WHERE l.isAvailable = true AND " +
+           "FUNCTION('distance', l.latitude, l.longitude, :latitude, :longitude) < :radius")
+    java.util.List<Listing> findAllAvailableListingsNearLocation(double latitude, double longitude, double radius);
 }

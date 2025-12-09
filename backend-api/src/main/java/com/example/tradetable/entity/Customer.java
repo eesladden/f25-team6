@@ -77,5 +77,5 @@ public class Customer {
     private String ProfileImageUrl;
 
     @Column(unique = true, length = 30)
-    private String phoneNumber; 
+    private String phoneNumber;
 }

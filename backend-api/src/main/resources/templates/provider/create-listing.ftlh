@@ -104,17 +104,47 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="card-location-container col">
-                            <label for="location">Location (City, State):</label>
-                            <input type="text" id="location" name="location" placeholder="Los Angeles, CA" class="form-control" required>
+                        <div class="street-address-container col">
+                            <label for="street-address">Street Address:</label>
+                            <input type="text" id="street-address" name="streetAddress" placeholder="123 Main St" class="form-control" required>
                             <#if creationError?? && creationError>
-                                <div class="text-danger mt-1">Location is required.</div>
+                                <div class="text-danger mt-1">Street address is required.</div>
                             </#if>
                         </div>
                     </div>
-                </div>
-                <div class="button-container text-center mb-3 mt-4">
-                    <button class="btn btn-primary w-50" type="submit">Create Listing</button>
+                    <div class="row mb-3">
+                        <div class="city-container col">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" name="city" placeholder="City" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">City is required.</div>
+                            </#if>
+                        </div>
+                        <div class="state-container col">
+                            <label for="state">State:</label>
+                            <input type="text" id="state" name="state" placeholder="State" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">State is required.</div>
+                            </#if>
+                        </div>
+                        <div class="zip-code-container col">
+                            <label for="zip-code">Zip Code:</label>
+                            <input type="text" id="zip-code" name="zipCode" placeholder="Zip Code" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">Zip code is required.</div>
+                            </#if>
+                        </div>
+                        <div class="country-container col">
+                            <label for="country">Country:</label>
+                            <input type="text" id="country" name="country" placeholder="Country" class="form-control" required>
+                            <#if creationError?? && creationError>
+                                <div class="text-danger mt-1">Country is required.</div>
+                            </#if>
+                        </div>
+                    </div>
+                    <div class="justify-content-center row mb-3 mt-5 me-4">
+                        <button class="btn btn-primary w-50" type="submit">Create Listing</button>
+                    </div>
                 </div>
             </form>
         </div>
