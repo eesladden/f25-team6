@@ -40,7 +40,7 @@ public class CustomerMvcController {
 
     // ---------------- Dashboard ----------------
     @GetMapping("/dashboard")
-    public String dashboard(Model model, HttpSession session) {
+    public String getCurrentCustomer(Model model, HttpSession session) {
         Long customerId = currentCustomerId(session);
 
         Customer me = customers.findById(customerId)

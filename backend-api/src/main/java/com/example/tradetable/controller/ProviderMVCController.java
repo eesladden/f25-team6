@@ -695,6 +695,13 @@ public class ProviderMVCController {
         model.addAttribute("listings", filteredProviderListings);
         return "provider/my-listings";
     }
+    /**
+     * View listing details
+     * @param id the ID of the listing
+     * @param session the HTTP session
+     * @param model the model
+     * @return the view for the listing details
+     */
     @GetMapping("listings/my-listings/{id}")
     public String viewListingDetails(@PathVariable Long id, HttpSession session, Model model) {
         Long providerId = (Long) session.getAttribute("providerId");
