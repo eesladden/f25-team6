@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,19 +22,31 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // The provider being reviewed
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
     @JsonIgnoreProperties({"receivedReviews", "listings", "collection"})
     private Provider provider;
 
+    // The customer who wrote the review
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnoreProperties({"sentReviews"})
     private Customer customer;
 
+    // (Optional) the listing this review is associated with
+    @ManyToOne
+    @JoinColumn(name = "listing_id")
+    @JsonIgnoreProperties({"provider", "collection"})
+    private Listing listing;
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    
-    private java.util.List<ReviewTags> tags;
+
+    // Tags like FRIENDLY, PUNCTUAL, etc.
+    @ElementCollection(targetClass = ReviewTags.class)
+    @CollectionTable(name = "review_tags", joinColumns = @JoinColumn(name = "review_id"))
+    @Enumerated(EnumType.STRING)
+    private List<ReviewTags> tags = new ArrayList<>();
 
     @NotNull
     @Min(1)
